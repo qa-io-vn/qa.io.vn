@@ -27,7 +27,7 @@ authors:
     #   email:          wowthemesnet@gmail.com
     #   twitter:        https://twitter.com/wowthemesnet
 
-    ken:
+    toronto22:
       name:           Toronto22
       site:           https://www.toronto22.info
       avatar:         /assets/images/avatar1.jpg
@@ -44,7 +44,7 @@ defaults:
       path: "_posts"
     values:
       layout: post
-      author: sal
+      author: toronto22
       avatar: /assets/images/avatar1.jpg
       
   # all pages
