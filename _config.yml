@@ -19,8 +19,8 @@ plugins:
   - jekyll-seo-tag
   
 authors:
-    ken:
-      name:           Toronto22
+    sal:
+      name:           Sal
       site:           https://www.wowthemes.net
       avatar:         /assets/images/avatar1.jpg
       bio:            "Hi, I am Toronto22. You can call me Ken. I hope you like it!"
@@ -43,7 +43,7 @@ defaults:
       path: "_posts"
     values:
       layout: post
-      author: ken
+      author: sal
       avatar: /assets/images/avatar1.jpg
       
   # all pages
