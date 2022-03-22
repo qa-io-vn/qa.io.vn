@@ -2,8 +2,8 @@
 layout: post
 title:  "How to compare two object with AssertJ"
 author: toronto22
-categories: [ Jekyll, tutorial ]
-image: assets/images/11.jpg
+categories: [ basic technique, tutorial, java, maven ]
+image: assets/images/6.jpg
 ---
 
 As an automation tester, I want to compare two objects to prove those are equal or not.
