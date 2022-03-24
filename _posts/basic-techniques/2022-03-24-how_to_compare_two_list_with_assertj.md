@@ -3,6 +3,7 @@ layout: post
 title:  "How to compare two lists with AssertJ"
 author: toronto22
 categories: [ basic technique, tutorial, java, maven, assertj ]
+tags: [ serenity ]
 image: assets/images/2022-03-23/assertj.png
 ---
 As an automation tester, I want to compare two lists to prove those are equal or not.
