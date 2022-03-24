@@ -3,7 +3,7 @@ layout: post
 title:  "Generate Single Page HTML Report For Maven Project"
 author: toronto22
 categories: [ basic technique, tutorial, java, maven, report ]
-image: assets/images/6.jpg
+image: assets/images/2022-03-23/test-summary-report.jpg
 ---
 
 As an automation tester, I want to generate single page HTML report. So, I can send the report to other members easily. To do that, I will use Serenity Report to generate the single page report.
