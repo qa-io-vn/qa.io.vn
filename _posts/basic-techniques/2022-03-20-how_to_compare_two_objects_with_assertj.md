@@ -2,12 +2,12 @@
 layout: post
 title:  "How to compare two object with AssertJ"
 author: toronto22
-categories: [ basic technique, tutorial, java, maven ]
+categories: [ basic technique, tutorial, java, maven, assertj ]
 image: assets/images/6.jpg
 ---
 
 As an automation tester, I want to compare two objects to prove those are equal or not.
-To do that, I can use function of AssertJ library (`assertj-core`) to compare tow objects field by field.
+To do that, I can use function of AssertJ library (`assertj-core`) to compare two objects field by field.
 
 ## Assertion example:
 

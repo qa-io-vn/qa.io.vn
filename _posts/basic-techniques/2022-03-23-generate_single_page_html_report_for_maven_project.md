@@ -56,7 +56,7 @@ public class WhenCompareTwoObject {
 ```
 There are two things we have to use correctly are:
 - Using annotation @SerenityTest for the test class
-- Using annotation @Test of `Junit5` fo the test scenario instead of `Junit 4`
+- Using annotation @Test of `Junit5` fo the test scenario instead of `Junit4`
 
 The main purpuse of these precondition steps is that we can run test cases with maven commonline, So we can using following commonline to verify that the project can be executed with maven's commonline.
 ```java
