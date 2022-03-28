@@ -38,8 +38,13 @@ We can define the class or function is run with concurrent or same thread with a
 ```java
 //To execute class/function in concurrent mode
 @Execution(ExecutionMode.CONCURRENT)
+
 //To execute class/function in same thread mode
 @Execution(ExecutionMode.SAME_THREAD)
 ```
 ## For more information
 [Referrence link](https://junit.org/junit5/docs/snapshot/user-guide/#writing-tests-parallel-execution)
+
+## Example
+
+Source code is [here](https://github.com/toronto22/BasicTecnique) with`how_to_assert_two_list_with_assertj` feature folder that contains test cases are configured by annotation.
