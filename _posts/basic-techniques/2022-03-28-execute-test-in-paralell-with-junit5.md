@@ -14,7 +14,9 @@ Our automation test script need to config to execute with Junit 5
 
 ## Configuration
 
-### Configure with `junit-platform.properties` file
+There are atleast two ways to configure the test cases can run in parallel is using configuration file and using annotation.
+
+### Configure with configuration file
 To run our script in parallel we can create `junit-platform.properties` file in `src/java/resources` folder and create the content with
 
 ```java
