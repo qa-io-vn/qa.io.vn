@@ -3,7 +3,7 @@ layout: post
 title:  "Execute test in paralell with junit5"
 author: toronto22
 categories: [ basic technique ]
-image: assets/images/2022-03-23/assertj.png
+image: assets/images/6.jpg
 tags: [junit5, serenity]
 ---
 As an automation tester I want to execute our automation test script in parallel. So I can finish the execution faster.
