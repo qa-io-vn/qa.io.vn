@@ -17,6 +17,7 @@ Our automation test script need to config to execute with Junit 5
 There are atleast two ways to configure the test cases can run in parallel is using configuration file and using annotation.
 
 ### Configure with configuration file
+
 To run our script in parallel we can create `junit-platform.properties` file in `src/java/resources` folder and create the content with
 
 ```java
@@ -32,7 +33,9 @@ The above content will enable the parallel executing feature and make script can
 junit.jupiter.execution.parallel.config.strategy=fixed
 junit.jupiter.execution.parallel.config.fixed.parallelism=2
 ```
+
 ### Configure directly by annotation
+
 We can define the class or function is run with concurrent or same thread with annotation
 
 ```java
@@ -42,7 +45,9 @@ We can define the class or function is run with concurrent or same thread with a
 //To execute class/function in same thread mode
 @Execution(ExecutionMode.SAME_THREAD)
 ```
+
 ## For more information
+
 [Referrence link](https://junit.org/junit5/docs/snapshot/user-guide/#writing-tests-parallel-execution)
 
 ## Example

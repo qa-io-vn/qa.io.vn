@@ -3,11 +3,9 @@ layout: post
 title:  "Jenkins - Installation"
 author: toronto22
 categories: [ Jenkins, CICD]
-image: assets/images/6.jpg
+image: assets/images/jenkins/jenkins-banner.png
 ---
 
-As an automation tester, I want to compare two objects to prove those are equal or not.
-To do that, I can use function of AssertJ library (`assertj-core`) to compare two objects field by field.
+As an automation tester, I want to use Jenkins tools to setup my CICD job. To do that, I need to install the jenkins tools.
 
-## Assertion example:
-
+## Assertion example

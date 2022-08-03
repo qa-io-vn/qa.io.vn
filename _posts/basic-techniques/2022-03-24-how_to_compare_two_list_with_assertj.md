@@ -10,6 +10,7 @@ As an automation tester, I want to compare two lists to prove those are equal or
 To do that, I can use function of AssertJ library (`assertj-core`) to compare two list
 
 ## Prerequisite
+
 To using AssertJ we have to add dependency into `pom.xml` file
 
 ```java
@@ -23,8 +24,11 @@ To using AssertJ we have to add dependency into `pom.xml` file
 ```
 
 ## Compare two lists objects
+
 ### Example
+
 I have some lists of `user` class
+
 ```java
     static List<User> firstList = new ArrayList<>();
     static List<User> secondList = new ArrayList<>();
@@ -48,8 +52,11 @@ I have some lists of `user` class
 ```
 
 I want to compare 2 lists with order and ignore order.
+
 ### Compare 2 lists with order
+
 Using following function we can compare two list that compare with order.
+
 ```java
     @Test
     public void compare_with_order_with_2_equal_lists_have_same_order(){
@@ -57,8 +64,11 @@ Using following function we can compare two list that compare with order.
                 .isEqualTo(thirdList);
     }
 ```
+
 ### Compare 2 lists ignore order
+
 Using following function we can compare two list and ignore about the order of items.
+
 ```java
     @Test
     public void compare_ignore_order_with_2_equal_objects_have_different_order(){
@@ -70,6 +80,7 @@ Using following function we can compare two list and ignore about the order of i
 ## Compare two lists String
 
 ### Example
+
 I have some lists of String class.
 
 ```java
@@ -96,9 +107,10 @@ I have some lists of String class.
 
 I want to compare those lists with order and ignore order.
 
-
 ### Compare 2 lists with order
+
 Using following function we can compare two list that compare with order.
+
 ```java
     @Test
     public void compare_with_order_with_2_equal_lists_have_same_order(){
@@ -108,7 +120,9 @@ Using following function we can compare two list that compare with order.
 ```
 
 ### Compare 2 lists ignore order
+
 Using following function we can compare two list that compare ignore order.
+
 ```java
     @Test
     public void compare_with_order_with_2_equal_lists_have_different_order(){
@@ -118,4 +132,5 @@ Using following function we can compare two list that compare ignore order.
 ```
 
 ## Compare two lists Interger, Float and Double
+
 We use the function to compare like the function that is used for two list String

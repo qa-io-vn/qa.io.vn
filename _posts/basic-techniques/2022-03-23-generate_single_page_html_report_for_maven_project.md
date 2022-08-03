@@ -9,6 +9,7 @@ image: assets/images/2022-03-23/test-summary-report.png
 As an automation tester, I want to generate single page HTML report. So, I can send the report to other members easily. To do that, I will use Serenity Report to generate the single page report.
 
 ## Prerequisite
+
 Asssumtion that we will using Junit 5 in our project. So we will setup to project that can execute the test cases with command line.
 
 In the pom.xml we need some dependencies:
@@ -36,7 +37,9 @@ In the pom.xml we need some dependencies:
     </dependencies>
     ...
 ```
+
 After adding dependencies into `pom` file, we can use it to run the test cases
+
 ```java
 //WhenCompareTwoObject.java file
 @SerenityTest
@@ -54,18 +57,23 @@ public class WhenCompareTwoObject {
 
 }
 ```
+
 There are two things we have to use correctly are:
+
 - Using annotation @SerenityTest for the test class
 - Using annotation @Test of `Junit5` fo the test scenario instead of `Junit4`
 
 The main purpuse of these precondition steps is that we can run test cases with maven commonline, So we can using following commonline to verify that the project can be executed with maven's commonline.
+
 ```java
 mvn clean install
 //or
 mvn clean verify
 
 ```
+
 ## Generate HTML
+
 After precondition steps is done, We need to add some plugins into `pom.xml` to make the single page HTML report is generated automatically.
 
 ```js
@@ -136,10 +144,13 @@ After precondition steps is done, We need to add some plugins into `pom.xml` to 
 ```
 
 Fillaly, we can generate the single page HML report after execute tests with commonline
+
 ```js
 mvn clean install
 \\or
 mvn clean verify
-``` 
+```
+
 ## Example on github
+
 [Github source](https://github.com/toronto22/BasicTecnique)

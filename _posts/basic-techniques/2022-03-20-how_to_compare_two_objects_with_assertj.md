@@ -9,7 +9,7 @@ image: assets/images/6.jpg
 As an automation tester, I want to compare two objects to prove those are equal or not.
 To do that, I can use function of AssertJ library (`assertj-core`) to compare two objects field by field.
 
-## Assertion example:
+## Assertion example
 
 We have the Class `User` and then we create 2 objects of that class with name `expectedUser` and `actualUser`. To compare those objects, we can use following steps:
 
@@ -39,13 +39,13 @@ public class WhenCompareTwoObject {
     User expectedUser;
     @Test
     public void should_be_able_to_compare_two_equal_project(){
-		//Init two objects to compare
+  //Init two objects to compare
         actualUser = new User("Toronto22",22,true,12.22);
         expectedUser = new User("Toronto22",22,true,12.22);
-		//Compare two object with AssertJ library
+  //Compare two object with AssertJ library
         Assertions.assertThat(actualUser).usingRecursiveComparison()
                 .isEqualTo(expectedUser);
-		//Test passed due to same value of the two objects
+  //Test passed due to same value of the two objects
     }
 }
 
@@ -54,7 +54,7 @@ public class WhenCompareTwoObject {
 That’s It!
 Pretty simple right!
 
-## Proven GitHub source code:
+## Proven GitHub source code
 
 The source code: [here](https://github.com/toronto22/BasicTecnique/tree/master/src/test/java/info/toronto22/how_to_assert_two_objects_with_assertj)
 
@@ -160,7 +160,7 @@ The recursive comparison was performed with this configuration:
   - java.nio.file.Path -> lexicographic comparator (Path natural order)
 - actual and expected objects and their fields were compared field by field recursively even if they were not of the same type, this allows for example to compare a Person to a PersonDto (call strictTypeChecking(true) to change that behavior).
 
-	at info.toronto22.feature.WhenCompareTwoObject.should_be_able_to_compare_two_equal_project(WhenCompareTwoObject.java:17)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+ at info.toronto22.feature.WhenCompareTwoObject.should_be_able_to_compare_two_equal_project(WhenCompareTwoObject.java:17)
+ at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 ... Bla Bla about some thing not so important. 
 ```
