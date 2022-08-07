@@ -6,8 +6,37 @@ categories: [ UI, Automation testing tools]
 image: assets/images/6.jpg
 ---
 
-As an automation tester, I want to compare two objects to prove those are equal or not.
-To do that, I can use function of AssertJ library (`assertj-core`) to compare two objects field by field.
+As an automation tester, I want to istall tools easily and it will be not diffirent between machines. To do that, I have to you Docker to install that tools.
 
-## Assertion example:
+## Why Docker?
 
+- Docker For Everyone
+- Environment Isolation
+- OS Independent Apps
+- Rapid Development & Deployment
+- Scalability & Flexibility Made Easier
+- No More Security Issues
+- Ship Anytime, Anywhere
+- Dependency Management Made Easier
+
+## What is Docker?
+
+Docker is a tool designed to make it easier for developers to develop, ship, and run applications by using containers. Containers allow devs to package an application with all of its requirements and configurations, such as libraries and other dependencies and deploy it as a single package.
+
+## How to install Docker Desktop
+
+Docker Desktop is developer productivity tools and a local Kubernetes environment. To install it, we following these steps:
+
+- Access <https://www.docker.com/get-started/>
+- Download Docker Desktop for our operating system.
+- Install that with default settings.
+
+## Install the first Docker container
+
+As an automation tester, I want to install Jenkins server to setup my CICD jobs. To do that, I need to install the server with Docker Destop by using the command:
+
+```js
+docker run -p 8080:8080 -p 50000:50000 --restart=on-failure jenkins/jenkins:lts-jdk11
+```
+
+After the command line is executed completely, we can verify that by access <http://localhost:8080/>. If the jenkins site is shown, the Docker contaner is installed successfully.
