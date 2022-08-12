@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Docker - Installation"
+title:  "Docker - Getting started"
 author: toronto22
 categories: [ UI, Automation testing tools]
 image: assets/images/6.jpg
@@ -42,8 +42,18 @@ docker run -p 8080:8080 -p 50000:50000 --restart=on-failure jenkins/jenkins:lts-
 
 After the command line is executed completely, we can verify that by access <http://localhost:8080/>. If the jenkins site is shown, the Docker contaner is installed successfully.
 
-## Video guide
+## Video guide (Click on Image to view video)
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=CGGGqbBWKRI
 " target="_blank"><img src="http://img.youtube.com/vi/CGGGqbBWKRI/0.jpg"
 alt="Docker Installation Video" width="240" height="180" border="10" /></a>
+
+<iframe
+    width="640"
+    height="480"
+    src="https://www.youtube.com/embed/CGGGqbBWKRI"
+    frameborder="10"
+    allow="autoplay; encrypted-media"
+    allowfullscreen
+>
+</iframe>
