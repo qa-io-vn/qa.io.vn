@@ -29,7 +29,8 @@ Docker Desktop is developer productivity tools and a local Kubernetes environmen
 
 - Access <https://www.docker.com/get-started/>
 - Download Docker Desktop for our operating system.
-- Install that with default settings.
+- Install that Docker with downloaded file
+- Start Docker application and finish the setup
 
 ## Install the first Docker container
 
@@ -40,3 +41,9 @@ docker run -p 8080:8080 -p 50000:50000 --restart=on-failure jenkins/jenkins:lts-
 ```
 
 After the command line is executed completely, we can verify that by access <http://localhost:8080/>. If the jenkins site is shown, the Docker contaner is installed successfully.
+
+## Video guide
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=CGGGqbBWKRI
+" target="_blank"><img src="http://img.youtube.com/vi/CGGGqbBWKRI/0.jpg"
+alt="Docker Installation Video" width="240" height="180" border="10" /></a>
