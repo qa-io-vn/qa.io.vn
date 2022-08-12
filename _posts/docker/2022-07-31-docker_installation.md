@@ -42,7 +42,7 @@ docker run -p 8080:8080 -p 50000:50000 --restart=on-failure jenkins/jenkins:lts-
 
 After the command line is executed completely, we can verify that by access <http://localhost:8080/>. If the jenkins site is shown, the Docker contaner is installed successfully.
 
-## Video guide (Click on Image to view video)
+## Video guide
 
 <iframe
     width="640"
