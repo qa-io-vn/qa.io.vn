@@ -44,10 +44,6 @@ After the command line is executed completely, we can verify that by access <htt
 
 ## Video guide (Click on Image to view video)
 
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=CGGGqbBWKRI
-" target="_blank"><img src="http://img.youtube.com/vi/CGGGqbBWKRI/0.jpg"
-alt="Docker Installation Video" width="240" height="180" border="10" /></a>
-
 <iframe
     width="640"
     height="480"
