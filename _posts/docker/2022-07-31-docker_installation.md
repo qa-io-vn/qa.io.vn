@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "Docker - Getting started"
+title:  "Docker - Installation"
 author: toronto22
 categories: [ UI, Automation testing tools]
-image: assets/images/6.jpg
+image: assets/images/docker/docker.jpeg
 ---
 
 As an automation tester, I want to istall tools easily and it will be not diffirent between machines. To do that, I have to you Docker to install that tools.
