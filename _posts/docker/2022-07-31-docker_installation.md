@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Docker - Getting started"
+title:  "Docker - Installation"
 author: toronto22
 categories: [ UI, Automation testing tools]
 image: assets/images/6.jpg
