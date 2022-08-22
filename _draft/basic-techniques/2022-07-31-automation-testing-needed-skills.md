@@ -12,6 +12,7 @@ To do that, I need to learn some set of skills to make the implementing is easie
 ## API tesing skills set
 
 Some essentials skills:
+
 - How API work
 - Post Man - Getting Started
 - Rest Assured - Getting Started
@@ -21,9 +22,10 @@ Some essentials skills:
 - How to run test in parallel with Junit 5
 - BDD Cucumber - getting started
 
-Good to have
+Good to have:
+
 - Collections Java - Getting Started
-- Collections Java - Practices 
+- Collections Java - Practices
 - Annotation Java - Getting Started
 - How to Allure report in API testing
 - Database - Getting Started
@@ -34,8 +36,30 @@ Good to have
 - How to run test in parallel with Junit 4
 - How to run test in parallel with TestNG
 - How to use assertions in Java
+- Java - Object oriented programing (OOP)
+- Java - Singleton design pattern
+- API testing project - Getting Started
+- API testing project - Integrate with Jenkins
+- API testing project - Integrate with Browserstack
+- API testing project - Allure report
 
 ## UI tesing skills set
 
 Some essentials skills:
+
+- Selenium - Getting Started
 - How to use Page object model
+- Selenium - Waits
+- Selenium - Cookies
+- How to improve performance of UI automation test script
+- Selenium - Javascript Executer
+- Selenium - Locate element
+- Selenium - Deal with complex element
+- Selenium - Selenium grid
+
+Good to have:
+
+- Selenium Project - Getting Started
+- Selenium Project - Integrate with Jenkins
+- Selenium Project - Integrate Browserstack
+- Selenium Project - Allure Report
