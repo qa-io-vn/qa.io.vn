@@ -63,3 +63,5 @@ Good to have:
 - Selenium Project - Integrate with Jenkins
 - Selenium Project - Integrate Browserstack
 - Selenium Project - Allure Report
+- How to use Chrome Browser interm of automation testing
+- Robot Framework - Getting Started
