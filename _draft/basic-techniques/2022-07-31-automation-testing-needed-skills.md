@@ -23,9 +23,6 @@ Some essentials skills:
 - BDD Cucumber - getting started
 
 Good to have:
-
-- Collections Java - Getting Started
-- Collections Java - Practices
 - Annotation Java - Getting Started
 - How to Allure report in API testing
 - Database - Getting Started
@@ -65,3 +62,18 @@ Good to have:
 - Selenium Project - Allure Report
 - How to use Chrome Browser interm of automation testing
 - Robot Framework - Getting Started
+- Robot Framework - Reuseable page/entity objects
+- Robot Framework - Supporting library
+- Robot Framework - Abstraction layer for increased readability
+- Robot Framework - Test runner, Suite/test setup and teardown 
+- Robot Framework - Reports and logs
+- Robot Framework - CI and Parallel execution
+
+Basic knowledge
+- Collections Java - Getting Started
+- Collections Java - HashMap
+- Collections Java - Set
+- Collections Java - List
+- Collections Java - StringBuilder
+- Collections Java - Array
+- Collections Java - String
