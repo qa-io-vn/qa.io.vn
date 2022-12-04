@@ -3,14 +3,14 @@ layout: post
 title:  "Selenium Grid - Installation"
 author: toronto22
 categories: [ Jenkins, CICD]
-image: assets/images/jenkins/jenkins-banner.png
+image: assets/images/selenium-grid/selenium-grid-basic.jpg
 ---
 
 As an automation tester, I want to execute my UI test script on remote browser. To do that, I need to install Selenium Grid which help me to execute my test script easily throw remote browsers.
 ## Install Selenium Grid on Docker
 To install Selnium Grid on Docker, we have to install Docker first. After that, we can easily install Selenium Grid by `Docker Compose`:
 
-- Create `docker-compose.yml` file with content (Or download [here](resources/docker-compose/selenium-grid/docker-compose.yml)):
+- Create `docker-compose.yml` file with content (Or download [here](../resources/docker-compose/selenium-grid/docker-compose.yml)):
 ```js
 version: "3"
 services:
