@@ -10,7 +10,7 @@ As an automation tester, I want to execute my UI test script on remote browser. 
 ## Install Selenium Grid on Docker
 To install Selnium Grid on Docker, we have to install Docker first. After that, we can easily install Selenium Grid by `Docker Compose`:
 
-- Create `docker-compose.yml` file with content:
+- Create `docker-compose.yml` file with content (Or download [here](resources/docker-compose/selenium-grid/docker-compose.yml)):
 ```js
 version: "3"
 services:
