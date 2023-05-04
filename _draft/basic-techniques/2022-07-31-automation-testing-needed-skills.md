@@ -23,6 +23,7 @@ Some essentials skills:
 - BDD Cucumber - getting started
 
 Good to have:
+
 - Annotation Java - Getting Started
 - How to Allure report in API testing
 - Database - Getting Started
@@ -65,11 +66,12 @@ Good to have:
 - Robot Framework - Reuseable page/entity objects
 - Robot Framework - Supporting library
 - Robot Framework - Abstraction layer for increased readability
-- Robot Framework - Test runner, Suite/test setup and teardown 
+- Robot Framework - Test runner, Suite/test setup and teardown
 - Robot Framework - Reports and logs
 - Robot Framework - CI and Parallel execution
 
 Basic knowledge
+
 - Collections Java - Getting Started
 - Collections Java - HashMap
 - Collections Java - Set
