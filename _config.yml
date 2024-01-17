@@ -1,6 +1,6 @@
 # Site
-name: 'Toronto22'
-description: 'Toronto22 is me, you can call me Ken!'
+name: 'QA.io.vn'
+description: 'QA.io.vn is me, you can call me Ken!'
 logo: 'assets/images/logo.png'
 favicon: 'assets/images/favicon.ico'
 baseurl: ''
@@ -20,12 +20,12 @@ plugins:
   
 authors:
     toronto22:
-      name:           Toronto22
-      site:           https://www.toronto22.info
+      name:           Ken
+      # site:           https://www.toronto22.info
       avatar:         assets/images/avatar1.jpg
-      bio:            "Hi, I am Toronto, you can call me Ken. I hope you like it!"
+      bio:            "Hi, I am Toronto. I hope you like it!"
       email:          toronto.nigma@gmail.com
-      twitter:        https://twitter.com/wowthemesnet
+      # twitter:        https://twitter.com/wowthemesnet
 
  
 # Defaults
@@ -36,7 +36,7 @@ defaults:
       path: "_posts"
     values:
       layout: post
-      author: toronto22
+      author: ken
       avatar: assets/images/avatar1.jpg
       
   # all pages
