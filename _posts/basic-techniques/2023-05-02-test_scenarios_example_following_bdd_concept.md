@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Test scenarios example following bdd concept"
-author: toronto22
+author: dani
 categories: [ basic technique, bdd]
 image: assets/images/6.jpg
 ---
@@ -20,4 +20,4 @@ Language: Gherkin
 
 ## Test scenarios example
 
-All of the test scenarios is store in [this link](https://github.com/toronto22/Automation-test-scenarios-examples).
+All of the test scenarios is store in [this link](https://github.com/dani/Automation-test-scenarios-examples).

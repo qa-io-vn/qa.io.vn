@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Learning plan for 2023"
-author: toronto22
+author: dani
 categories: [ blog, plan ]
 image: assets/images/plan/plan-dice-760.jpg
 ---

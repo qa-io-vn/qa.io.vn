@@ -19,8 +19,8 @@ plugins:
   - jekyll-seo-tag
   
 authors:
-    toronto22:
-      name:           toronto22
+    dani:
+      name:           dani
       # site:           https://www.toronto22.info
       avatar:         assets/images/avatar1.jpg
       bio:            "Hi, I am Ken. I hope you like it!"

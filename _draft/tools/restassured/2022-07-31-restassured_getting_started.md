@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "RestAssured - Getting started"
-author: toronto22
+author: dani
 categories: [ UI, Automation testing tools]
 image: assets/images/6.jpg
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Jenkins - Installation"
-author: toronto22
+author: dani
 categories: [ Jenkins, CICD]
 image: assets/images/jenkins/jenkins-banner.png
 ---

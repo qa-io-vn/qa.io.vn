@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Jenkins - Allure report pipeline"
-author: toronto22
+author: dani
 categories: [ Jenkins, CICD]
 image: assets/images/6.jpg
 ---

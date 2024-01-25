@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Generate Single Page HTML Report For Maven Project"
-author: toronto22
+author: dani
 categories: [ basic technique, tutorial, java, maven, report ]
 image: assets/images/2022-03-23/test-summary-report.png
 ---
@@ -48,8 +48,8 @@ public class WhenCompareTwoObject {
     User expectedUser;
     @Test
     public void should_be_able_to_compare_two_equal_project(){
-        actualUser = new User("Toronto22",22,true,12.22);
-        expectedUser = new User("Toronto22",22,true,12.22);
+        actualUser = new User("dani",22,true,12.22);
+        expectedUser = new User("dani",22,true,12.22);
 
         Assertions.assertThat(actualUser).usingRecursiveComparison()
                 .isEqualTo(expectedUser);
@@ -153,4 +153,4 @@ mvn clean verify
 
 ## Example on github
 
-[Github source](https://github.com/toronto22/BasicTecnique)
+[Github source](https://github.com/dani/BasicTecnique)

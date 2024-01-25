@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Execute test in paralell with junit5"
-author: toronto22
+author: dani
 categories: [ basic technique ]
 image: assets/images/6.jpg
 tags: [junit5, serenity]
@@ -52,4 +52,4 @@ We can define the class or function is run with concurrent or same thread with a
 
 ## Example
 
-Source code is [here](https://github.com/toronto22/BasicTecnique) with`how_to_assert_two_list_with_assertj` feature folder that contains test cases are configured by annotation.
+Source code is [here](https://github.com/dani/BasicTecnique) with`how_to_assert_two_list_with_assertj` feature folder that contains test cases are configured by annotation.

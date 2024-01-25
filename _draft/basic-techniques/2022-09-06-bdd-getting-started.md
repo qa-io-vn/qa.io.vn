@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "How API works"
-author: toronto22
+author: dani
 categories: [ automation test, api testing]
 image: assets/images/basic-technique/api-testing.png
 ---

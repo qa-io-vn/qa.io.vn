@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Docker - Docker Compose"
-author: toronto22
+author: dani
 categories: [ Docker, Docker Compose]
 image: assets/images/docker/docker-compose.png
 ---

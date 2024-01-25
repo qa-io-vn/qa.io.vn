@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "How to compare two lists with AssertJ"
-author: toronto22
+author: dani
 categories: [ basic technique, tutorial, java, maven, assertj ]
 image: assets/images/2022-03-23/assertj.png
 tags: [featured, serenity]

@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Automation testing needed skills"
-author: toronto22
+author: dani
 categories: [ automation test]
 image: assets/images/6.jpg
 ---

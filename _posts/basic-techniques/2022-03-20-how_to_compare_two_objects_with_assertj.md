@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "How to compare two object with AssertJ"
-author: toronto22
+author: dani
 categories: [ basic technique, tutorial, java, maven, assertj ]
 image: assets/images/6.jpg
 ---
@@ -28,9 +28,9 @@ We have the Class `User` and then we create 2 objects of that class with name `e
 - The compare functions is described in following test
 
 ```java
-package info.toronto22.feature;
+package info.dani.feature;
 
-import info.toronto22.model.User;
+import info.dani.model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -40,8 +40,8 @@ public class WhenCompareTwoObject {
     @Test
     public void should_be_able_to_compare_two_equal_project(){
   //Init two objects to compare
-        actualUser = new User("Toronto22",22,true,12.22);
-        expectedUser = new User("Toronto22",22,true,12.22);
+        actualUser = new User("dani",22,true,12.22);
+        expectedUser = new User("dani",22,true,12.22);
   //Compare two object with AssertJ library
         Assertions.assertThat(actualUser).usingRecursiveComparison()
                 .isEqualTo(expectedUser);
@@ -56,14 +56,14 @@ Pretty simple right!
 
 ## Proven GitHub source code
 
-The source code: [here](https://github.com/toronto22/BasicTecnique/tree/master/src/test/java/info/toronto22/how_to_assert_two_objects_with_assertj)
+The source code: [here](https://github.com/dani/BasicTecnique/tree/master/src/test/java/info/dani/how_to_assert_two_objects_with_assertj)
 
 ## More details about assertion example
 
 - `User` class:
 
 ```java
-package info.toronto22.model;
+package info.dani.model;
 
 public class User {
     String name;
@@ -125,19 +125,19 @@ Assertions.assertThat(actualUser).isEqualToComparingFieldByField(expectedUser);
 
 ```java
 //compare
-//actualUser = new User("Toronto22",22,true,12.22);
+//actualUser = new User("dani",22,true,12.22);
 //expectedUser = new User("Toronto23",23,false,12.22);
 //Assertions.assertThat(actualUser).usingRecursiveComparison()
 //                .isEqualTo(expectedUser);
 //With error log:
 
-C:\Users\admin\.jdks\corretto-11.0.14.1\bin\java.exe -ea -Didea.test.cyclic.buffer.size=1048576 "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2021.1\lib\idea_rt.jar=61506:C:\Program Files\JetBrains\IntelliJ IDEA 2021.1\bin" -Dfile.encoding=UTF-8 -classpath "C:\Program Files\JetBrains\IntelliJ IDEA 2021.1\lib\idea_rt.jar;C:\Users\admin\.m2\repository\org\junit\platform\junit-platform-launcher\1.8.2\junit-platform-launcher-1.8.2.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2021.1\plugins\junit\lib\junit5-rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2021.1\plugins\junit\lib\junit-rt.jar;D:\OneMountWorkspace\SourceCode\BasicTecnique\target\test-classes;C:\Users\admin\.m2\repository\org\junit\jupiter\junit-jupiter\5.8.2\junit-jupiter-5.8.2.jar;C:\Users\admin\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.8.2\junit-jupiter-api-5.8.2.jar;C:\Users\admin\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\admin\.m2\repository\org\junit\platform\junit-platform-commons\1.8.2\junit-platform-commons-1.8.2.jar;C:\Users\admin\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\admin\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.8.2\junit-jupiter-params-5.8.2.jar;C:\Users\admin\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.8.2\junit-jupiter-engine-5.8.2.jar;C:\Users\admin\.m2\repository\org\junit\platform\junit-platform-engine\1.8.2\junit-platform-engine-1.8.2.jar;C:\Users\admin\.m2\repository\org\assertj\assertj-core\3.22.0\assertj-core-3.22.0.jar" com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit5 info.toronto22.feature.WhenCompareTwoObject,should_be_able_to_compare_two_equal_project
+C:\Users\admin\.jdks\corretto-11.0.14.1\bin\java.exe -ea -Didea.test.cyclic.buffer.size=1048576 "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2021.1\lib\idea_rt.jar=61506:C:\Program Files\JetBrains\IntelliJ IDEA 2021.1\bin" -Dfile.encoding=UTF-8 -classpath "C:\Program Files\JetBrains\IntelliJ IDEA 2021.1\lib\idea_rt.jar;C:\Users\admin\.m2\repository\org\junit\platform\junit-platform-launcher\1.8.2\junit-platform-launcher-1.8.2.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2021.1\plugins\junit\lib\junit5-rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2021.1\plugins\junit\lib\junit-rt.jar;D:\OneMountWorkspace\SourceCode\BasicTecnique\target\test-classes;C:\Users\admin\.m2\repository\org\junit\jupiter\junit-jupiter\5.8.2\junit-jupiter-5.8.2.jar;C:\Users\admin\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.8.2\junit-jupiter-api-5.8.2.jar;C:\Users\admin\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\admin\.m2\repository\org\junit\platform\junit-platform-commons\1.8.2\junit-platform-commons-1.8.2.jar;C:\Users\admin\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\admin\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.8.2\junit-jupiter-params-5.8.2.jar;C:\Users\admin\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.8.2\junit-jupiter-engine-5.8.2.jar;C:\Users\admin\.m2\repository\org\junit\platform\junit-platform-engine\1.8.2\junit-platform-engine-1.8.2.jar;C:\Users\admin\.m2\repository\org\assertj\assertj-core\3.22.0\assertj-core-3.22.0.jar" com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit5 info.dani.feature.WhenCompareTwoObject,should_be_able_to_compare_two_equal_project
 
 java.lang.AssertionError: 
 Expecting actual:
-  info.toronto22.model.User@366647c2
+  info.dani.model.User@366647c2
 to be equal to:
-  info.toronto22.model.User@6a6afff2
+  info.dani.model.User@6a6afff2
 when recursively comparing field by field, but found the following 3 differences:
 
 field/property 'age' differ:
@@ -149,7 +149,7 @@ field/property 'isMarriage' differ:
 - expected value: false
 
 field/property 'name' differ:
-- actual value  : "Toronto22"
+- actual value  : "dani"
 - expected value: "Toronto23"
 
 The recursive comparison was performed with this configuration:
@@ -160,7 +160,7 @@ The recursive comparison was performed with this configuration:
   - java.nio.file.Path -> lexicographic comparator (Path natural order)
 - actual and expected objects and their fields were compared field by field recursively even if they were not of the same type, this allows for example to compare a Person to a PersonDto (call strictTypeChecking(true) to change that behavior).
 
- at info.toronto22.feature.WhenCompareTwoObject.should_be_able_to_compare_two_equal_project(WhenCompareTwoObject.java:17)
+ at info.dani.feature.WhenCompareTwoObject.should_be_able_to_compare_two_equal_project(WhenCompareTwoObject.java:17)
  at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 ... Bla Bla about some thing not so important. 
 ```

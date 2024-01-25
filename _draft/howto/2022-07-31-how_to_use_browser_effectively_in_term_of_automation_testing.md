@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "How to use browser effectively in term of automation testing"
-author: toronto22
+author: dani
 categories: [ UI, Automation testing tools]
 image: assets/images/6.jpg
 ---

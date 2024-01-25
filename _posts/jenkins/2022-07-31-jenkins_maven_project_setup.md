@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Jenkins - Maven project setup"
-author: toronto22
+author: dani
 categories: [ Jenkins, CICD]
 image: assets/images/jenkins/jenkins-banner.png
 ---

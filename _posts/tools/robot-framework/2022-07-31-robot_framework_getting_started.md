@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Robot Framework - Getting started"
-author: toronto22
+author: dani
 categories: [ UI, Automation testing tools]
 image: assets/images/tools/robot-framework.png
 ---

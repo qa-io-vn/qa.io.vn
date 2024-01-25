@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Selenium Grid - Installation"
-author: toronto22
+author: dani
 categories: [ Jenkins, CICD]
 image: assets/images/selenium-grid/selenium-grid-basic.jpg
 ---

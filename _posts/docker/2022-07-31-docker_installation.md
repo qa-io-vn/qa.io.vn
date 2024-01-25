@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Docker - Installation"
-author: toronto22
+author: dani
 categories: [ UI, Automation testing tools]
 image: assets/images/docker/docker.jpeg
 ---
