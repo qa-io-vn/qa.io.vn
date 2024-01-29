@@ -2,7 +2,7 @@
 layout: post
 title:  "Jenkins - Allure Report Setup"
 author: dani
-categories: [ Jenkins, CICD, Allure report]
+categories: [ Jenkins, CICD, Allure report, Java, Maven]
 image: assets/images/jenkins/jenkins-banner.png
 ---
 
