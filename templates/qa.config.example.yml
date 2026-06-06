@@ -1,0 +1,119 @@
+# ============================================================================
+# qa.config.yml — THE single per-project config for the QA toolkit
+# ----------------------------------------------------------------------------
+# Copy this file to your project root as `qa.config.yml` and fill it in.
+# Every /qa:* command reads this file. This is the ONLY file that changes
+# between projects — the commands and templates are identical everywhere.
+#
+# Quick start:  run  /qa:qa-init  and Claude will generate this for you.
+# ============================================================================
+
+project:
+  name: "ShopEase"                       # product / app name
+  description: "Web + REST API e-commerce platform"
+  type: "web+api"                        # web | api | web+api
+  repo_url: "https://github.com/acme/shopease"
+  primary_locale: "en-US"
+
+process:
+  methodology: "scrum"                   # scrum | kanban | scrumban
+  sprint_length_weeks: 2
+  release_cadence: "per-sprint"          # per-sprint | continuous | monthly
+
+stack:
+  frontend: "React"                      # framework, for context
+  backend: "Node.js / Express"
+  api_style: "REST"                      # REST | GraphQL | both
+  api_spec: "openapi"                    # openapi | none
+  api_spec_path: "./openapi.yaml"        # source of truth for API tests/contracts
+  base_url_web: "http://localhost:3000"
+  base_url_api: "http://localhost:4000"
+
+# ----------------------------------------------------------------------------
+# Test tooling — toggle what this project uses. Commands respect these flags.
+# ----------------------------------------------------------------------------
+tooling:
+  e2e: "playwright"                      # core: Playwright + TypeScript
+  language: "typescript"
+  unit: "vitest"                         # vitest | jest
+  component: "playwright-ct"             # playwright-ct | testing-library | none
+  api: "playwright-request"              # uses Playwright request context
+  contract: "pact"                       # pact | none
+  contract_broker_url: "https://pact-broker.acme.io"
+  performance: "k6"                      # k6 | none
+  accessibility: "axe"                   # axe | none
+  visual: "playwright-snapshots"         # playwright-snapshots | none
+  security:
+    sast: "semgrep"                      # semgrep | codeql | sonarqube | none
+    sca: "npm-audit"                     # npm-audit | snyk | trivy | none
+    dast: "owasp-zap"                    # owasp-zap | none
+    secrets: "gitleaks"                  # gitleaks | trufflehog | none
+  mocking: "playwright-route"            # playwright-route | msw | prism | wiremock | none
+  mobile: "playwright-responsive"        # playwright-responsive | appium | device-farm | none
+  mobile_device_matrix: ["iPhone 14", "Pixel 7"]   # devices/viewports to cover (responsive or native)
+
+# ----------------------------------------------------------------------------
+# CI / CD
+# ----------------------------------------------------------------------------
+ci:
+  platform: "jenkins"                    # jenkins | github-actions | gitlab | azure
+  agents_docker_image: "mcr.microsoft.com/playwright:v1.x-jammy"
+  shard_count: 4
+  browsers: ["chromium", "firefox", "webkit"]
+  jenkins_url: "https://jenkins.acme.io" # base Jenkins URL (for /qa:fix-jenkins)
+  jenkins_job: "shopease/main"           # job path; folders/multibranch use "folder/job"
+  # Jenkins auth comes from env vars JENKINS_USER and JENKINS_API_TOKEN — never store tokens here.
+
+# ----------------------------------------------------------------------------
+# Quality gates / SLAs — used by exit criteria, perf thresholds, sign-off.
+# ----------------------------------------------------------------------------
+gates:
+  min_pass_rate_pct: 98
+  block_on_severity: ["S1", "S2"]
+  accessibility_standard: "WCAG 2.1 AA"
+  a11y_block_on: ["critical", "serious"]
+  security_block_on: ["high", "critical"]
+  performance:
+    checkout_p95_ms: 500
+    p99_ms: 1000
+    error_rate_pct: 1
+    target_rps: 100
+
+# ----------------------------------------------------------------------------
+# Risk tiers — list the high-risk areas so commands prioritise depth here.
+# ----------------------------------------------------------------------------
+risk_areas:
+  critical: ["authentication", "authorization", "payments", "checkout", "PII"]
+  high: ["cart", "search", "account-management"]
+  medium: ["reporting", "admin-tools"]
+
+# ----------------------------------------------------------------------------
+# Test data & environments
+# ----------------------------------------------------------------------------
+environments:
+  - { name: "ci",      url: "ephemeral", purpose: "PR gate" }
+  - { name: "qa",      url: "https://qa.shopease.io", purpose: "integration" }
+  - { name: "staging", url: "https://staging.shopease.io", purpose: "pre-release / perf / security" }
+
+test_data:
+  strategy: "factories"                  # factories | fixtures | db-seed
+  seed_via: "api"                        # api | db | both
+  sensitive_data_rule: "synthetic-only — never real PII"
+  secrets_store: "jenkins-credentials"   # jenkins-credentials | vault | env
+
+# ----------------------------------------------------------------------------
+# Team / ownership (used in plans, RACI, sign-off)
+# ----------------------------------------------------------------------------
+team:
+  qa_manager: "TBD"
+  qa_lead: "TBD"
+  product_owner: "TBD"
+  eng_lead: "TBD"
+
+# ----------------------------------------------------------------------------
+# Paths — where the toolkit writes generated artifacts in this repo.
+# ----------------------------------------------------------------------------
+paths:
+  docs_dir: "docs/qa"                    # strategy & plans go here
+  tests_dir: "tests"                     # automation framework root
+  reports_dir: "reports"

@@ -1,0 +1,25 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Node / build (in case the toolkit is extended with scripts)
+node_modules/
+dist/
+build/
+*.log
+
+# Test & report artifacts
+coverage/
+test-results/
+playwright-report/
+blob-report/
+reports/
+
+# Secrets & local config — never commit
+.env
+.env.*
+*.local.yml
+qa.config.local.yml

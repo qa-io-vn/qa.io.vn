@@ -1,0 +1,13 @@
+{
+  "name": "qa",
+  "version": "3.7.0",
+  "description": "Complete ISTQB-aligned QA toolkit for Web + REST API projects: 58 slash commands covering the full ISTQB body of knowledge (Foundation, Test Manager, Analyst, Technical Analyst, Agile, Automation, Performance, Security, Acceptance, Usability, AI/GenAI, Model-Based, Mobile, process improvement) using Playwright+TypeScript / K6 / Pact. Follows CTFL v4.0 and ISO/IEC/IEEE 29119-3. Driven by a single per-project qa.config.yml.",
+  "author": {
+    "name": "Tony",
+    "email": "toronto.nigma@gmail.com"
+  },
+  "homepage": "https://github.com/toronto-nigma/claude-qa-toolkit",
+  "repository": "https://github.com/toronto-nigma/claude-qa-toolkit",
+  "license": "MIT",
+  "keywords": ["qa", "testing", "istqb", "ctfl", "ctal", "iso-29119", "tmmi", "playwright", "typescript", "k6", "pact", "accessibility", "security", "performance", "ai-testing", "exploratory", "ci", "jenkins"]
+}

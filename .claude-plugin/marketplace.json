@@ -1,0 +1,18 @@
+{
+  "name": "claude-qa-toolkit",
+  "owner": {
+    "name": "Tony",
+    "email": "toronto.nigma@gmail.com"
+  },
+  "metadata": {
+    "description": "A reusable, complete ISTQB-aligned QA testing toolkit for Web + API projects, installable across all your repositories.",
+    "version": "3.7.0"
+  },
+  "plugins": [
+    {
+      "name": "qa",
+      "source": "./",
+      "description": "Complete ISTQB body-of-knowledge toolkit (CTFL v4.0 / CTAL / ISO 29119-3): 58 commands for policy, strategy, plans, risk, estimation, design techniques, automation, all test types, monitoring, completion and process improvement. Driven by a single qa.config.yml per project."
+    }
+  ]
+}
