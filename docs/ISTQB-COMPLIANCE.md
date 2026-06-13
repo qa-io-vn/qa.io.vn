@@ -24,7 +24,7 @@ The ISTQB portfolio is organized into **Core**, **Agile**, and **Specialist** st
 | Security Testing | CT-SEC | Security risk assessment, OWASP-aligned testing. See `security-scan`. |
 | Acceptance Testing | CT-AcT | ATDD, acceptance criteria, BDD. See `create-plan`, `test-design`. |
 | Usability/Accessibility | CT-UT / a11y | WCAG-aligned accessibility evaluation. See `a11y-audit`. |
-| Quality in DevOps | — | CI/CD quality gates, shift-left/right, pipeline testing. See `scaffold`, `fix-ci`. |
+| Quality in DevOps | — | CI/CD quality gates, shift-left/right, pipeline testing, testing in production. See `scaffold`, `fix-ci`, `shift-right`. |
 
 ---
 
@@ -73,11 +73,11 @@ ISTQB defines test levels; the toolkit maps them to concrete tooling via config.
 | **System testing** | `web-automate` end-to-end across the integrated Web + API system; non-functional system testing (`perf-test`, `security-scan`, `a11y-audit`). |
 | **System integration testing** | `integration-test` across external services using service virtualization / mocking, backed by contract testing. |
 | **Acceptance testing** | `acceptance` — ATDD/UAT from acceptance criteria. Includes UAT, operational acceptance, contractual/regulatory, alpha/beta as applicable. |
-| **Maintenance testing** (§2.4) | `maintenance-test` — modification / migration / retirement + impact analysis. |
+| **Maintenance testing** (§2.3) | `maintenance-test` — modification / migration / retirement + impact analysis. |
 
 ---
 
-## 5. Test types (CTFL v4.0 §2.3) and quality characteristics (ISO/IEC 25010)
+## 5. Test types (CTFL v4.0 §2.2.2) and quality characteristics (ISO/IEC 25010)
 
 | ISTQB test type | Toolkit command(s) | ISO 25010 characteristic |
 |---|---|---|
@@ -126,6 +126,8 @@ ISTQB risk-based testing drives effort by **risk level = likelihood × impact**.
 - Allocates test depth, technique rigor, and level by risk (mirrored in `risk_areas` of `qa.config.yml`).
 - Feeds risk into the Test Plan, exit evaluation, and the Completion Report's residual-risk statement.
 
+The output is the **Product Risk Register** (ISO/IEC/IEEE 29119-3 work product; see §11).
+
 ---
 
 ## 9. Test monitoring, control & metrics (CTFL v4.0 §5.3) — `status-report`
@@ -142,21 +144,24 @@ ISTQB distinguishes **monitoring** (gathering data), **control** (corrective act
 
 ## 11. Test documentation — ISO/IEC/IEEE 29119-3 alignment
 
-ISTQB references the ISO/IEC/IEEE 29119 standard for documentation. The toolkit's artifacts map to 29119-3 work products:
+ISTQB references the ISO/IEC/IEEE 29119 standard for documentation. The toolkit's artifacts map to 29119-3 work products (the **Organizational Test Policy** sits above them under **ISO/IEC/IEEE 29119-2**, with the Organizational Test Strategy and Test Plans below it):
 
-| ISO/IEC/IEEE 29119-3 document | Toolkit artifact | Produced by |
+| ISO/IEC/IEEE 29119 work product | Toolkit artifact (template) | Produced by |
 |---|---|---|
-| Organizational Test Strategy / Test Policy | `TEST-STRATEGY.md` | `create-strategy` |
-| Test Plan | `TEST-PLAN-<release>.md` | `create-plan` |
+| Organizational Test Policy (ISO/IEC/IEEE **29119-2**) | `TEST-POLICY.md` (`policy-template.md`) | `test-policy` |
+| Organizational Test Strategy | `TEST-STRATEGY.md` (`strategy-template.md`) | `create-strategy` |
+| Test Automation Strategy / Test Automation Plan | automation strategy/plan doc (`automation-strategy-template.md`, `automation-plan-template.md`) | `automation-strategy` |
+| Test Plan | `TEST-PLAN-<release>.md` (`plan-template.md`) | `create-plan` |
+| Product Risk Register | risk register (`risk-register-template.md`) | `risk-assessment` |
 | Test Design Specification | test-conditions + design output | `test-design` |
-| Test Case Specification | test cases (repo + plan §cases) | `test-design`, `implement` |
+| Test Case Specification | test cases (repo + plan §cases, `test-case-template.md`) | `test-design`, `implement` |
 | Test Procedure Specification | executable specs/scripts | `implement`, `scaffold` |
-| Test Data / Environment Requirements | factories, fixtures, env config | `test-data`, `scaffold` |
+| Test Data / Environment Requirements | factories, fixtures, env config (`test-data-template.md`, `test-environment-template.md`) | `test-data`, `test-env`, `scaffold` |
 | Test Execution Log / Test Results | CI reports (JUnit/HTML/K6) | `implement`, CI |
+| Production Verification Report (shift-right / testing in production) | `production-verification-<scope>.md` (`shift-right-template.md`) | `shift-right` |
 | Test Status Report | `STATUS-REPORT-*.md` | `status-report` |
-| Test Completion Report | `RELEASE-REPORT-<release>.md` | `release-report` |
-| Incident (Defect) Report | defect report | `triage` |
-| Product Risk Register | risk register | `risk-assessment` |
+| Test Completion Report | `RELEASE-REPORT-<release>.md` (`completion-report-template.md`) | `release-report` |
+| Incident (Defect) Report | defect report (`defect-report-template.md`) | `triage` |
 
 Legacy IEEE 829 users: the Test Plan and Completion Report follow the equivalent 829 structure where teams still require it.
 
@@ -184,11 +189,16 @@ Test basis (requirement / user story / OpenAPI)
 | Command | ISTQB process activity | Key syllabus reference |
 |---|---|---|
 | `qa-init` | Test planning (context establishment) | CTFL §1.4, §5.1 |
+| `test-policy` | Organizational Test Policy (governance) | ISO/IEC/IEEE 29119-2; CTAL-TM / Test Management (Expert) |
 | `create-strategy` | Test planning (org test strategy) | CTFL §5.1; CTAL-TM |
 | `create-plan` | Test planning (test plan) | CTFL §5.1; ISO 29119-3 |
+| `automation-strategy` | Test automation strategy/plan (gTAA) | CT-TAE; Test Automation Strategy (Specialist) |
+| `tool-select` | Test tool selection & evaluation | CT-TAE; Test Automation Strategy (Specialist); CTFL §6 (generic tool support) |
+| `cost-of-quality` | Value of testing, test economics & cost of quality | CTAL-TM (cost of quality, ROI, metrics) |
 | `risk-assessment` | Risk-based testing | CTFL §5.2; CTAL-TM |
 | `static-review` | Static testing | CTFL §3 |
 | `test-design` | Test analysis + design + techniques | CTFL §1.4, §4 |
+| `acceptance` | Collaboration-based design (ATDD) + acceptance testing | CTFL §4.5 (ATDD technique); CT-AcT (acceptance-testing forms, distinct from §4.5); CTFL §2.2 (level) |
 | `scaffold` | Test implementation (test env/automation) | CTFL §1.4, §6; CT-TAE |
 | `implement` | Test implementation + execution | CTFL §1.4 |
 | `add-test` | Test design + implementation | CTFL §4 |
@@ -196,9 +206,11 @@ Test basis (requirement / user story / OpenAPI)
 | `perf-test` | Non-functional (performance) testing | CT-PT |
 | `a11y-audit` | Non-functional (usability/accessibility) | CT-UT / WCAG |
 | `contract-sync` | Integration testing | CTFL §2.2 |
-| `security-scan` | Non-functional (security) testing | CT-SEC |
+| `security-scan` | Non-functional (security) testing | CT-SEC; OWASP / ASVS; ISO/IEC 25010 Security |
+| `shift-right` | Testing in production (shift-right) | Quality in DevOps (Specialist); ISO/IEC/IEEE 29119-3 Production Verification Report |
 | `fix-ci` | Test execution / test environment mgmt | CTFL §6; DevOps |
-| `flaky-hunt` | Test maintenance (pesticide paradox) | CTFL §1.3, §6 |
+| `flaky-hunt` | Test automation maintenance & reliability | CT-TAE; CTFL §6 |
+| `automation-audit` | Static testing of testware + automation architecture assessment | CTFL §3.1; CT-TAE; ISO/IEC 25010 |
 | `review-coverage` | Test monitoring (coverage) + analysis | CTFL §5.3 |
 | `status-report` | Test monitoring & control | CTFL §5.3 |
 | `triage` | Defect management | CTFL §5.5 |
@@ -213,7 +225,7 @@ This matrix shows that **every applicable ISTQB syllabus has at least one comman
 | ISTQB syllabus | Stream / level | Covered by command(s) |
 |---|---|---|
 | Foundation Level (CTFL v4.0) | Core / Foundation | All commands; principles & process embedded in `qa-context` |
-| Advanced Test Manager (CTAL-TM) | Core / Advanced | `test-policy`, `create-strategy`, `create-plan`, `risk-assessment`, `estimate`, `status-report`, `release-report`, `process-improvement` |
+| Advanced Test Manager (CTAL-TM) | Core / Advanced | `test-policy`, `create-strategy`, `create-plan`, `risk-assessment`, `estimate`, `cost-of-quality`, `status-report`, `release-report`, `process-improvement` |
 | Advanced Test Analyst (CTAL-TA) | Core / Advanced | `test-design`, `exploratory`, `acceptance`, `usability-test` |
 | Advanced Technical Test Analyst (CTAL-TTA) | Core / Advanced | `test-design` (white-box), `coverage-measure`, `static-review`, `nonfunctional`, `perf-test`, `security-scan` |
 | Improving the Test Process (Expert) | Expert | `process-improvement` |
@@ -221,7 +233,7 @@ This matrix shows that **every applicable ISTQB syllabus has at least one comman
 | Agile Tester (CTFL-AT) | Agile / Foundation | `create-strategy` (agile mapping), `acceptance`, `exploratory`, `create-plan` |
 | Agile Technical Tester (CT-ATT) | Agile | `implement`, `scaffold`, `test-data`, `fix-ci` |
 | Agile Test Leadership at Scale | Agile | `test-policy`, `process-improvement` |
-| Test Automation Engineering (CT-TAE) | Specialist | `automate`, `automation-strategy` (gTAA), `api-automate`, `web-automate`, `mobile-automate`, `scaffold`, `implement`, `flaky-hunt`, `tool-select`, `test-env` |
+| Test Automation Engineering (CT-TAE) | Specialist | `automate`, `automation-strategy` (gTAA), `automation-audit` (gTAA/SOLID assessment), `api-automate`, `web-automate`, `mobile-automate`, `scaffold`, `implement`, `flaky-hunt`, `tool-select`, `test-env` |
 | Test Automation Strategy | Specialist | `automation-strategy`, `tool-select` |
 | Performance Testing (CT-PT) | Specialist | `perf-plan` (planning/workload model), `perf-test` (scripting/execution) |
 | Security Testing (CT-SEC) | Specialist | `security-scan` |
@@ -232,22 +244,22 @@ This matrix shows that **every applicable ISTQB syllabus has at least one comman
 | Testing with Generative AI (CT-GenAI) | Specialist | `genai-assist` |
 | Model-Based Testing (CT-MBT) | Specialist | `mbt` |
 | Mobile Application Testing (CT-MAT) | Specialist | `mobile-automate` (native/cross-platform via Appium/device farm), `mobile-test` (responsive web) |
-| Quality in DevOps | Specialist | `scaffold` (CI), `fix-ci`, `coverage-measure` |
+| Quality in DevOps | Specialist | `scaffold` (CI), `fix-ci`, `coverage-measure`, `shift-right` |
 | Accessibility | Specialist | `a11y-audit` |
 | Automotive / Finance / Gambling / Game | Specialist (domain) | *Extensible — add a command + config domain if the product is in this domain.* |
 | Glossary / learning | — | `istqb-coach` (on-demand reference for any concept) |
 
 > **Completeness:** for a topic-by-topic walk of every CTFL chapter and Advanced/Specialist syllabus against commands (the gap analysis), see [`ISTQB-COVERAGE.md`](./ISTQB-COVERAGE.md).
 
-### Complete command catalog (58) by ISTQB activity
+### Complete command catalog (59) by ISTQB activity
 
 - **Test planning & management:** `qa-init`, `test-policy`, `create-strategy`, `create-plan`, `risk-assessment`, `estimate`, `tool-select`, `process-improvement`
 - **QA management & governance:** `quality-report`, `team-plan`, `go-no-go`, `cost-of-quality`, `audit-prep`
-- **Static testing & analysis:** `static-review`, `static-analysis`
+- **Static testing & analysis:** `static-review`, `static-analysis`, `automation-audit`
 - **Test analysis & design:** `test-cases`, `test-design`, `combinatorial`, `acceptance`, `mbt`, `exploratory`, `review-coverage`
 - **Test levels & change-related:** `unit-test`, `integration-test`, `maintenance-test`, `regression`
 - **Dynamic analysis & production:** `dynamic-analysis`, `shift-right`
-- **Test implementation & automation:** `scaffold`, `automate`, `automation-strategy`, `api-automate`, `web-automate`, `scan-ui`, `implement`, `add-test`, `test-data`, `test-env`
+- **Test implementation & automation:** `scaffold`, `automate`, `automation-strategy`, `api-automate`, `web-automate`, `mobile-automate`, `scan-ui`, `implement`, `add-test`, `test-data`, `test-env`
 - **Test automation maintenance:** `self-heal`, `flaky-hunt`, `fix-jenkins`
 - **Performance:** `perf-plan`, `perf-test`
 - **Test execution (functional & non-functional):** `perf-test`, `a11y-audit`, `usability-test`, `nonfunctional`, `security-scan`, `contract-sync`, `mobile-test`, `ai-test`, `regression`, `fix-ci`, `fix-jenkins`, `flaky-hunt`

@@ -1,4 +1,4 @@
-# Claude QA Toolkit
+# QA Toolkit
 
 A reusable, **ISTQB-aligned QA toolkit** for Web + REST API projects, packaged as a Claude Code plugin. Install it once, then drive your whole testing workflow with `/qa:*` slash commands in **any** repository. The only thing that changes between projects is a single config file: **`qa.config.yml`**.
 
@@ -15,9 +15,9 @@ The toolkit follows the **ISTQB®** framework strictly — **Certified Tester Fo
 ## The idea in one picture
 
 ```
-  claude-qa-toolkit (this repo, on GitHub)        Your project A          Your project B
+  qa-toolkit (this repo, on GitHub)        Your project A          Your project B
   ┌──────────────────────────────┐                ┌───────────────┐       ┌───────────────┐
-  │ commands/  (16 /qa:* commands)│   install once │ qa.config.yml │       │ qa.config.yml │
+  │ commands/  (59 /qa:* commands)│   install once │ qa.config.yml │       │ qa.config.yml │
   │ skills/    (auto context)     │ ─────────────► │  (the only    │  ...  │  (different   │
   │ templates/ (strategy & plan)  │   via /plugin  │   per-project │       │   values)     │
   └──────────────────────────────┘                │   file)       │       │               │
@@ -32,15 +32,15 @@ Commands + templates are identical across every project. `qa.config.yml` supplie
 
 ```bash
 # 1. Add this repo as a plugin marketplace (once per machine)
-/plugin marketplace add toronto-nigma/claude-qa-toolkit
+/plugin marketplace add qa-io-vn/qa.io.vn
 
 # 2. Install the plugin
-/plugin install qa@claude-qa-toolkit
+/plugin install qa@qa-toolkit
 ```
 
-> Replace `toronto-nigma/claude-qa-toolkit` with your actual GitHub `owner/repo`. You can also point at a local path during development: `/plugin marketplace add /path/to/claude-qa-toolkit`.
+> Replace `qa-io-vn/qa.io.vn` with your actual GitHub `owner/repo`. You can also point at a local path during development: `/plugin marketplace add /path/to/qa-toolkit`.
 
-To update later: `/plugin marketplace update claude-qa-toolkit`.
+To update later: `/plugin marketplace update qa-toolkit`.
 
 ---
 
@@ -63,9 +63,16 @@ Everything reads `qa.config.yml`, so you never re-specify your stack or threshol
 
 ---
 
-## Commands (58)
+## Commands (59)
 
-A command for every ISTQB activity, so a tester can run the **entire** workflow through the agent. Grouped by the ISTQB test-process activity each implements. All commands read `qa.config.yml`, respect its `tooling` toggles, and use ISTQB Glossary terminology. Full syllabus→command mapping: [`docs/ISTQB-COMPLIANCE.md`](docs/ISTQB-COMPLIANCE.md).
+A command for every ISTQB activity, so a tester can run the **entire** workflow through the agent. Grouped by the ISTQB test-process activity each implements. All commands read `qa.config.yml`, respect its `tooling` toggles, and use ISTQB Glossary terminology.
+
+> 🏠 **Start here — the visual guide:** [`docs/index.html`](docs/index.html) — a blog-style home page with the role playbooks, lifecycle map, and full catalog (enable GitHub Pages from `/docs` to host it).
+> 🧑‍💼 **Role playbooks:** [`docs/WORKFLOWS.md`](docs/WORKFLOWS.md) — how to work as a **Manual Tester, Automation Tester, Performance Tester, Test Leader, or Test Manager**: each role's mission, command loops, and cadence, plus the release-lifecycle map that ties them together.
+> 📖 **Full how-to:** [`docs/COMMAND-GUIDE.md`](docs/COMMAND-GUIDE.md) — every command's purpose, prerequisites, output, and next step, plus copy-paste **workflow recipes** and a "which command do I use?" index.
+> 🧪 **Worked examples:** [`docs/COMMAND-EXAMPLES.md`](docs/COMMAND-EXAMPLES.md) — a sample invocation for **every** command with a "Correct when" check, all anchored to one consistent sample project.
+> 📑 **Command reference + proof:** [`docs/command-reference.html`](docs/command-reference.html) — all 59 commands with a **worked sample output** for each (the actual ISTQB artifact it generates for the ShopEase sample project), a live filter box, and the verify-it-worked checklist. The "show me it works" page.
+> Full syllabus→command mapping: [`docs/ISTQB-COMPLIANCE.md`](docs/ISTQB-COMPLIANCE.md).
 
 **Test planning & management** (CTFL §5 · CTAL-TM · Expert)
 
@@ -90,16 +97,17 @@ A command for every ISTQB activity, so a tester can run the **entire** workflow 
 | Command | What it does |
 |---|---|
 | `/qa:static-review <story\|spec>` | Static testing — review the test basis + static analysis (shift-left). |
-| `/qa:test-cases <requirement>` | **Generate test cases** from a requirement/story/endpoint/file — ISTQB techniques, risk-based detail, Test Case Spec + CSV. |
+| `/qa:test-cases <requirement>` | **Generate test cases** from a requirement/story/endpoint/file — ISTQB techniques, risk-based detail, Test Case Spec (+ CSV on request). |
 | `/qa:test-design <feature>` | Broader test analysis & design context for a feature (conditions + cases). |
 | `/qa:combinatorial <feature>` | **Pairwise / classification-tree** design for multi-parameter features (Advanced/CTAL-TA). |
 | `/qa:acceptance <story>` | ATDD/BDD acceptance criteria & Gherkin scenarios. |
 | `/qa:mbt <flow>` | **Model-Based Testing** — model a stateful flow, derive cases by coverage. |
 | `/qa:exploratory <area>` | Session-based **exploratory** testing charters (experience-based). |
 | `/qa:static-analysis [path]` | **Static analysis** of code — complexity, control/data flow, maintainability metrics. |
+| `/qa:automation-audit [path]` | **Audit an existing automation project** — gTAA architecture, **SOLID** & clean-code, test-case/design quality, anti-patterns, pyramid; scored health report + prioritized fixes. |
 | `/qa:review-coverage [area]` | Audit coverage & traceability; recommend missing tests. |
 
-**Test levels & change-related** (CTFL §2.2, §2.4)
+**Test levels & change-related** (CTFL §2.2, §2.3)
 
 | Command | What it does |
 |---|---|
@@ -131,7 +139,7 @@ A command for every ISTQB activity, so a tester can run the **entire** workflow 
 | `/qa:mobile-automate <flow>` | **Mobile** automation — native/cross-platform (Appium/device farm) or responsive mobile-web. |
 | `/qa:perf-plan [scope]` | **Performance test planning** — objectives, SLAs, operational profiles, workload model (feeds `perf-test`). |
 
-**Test execution — functional & non-functional** (CTFL §2.3 · CT-PT/SEC/UT/AI/MAT)
+**Test execution — functional & non-functional** (CTFL §2.2.2 · CT-PT/SEC/UT/AI/MAT)
 
 | Command | What it does |
 |---|---|
@@ -145,8 +153,8 @@ A command for every ISTQB activity, so a tester can run the **entire** workflow 
 | `/qa:ai-test <feature>` | Test **AI/ML** components (metrics, bias, robustness, drift). |
 | `/qa:regression [change]` | Regression test **selection & prioritization** (impact analysis). |
 | `/qa:fix-ci [log]` | Diagnose & fix a failing pipeline / test run (any CI). |
-| `/qa:fix-jenkins [build URL]` | Pull the **latest Jenkins build's failed cases**, fix each, re-run them locally until all pass. |
-| `/qa:flaky-hunt` | Find & fix flaky tests (pesticide-paradox maintenance). |
+| `/qa:fix-jenkins [build URL\|job path]` | Pull the **latest Jenkins build's failed cases**, fix each, re-run them locally until all pass. |
+| `/qa:flaky-hunt [path\|N runs]` | Find & fix flaky tests — deterministic fixes, no blind retries (testware maintenance). |
 | `/qa:self-heal [area]` | **Maintain & auto-heal** the suite — repair broken locators after UI changes, prune/refactor, re-run to confirm. |
 
 **Monitoring, control & completion** (CTFL §5.3–5.5 · ISO 29119-3)
@@ -176,11 +184,11 @@ Copy [`templates/qa.config.example.yml`](templates/qa.config.example.yml) to you
 ## Repo layout
 
 ```
-claude-qa-toolkit/
+qa-toolkit/
 ├── .claude-plugin/
 │   ├── plugin.json            # plugin manifest (name: qa)
 │   └── marketplace.json       # marketplace manifest (clone & install target)
-├── commands/                  # the 58 /qa:* slash commands (one .md each)
+├── commands/                  # the 59 /qa:* slash commands (one .md each)
 ├── skills/
 │   └── qa-context/SKILL.md    # auto-loads qa.config.yml + ISTQB standing rules
 ├── templates/
@@ -188,6 +196,10 @@ claude-qa-toolkit/
 │   ├── strategy-template.md   # ISTQB/ISO-29119 Org Test Strategy structure
 │   └── plan-template.md       # ISTQB/ISO-29119 Test Plan structure
 ├── docs/
+│   ├── index.html             # blog-style visual guide (GitHub Pages-ready)
+│   ├── WORKFLOWS.md           # role playbooks: manual/automation/perf tester, lead, manager
+│   ├── COMMAND-GUIDE.md       # full how-to for all 59 commands + workflow recipes
+│   ├── COMMAND-EXAMPLES.md    # a worked sample invocation for every command
 │   ├── ISTQB-COMPLIANCE.md    # command → ISTQB syllabus traceability map
 │   └── GLOSSARY.md            # ISTQB Glossary-aligned terms
 └── README.md

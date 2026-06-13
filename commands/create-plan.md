@@ -29,7 +29,17 @@ If `qa.config.yml` is missing, stop and tell the user to run `/qa:qa-init`.
    - Schedule mapped to `process.sprint_length_weeks` and cadence.
    - A representative set of sample test cases (Given/When/Then) for the listed features — cover happy path, negative, authz, and any non-functional checks relevant to the feature's risk tier.
    - Risk register (Impact×Likelihood), RACI from `team`, defect rules, a test-summary-report template, and an approvals block.
-3. Write to `<paths.docs_dir>/TEST-PLAN-<release-id>.md`. Create the directory if needed.
-4. Keep it specific to this release — link to `TEST-STRATEGY.md` for the general approach instead of repeating it.
+3. Keep it specific to this release — link to `TEST-STRATEGY.md` for the general approach instead of repeating it.
+4. Write the **Test Plan** (the ISO/IEC/IEEE 29119-3 Test Plan work product) to `<paths.docs_dir>/TEST-PLAN-<release-id>.md`. Create the directory if needed.
+
+## Self-check (run before finalizing output)
+
+Do not finalize until every item passes:
+- [ ] **Config reflected** — every relevant `qa.config.yml` field in scope (`paths.*`, `tooling.*` toggles, `gates`, `risk_areas`, `team`, `test_data`, `process.sprint_length_weeks`) is honored; nothing hardcoded.
+- [ ] **Every feature covered** — each feature in scope has at least one test case; no feature is listed without a corresponding case.
+- [ ] **Acceptance criteria mapped** — each acceptance criterion is traced test basis -> condition -> case; the chain (-> procedure -> result -> defect) is preserved, bidirectional, and free of orphans.
+- [ ] **Measurable** — coverage is stated as counts/percentages (e.g. N conditions, M cases by priority, % of features with ≥1 case) rather than prose claims.
+- [ ] **Residual risk stated** — include a **Residual Risk** section naming what is NOT covered and why (CTFL v4.0 Principle 1: testing shows the presence, not the absence, of defects; §1.4.4).
+- [ ] **Work product named** — output is identified as the ISO/IEC/IEEE 29119-3 **Test Plan** work product, with the `gates` thresholds carried verbatim into its exit criteria, and written to the correct `<paths.docs_dir>` location.
 
 End by pointing to the file and suggesting `/qa:implement <feature>` to start automating.

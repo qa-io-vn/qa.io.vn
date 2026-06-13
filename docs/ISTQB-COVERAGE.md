@@ -82,16 +82,17 @@ Legend: ✅ command exists · 📘 covered as reference/knowledge (via `qa-conte
 ### Test Manager (CTAL-TM) / Expert
 | Topic | Coverage |
 |---|---|
-| Test policy, strategy, planning | ✅ `test-policy`, `create-strategy`, `create-plan` |
-| Risk management | ✅ `risk-assessment` |
+| Test policy, strategy, planning | ✅ `test-policy` (ISO/IEC/IEEE 29119-2 Test Policy), `create-strategy`, `create-plan` |
+| Risk management | ✅ `risk-assessment` (Product Risk Register) |
 | Estimation, monitoring, reporting | ✅ `estimate`, `status-report`, `release-report` |
-| Test process improvement (TMMi/TPI) | ✅ `process-improvement` |
-| People/team skills | 📘 `istqb-coach` (soft topic) |
+| Value of testing, cost of quality, ROI | ✅ `cost-of-quality` |
+| Test process improvement (process-maturity lens, e.g. TMMi/TPI — verify level wording against the current model) | ✅ `process-improvement` |
+| People/team skills | ✅ `team-plan`; 📘 `istqb-coach` (soft topic) |
 
 ## Specialist Level
 | Syllabus | Coverage |
 |---|---|
-| Test Automation Engineering (CT-TAE) + Strategy | ✅ `automation-strategy`, `automate`, `api-automate`, `web-automate`, `mobile-automate`, `scaffold` |
+| Test Automation Engineering (CT-TAE) + Strategy | ✅ `automation-strategy`, `tool-select`, `automate`, `api-automate`, `web-automate`, `mobile-automate`, `scaffold`, `test-env` |
 | Performance Testing (CT-PT) | ✅ `perf-plan`, `perf-test` |
 | Security Testing (CT-SEC) | ✅ `security-scan` |
 | Acceptance Testing (CT-AcT) | ✅ `acceptance` |

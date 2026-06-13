@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Toolkit — A field manual for ISTQB-aligned testing</title>
+<meta name="description" content="59 /qa:* slash commands for Claude Code. ISTQB CTFL v4.0 + Advanced/Specialist aligned. One qa.config.yml per project. Five role playbooks, one release lifecycle.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   QA Toolkit — "Terminal editorial"
+   A long-form technical magazine printed on a dark terminal.
+   ============================================================ */
+:root{
+  /* ink */
+  --bg:        #0d0f13;
+  --bg-deep:   #0a0c10;
+  --surface:   #12151c;
+  --surface-2: #161a22;
+  --hairline:  rgba(232,228,217,.10);
+  --hairline-2:rgba(232,228,217,.06);
+
+  /* type */
+  --text:      #e9e4d8;
+  --text-soft: #c8c4ba;
+  --dim:       #9aa1ab;
+  --faint:     #788089;
+
+  /* primary accent — phosphor green */
+  --accent:       #5ee2a0;
+  --accent-dim:   #3da874;
+  --accent-glow:  rgba(94,226,160,.14);
+
+  /* role accents */
+  --c-manual:    #f0b03c;  /* amber  */
+  --c-auto:      #45d483;  /* green  */
+  --c-perf:      #f4654f;  /* red    */
+  --c-leader:    #5da9f2;  /* blue   */
+  --c-manager:   #ab8df8;  /* violet */
+
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans:  "Public Sans", -apple-system, "Segoe UI", sans-serif;
+  --mono:  "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --wrap: 1120px;
+  --prose: 740px;
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *,*::before,*::after{ animation:none !important; transition:none !important; }
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:1.0625rem;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  /* faint blueprint grid + warm vignette */
+  background-image:
+    radial-gradient(1200px 600px at 50% -10%, rgba(94,226,160,.05), transparent 60%),
+    linear-gradient(rgba(232,228,217,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,228,217,.022) 1px, transparent 1px);
+  background-size:auto, 56px 56px, 56px 56px;
+}
+
+::selection{ background:rgba(94,226,160,.25); color:#fff; }
+
+a{ color:var(--accent); text-decoration:none; }
+a:hover{ text-decoration:underline; text-underline-offset:3px; }
+a:focus-visible, button:focus-visible{
+  outline:2px solid var(--accent); outline-offset:3px; border-radius:2px;
+}
+
+code, kbd{ font-family:var(--mono); }
+
+.wrap{ max-width:var(--wrap); margin:0 auto; padding:0 28px; }
+
+/* ---------- kickers & headings ---------- */
+.kicker{
+  font-family:var(--mono);
+  font-size:.72rem;
+  font-weight:500;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+.kicker::before{ content:"// "; color:var(--faint); letter-spacing:0; }
+
+h2.sec-title{
+  font-family:var(--serif);
+  font-weight:400;
+  font-size:clamp(2rem, 4.2vw, 3rem);
+  line-height:1.12;
+  letter-spacing:-.01em;
+  margin:.55em 0 .35em;
+}
+.sec-intro{ max-width:var(--prose); color:var(--text-soft); }
+.sec-intro code{ font-size:.9em; color:var(--accent); }
+
+section{ padding:96px 0 88px; border-top:1px solid var(--hairline-2); }
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.topnav{
+  position:sticky; top:0; z-index:50;
+  background:rgba(13,15,19,.94);
+  border-bottom:1px solid var(--hairline);
+}
+@supports (backdrop-filter: blur(6px)){
+  .topnav{ background:rgba(13,15,19,.82); backdrop-filter:blur(8px); }
+}
+.topnav .wrap{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:18px; height:56px;
+}
+.wordmark{
+  font-family:var(--serif); font-weight:500; font-style:italic;
+  font-size:1.08rem; color:var(--text); white-space:nowrap;
+}
+.wordmark:hover{ text-decoration:none; color:var(--accent); }
+.wordmark .v{
+  font-family:var(--mono); font-style:normal; font-size:.66rem;
+  color:var(--faint); letter-spacing:.08em; margin-left:.5em; vertical-align:2px;
+}
+.navlinks{ display:flex; gap:4px; list-style:none; }
+.navlinks a{
+  font-family:var(--mono); font-size:.74rem; letter-spacing:.06em;
+  color:var(--dim); padding:6px 10px; border-radius:4px; white-space:nowrap;
+}
+.navlinks a:hover{ color:var(--text); text-decoration:none; background:rgba(232,228,217,.05); }
+.navlinks a.active{ color:var(--accent); }
+@media (max-width: 860px){
+  .topnav .wrap{ height:auto; flex-wrap:wrap; padding-top:10px; padding-bottom:10px; }
+  .navlinks{ flex-wrap:wrap; row-gap:0; }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{ border-top:none; padding:110px 0 96px; position:relative; overflow:hidden; }
+.hero .kicker{ animation:rise .7s ease both; }
+.hero h1{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(3rem, 8.2vw, 6.2rem);
+  line-height:1.02;
+  letter-spacing:-.022em;
+  margin:.3em 0 .35em;
+  max-width:13ch;
+  animation:rise .7s .08s ease both;
+}
+.hero h1 em{
+  font-style:italic; font-weight:400; color:var(--accent);
+  text-shadow:0 0 34px var(--accent-glow), 0 0 80px var(--accent-glow);
+}
+.standfirst{
+  max-width:var(--prose);
+  font-size:clamp(1.1rem, 2vw, 1.3rem);
+  line-height:1.6;
+  color:var(--text-soft);
+  animation:rise .7s .16s ease both;
+}
+.standfirst code{ font-size:.85em; color:var(--accent); }
+.meta-row{
+  display:flex; flex-wrap:wrap; gap:.4em 0; align-items:center;
+  margin:34px 0 44px;
+  font-family:var(--mono); font-size:.76rem; letter-spacing:.05em; color:var(--dim);
+  animation:rise .7s .24s ease both;
+}
+.meta-row > span{ white-space:nowrap; }
+.meta-row > span + span::before{ content:"·"; margin:0 .9em; color:var(--faint); }
+.meta-row strong{ color:var(--text); font-weight:500; }
+
+@keyframes rise{ from{ opacity:0; transform:translateY(16px);} to{ opacity:1; transform:none;} }
+
+/* ============================================================
+   TERMINAL BLOCKS
+   ============================================================ */
+.term{
+  background:var(--bg-deep);
+  border:1px solid var(--hairline);
+  border-radius:10px;
+  box-shadow:0 14px 44px rgba(0,0,0,.42), 0 0 0 1px rgba(0,0,0,.3), 0 0 60px rgba(94,226,160,.04);
+  overflow:hidden;
+}
+.term-bar{
+  display:flex; align-items:center; gap:7px;
+  padding:11px 14px;
+  border-bottom:1px solid var(--hairline-2);
+}
+.term-bar i{ width:11px; height:11px; border-radius:50%; background:#3a4150; }
+.term-bar i:nth-child(1){ background:#e5634f; }
+.term-bar i:nth-child(2){ background:#e0a93e; }
+.term-bar i:nth-child(3){ background:#46c06c; }
+.term-bar span{
+  margin-left:auto; font-family:var(--mono); font-size:.68rem;
+  letter-spacing:.08em; color:var(--faint);
+}
+.term pre{
+  padding:18px 20px;
+  font-family:var(--mono);
+  font-size:.84rem;
+  line-height:1.85;
+  overflow-x:auto;
+  color:var(--text-soft);
+}
+.term .p{ color:var(--accent); }          /* prompt + /qa: */
+.term .a{ color:var(--text); }            /* argument */
+.term .c{ color:var(--faint); font-style:italic; } /* comment */
+.term .o{ color:var(--dim); }             /* output / arrow */
+
+/* terminal lines: command stays whole; the aligned comment column
+   wraps under the command on narrow screens instead of stranding
+   off-screen in a scrollable pre. --lhs sets the comment column. */
+.term pre .ln{ display:flex; flex-wrap:wrap; column-gap:2.5ch; }
+.term pre .lhs{ flex:none; white-space:pre; min-width:var(--lhs, 0); }
+.term pre .ln .c{ flex:1 1 16ch; min-width:0; white-space:normal; }
+
+.hero .term{ max-width:780px; animation:rise .7s .32s ease both; }
+
+/* inline command flow line, used in role cards & cheat rows */
+.flow{
+  font-family:var(--mono); font-size:.8rem; line-height:2.05;
+  color:var(--text-soft);
+}
+.flow b{ font-weight:500; color:var(--text); white-space:nowrap; }
+/* inline-block makes each arrow a legal wrap point between tokens */
+.flow .arr{ display:inline-block; color:var(--faint); padding:0 .25em; }
+
+/* ============================================================
+   HOW IT WORKS — three numbered editorial blocks
+   ============================================================ */
+.ideas{
+  margin-top:48px;
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:0;
+  border-top:1px solid var(--hairline);
+}
+.idea{
+  padding:34px 34px 38px 0;
+  border-bottom:1px solid var(--hairline);
+}
+.idea + .idea{ border-left:1px solid var(--hairline); padding-left:34px; }
+.idea .num{
+  font-family:var(--mono); font-size:.74rem; letter-spacing:.2em; color:var(--accent);
+  display:block; margin-bottom:18px;
+}
+.idea h3{
+  font-family:var(--serif); font-weight:500; font-size:1.45rem;
+  line-height:1.25; margin-bottom:.5em; letter-spacing:-.01em;
+}
+.idea p{ font-size:.96rem; color:var(--dim); }
+.idea p code{ font-size:.86em; color:var(--text-soft); background:rgba(232,228,217,.06); padding:.1em .35em; border-radius:4px; }
+@media (max-width: 880px){
+  .ideas{ grid-template-columns:1fr; }
+  .idea, .idea + .idea{ border-left:none; padding-left:0; padding-right:0; }
+}
+
+/* ============================================================
+   QUICK START — numbered terminal steps
+   ============================================================ */
+.steps{ margin-top:46px; display:grid; gap:26px; max-width:860px; }
+.step{ display:grid; grid-template-columns:64px 1fr; gap:22px; align-items:start; }
+.step > div{ min-width:0; }
+.step .n{
+  font-family:var(--serif); font-style:italic; font-weight:300;
+  font-size:2.6rem; line-height:1; color:var(--faint); padding-top:8px;
+  text-align:right;
+}
+.step h3{
+  font-family:var(--sans); font-weight:600; font-size:1rem;
+  letter-spacing:.01em; margin-bottom:10px;
+}
+.step h3 small{ font-weight:400; color:var(--dim); margin-left:.6em; font-size:.85em; }
+@media (max-width: 640px){
+  .step{ grid-template-columns:1fr; gap:8px; }
+  .step .n{ text-align:left; font-size:1.8rem; padding-top:0; }
+}
+
+/* ============================================================
+   ROLE PLAYBOOKS
+   ============================================================ */
+.role{
+  --rc: var(--accent);
+  margin-top:54px;
+  border:1px solid var(--hairline);
+  border-left:3px solid var(--rc);
+  border-radius:12px;
+  background:linear-gradient(180deg, var(--surface), var(--bg) 88%);
+  overflow:hidden;
+  position:relative;
+}
+.role::before{ /* faint accent wash, top-left */
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(640px 240px at 0% 0%, color-mix(in srgb, var(--rc) 9%, transparent), transparent 70%);
+}
+.role-head{
+  display:flex; align-items:baseline; gap:18px; flex-wrap:wrap;
+  padding:30px 38px 0;
+  position:relative;
+}
+.role-glyph{
+  font-size:1.5rem; line-height:1;
+  align-self:center;
+  width:52px; height:52px; display:grid; place-items:center;
+  border:1px solid color-mix(in srgb, var(--rc) 45%, transparent);
+  background:color-mix(in srgb, var(--rc) 10%, transparent);
+  border-radius:10px;
+  flex:none;
+}
+.role-head h3{
+  font-family:var(--serif); font-weight:500; font-size:clamp(1.7rem, 3vw, 2.2rem);
+  letter-spacing:-.01em; align-self:center;
+}
+.role-tag{
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--rc); align-self:center;
+}
+.role-body{
+  display:grid; grid-template-columns: 5fr 6fr; gap:38px;
+  padding:22px 38px 34px; position:relative;
+}
+.role-mission, .role-flows{ min-width:0; }
+.role-mission{ font-size:1rem; color:var(--text-soft); }
+.role-mission strong{ color:var(--text); font-weight:600; }
+.role-mission .istqb{
+  display:block; margin-top:14px;
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.05em;
+  color:var(--faint); line-height:1.8;
+}
+.role-mission .istqb b{ color:var(--dim); font-weight:500; }
+.role-link{
+  display:inline-block; margin-top:20px;
+  font-family:var(--mono); font-size:.76rem; letter-spacing:.06em;
+  color:var(--rc);
+}
+.role-link:hover{ color:var(--text); }
+.role-flows{ display:grid; gap:16px; align-content:start; }
+.flowbox{
+  border:1px solid var(--hairline-2);
+  background:rgba(0,0,0,.32);
+  border-radius:8px;
+  padding:14px 18px 12px;
+}
+.flowbox h4{
+  font-family:var(--mono); font-weight:500; font-size:.66rem;
+  letter-spacing:.22em; text-transform:uppercase;
+  color:var(--rc); margin-bottom:6px;
+}
+.flowbox .flow b{ color:var(--text); }
+.flowbox .flow .dim{ color:var(--faint); }
+
+.pull{
+  margin-top:22px;
+  padding:4px 0 4px 20px;
+  border-left:2px solid var(--rc);
+  font-family:var(--serif); font-style:italic; font-weight:400;
+  font-size:1.18rem; line-height:1.5; color:var(--text);
+}
+.pull cite{
+  display:block; margin-top:8px;
+  font-family:var(--mono); font-style:normal; font-size:.68rem;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--faint);
+}
+.pull code{ font-size:.82em; color:var(--rc); font-style:normal; }
+
+.handoff{
+  border-top:1px solid var(--hairline-2);
+  padding:16px 38px 20px;
+  font-size:.85rem; color:var(--dim); position:relative;
+}
+.handoff b{ color:var(--text-soft); font-weight:600; }
+.handoff code{ font-size:.86em; color:var(--text-soft); }
+
+@media (max-width: 920px){
+  .role-body{ grid-template-columns:1fr; gap:26px; }
+  .role-head, .role-body{ padding-left:24px; padding-right:24px; }
+  .handoff{ padding-left:24px; padding-right:24px; }
+}
+
+/* role color helpers */
+.r-manual { --rc: var(--c-manual); }
+.r-auto   { --rc: var(--c-auto); }
+.r-perf   { --rc: var(--c-perf); }
+.r-leader { --rc: var(--c-leader); }
+.r-manager{ --rc: var(--c-manager); }
+
+/* ============================================================
+   LIFECYCLE TIMELINE
+   ============================================================ */
+.legend{
+  display:flex; flex-wrap:wrap; gap:10px 22px; margin:30px 0 10px;
+  font-size:.82rem; color:var(--dim);
+}
+.legend span{ display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
+
+.chip{
+  display:inline-grid; place-items:center;
+  min-width:30px; height:21px; padding:0 6px;
+  border-radius:5px;
+  font-family:var(--mono); font-size:.64rem; font-weight:700; letter-spacing:.05em;
+  color:var(--bg-deep);
+  flex:none;
+}
+.chip.m { background:var(--c-manual); }
+.chip.a { background:var(--c-auto); }
+.chip.p { background:var(--c-perf); }
+.chip.l { background:var(--c-leader); }
+.chip.tm{ background:var(--c-manager); }
+
+.timeline{ margin-top:34px; position:relative; padding-left:30px; }
+.timeline::before{
+  content:""; position:absolute; left:7px; top:14px; bottom:14px;
+  width:1px;
+  background:linear-gradient(180deg, var(--accent-dim), var(--hairline) 30%, var(--hairline) 70%, var(--accent-dim));
+}
+.phase{ position:relative; padding:0 0 52px; }
+.phase:last-child{ padding-bottom:6px; }
+.phase::before{ /* node */
+  content:""; position:absolute; left:-30px; top:7px;
+  width:15px; height:15px; border-radius:50%;
+  background:var(--bg);
+  border:2px solid var(--accent);
+  box-shadow:0 0 0 5px var(--bg), 0 0 18px var(--accent-glow);
+}
+.phase-head{
+  display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; margin-bottom:6px;
+}
+.phase-head h3{
+  font-family:var(--mono); font-weight:700; font-size:.92rem;
+  letter-spacing:.3em; text-transform:uppercase; color:var(--text);
+}
+.phase-head .when{
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; color:var(--faint);
+}
+.phase-rule{
+  height:1px; background:var(--hairline); margin:10px 0 18px;
+  position:relative; overflow:visible;
+}
+.acts{ list-style:none; display:grid; gap:11px; max-width:880px; }
+.acts li{
+  display:grid; grid-template-columns:46px 1fr; gap:14px; align-items:start;
+}
+.acts li > *{ min-width:0; }
+.acts .flow{ line-height:1.85; padding-top:0; }
+.acts .flow .note{ color:var(--faint); font-style:italic; }
+.acts .chip{ margin-top:3px; }
+.acts li.dual{ grid-template-columns:46px 1fr; }
+.acts li.dual .chips{ display:flex; gap:3px; margin-top:3px; }
+.acts li.dual .chips .chip{ min-width:22px; padding:0 4px; margin-top:0; }
+@media (max-width: 640px){
+  .acts li{ grid-template-columns:40px 1fr; gap:10px; }
+}
+
+/* ============================================================
+   COMMAND CATALOG
+   ============================================================ */
+.cat-grid{
+  margin-top:46px;
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(330px, 1fr));
+  gap:18px;
+}
+.cat{
+  border:1px solid var(--hairline);
+  background:var(--surface);
+  border-radius:10px;
+  padding:22px 22px 20px;
+  display:flex; flex-direction:column; gap:12px;
+  transition:border-color .2s ease, transform .2s ease;
+}
+.cat:hover{ border-color:rgba(94,226,160,.35); transform:translateY(-2px); }
+.cat header{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+.cat h3{
+  font-family:var(--sans); font-weight:600; font-size:.95rem; letter-spacing:.01em;
+}
+.cat .count{
+  font-family:var(--mono); font-size:.68rem; color:var(--accent);
+  letter-spacing:.08em; white-space:nowrap;
+}
+.cat .ref{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.1em;
+  color:var(--faint); margin-top:-8px;
+}
+.chips-wrap{ display:flex; flex-wrap:wrap; gap:7px; }
+.cmd{
+  font-family:var(--mono); font-size:.74rem;
+  color:var(--text-soft);
+  background:rgba(0,0,0,.35);
+  border:1px solid var(--hairline-2);
+  border-radius:5px;
+  padding:3px 9px;
+  cursor:help;
+  transition:color .15s ease, border-color .15s ease;
+}
+.cmd:hover{ color:var(--accent); border-color:rgba(94,226,160,.4); }
+.cat-total{
+  margin-top:26px;
+  font-family:var(--mono); font-size:.76rem; letter-spacing:.08em; color:var(--dim);
+}
+.cat-total b{ color:var(--accent); font-weight:700; }
+
+/* ============================================================
+   DOCS
+   ============================================================ */
+.doc-grid{
+  margin-top:46px;
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+  gap:18px;
+}
+.doc{
+  display:block;
+  border:1px solid var(--hairline);
+  border-radius:10px;
+  background:var(--surface);
+  padding:24px 24px 22px;
+  color:var(--text);
+  transition:border-color .2s ease, transform .2s ease;
+}
+.doc:hover{ text-decoration:none; border-color:rgba(94,226,160,.4); transform:translateY(-2px); }
+.doc .fname{
+  font-family:var(--mono); font-size:.78rem; color:var(--accent);
+  letter-spacing:.03em; display:block; margin-bottom:10px;
+}
+.doc h3{
+  font-family:var(--serif); font-weight:500; font-size:1.25rem;
+  letter-spacing:-.01em; margin-bottom:6px;
+}
+.doc p{ font-size:.88rem; color:var(--dim); }
+.doc .go{
+  display:block; margin-top:14px;
+  font-family:var(--mono); font-size:.7rem; letter-spacing:.12em; color:var(--faint);
+}
+.doc:hover .go{ color:var(--accent); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{
+  border-top:1px solid var(--hairline);
+  padding:54px 0 70px;
+  margin-top:30px;
+}
+footer .wrap{ display:grid; gap:16px; }
+.foot-line{
+  font-family:var(--mono); font-size:.74rem; letter-spacing:.06em; color:var(--dim);
+  display:flex; flex-wrap:wrap; gap:.3em 0;
+}
+.foot-line span + span::before{ content:"·"; margin:0 .8em; color:var(--faint); }
+.foot-legal{ font-size:.82rem; color:var(--faint); max-width:var(--prose); }
+.foot-legal a{ color:var(--dim); }
+
+/* scroll reveal (progressive enhancement — visible without JS) */
+html.js .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+html.js .reveal.in{ opacity:1; transform:none; }
+@media print{
+  html.js .reveal{ opacity:1 !important; transform:none !important; transition:none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====================== NAV ====================== -->
+<nav class="topnav" aria-label="Page navigation">
+  <div class="wrap">
+    <a class="wordmark" href="#top">QA Toolkit<span class="v">v3.8.1</span></a>
+    <ul class="navlinks">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#quickstart">Quick start</a></li>
+      <li><a href="#roles">Roles</a></li>
+      <li><a href="#lifecycle">Lifecycle</a></li>
+      <li><a href="#commands">Commands</a></li>
+      <li><a href="#docs">Docs</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ====================== HERO ====================== -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <p class="kicker">A field manual for ISTQB-aligned testing</p>
+    <h1>One toolkit. <em>Every</em> testing role.</h1>
+    <p class="standfirst">
+      Fifty-nine <code>/qa:*</code> slash commands turn Claude&nbsp;Code into a full QA department —
+      aligned with ISTQB CTFL&nbsp;v4.0 and the Advanced &amp; Specialist syllabi, documented to
+      ISO/IEC/IEEE&nbsp;29119-3. Install once as a plugin; the only file that changes between
+      projects is a single <code>qa.config.yml</code>.
+    </p>
+    <div class="meta-row">
+      <span><strong>v3.8.1</strong></span>
+      <span><strong>59</strong> commands</span>
+      <span>MIT license</span>
+      <span>ISTQB-aligned</span>
+      <span>Playwright · K6 · Pact · axe</span>
+    </div>
+    <div class="term">
+      <div class="term-bar"><i></i><i></i><i></i><span>your-project — claude</span></div>
+      <pre style="--lhs:34ch"><span class="ln"
+><span class="lhs"><span class="p">&gt; /qa:qa-init</span></span><span class="c"># interview → qa.config.yml</span></span><span class="ln"
+><span class="lhs"><span class="p">&gt; /qa:create-strategy</span></span><span class="c"># → docs/qa/TEST-STRATEGY.md</span></span><span class="ln"
+><span class="lhs"><span class="p">&gt; /qa:scaffold</span></span><span class="c"># → Playwright+TS · K6 · Pact · CI</span></span><span class="ln"
+><span class="lhs"><span class="p">&gt; /qa:implement</span> <span class="a">"guest checkout"</span></span><span class="c"># → E2E + API + contract tests</span></span></pre>
+    </div>
+  </div>
+</header>
+
+<!-- ====================== HOW IT WORKS ====================== -->
+<section id="how">
+  <div class="wrap">
+    <p class="kicker reveal">How it works</p>
+    <h2 class="sec-title reveal">Three ideas, one config file.</h2>
+    <p class="sec-intro reveal">
+      The toolkit lives in one GitHub repo and behaves identically in every project you point it at.
+      What varies per project fits in a single YAML file.
+    </p>
+    <div class="ideas">
+      <div class="idea reveal">
+        <span class="num">01</span>
+        <h3>Install once, identical everywhere</h3>
+        <p>The toolkit ships as a Claude Code <em>plugin</em>: 59 commands, auto-loading skills,
+           and ISO-29119 document templates. Improve the toolkit in one place and every project
+           gets the upgrade with <code>/plugin marketplace update</code>.</p>
+      </div>
+      <div class="idea reveal">
+        <span class="num">02</span>
+        <h3>One file differs per project</h3>
+        <p><code>qa.config.yml</code> captures your stack, tooling toggles, CI platform,
+           quality-gate thresholds, risk areas, environments, and team. Every command reads it —
+           you never re-specify your stack or SLAs.</p>
+      </div>
+      <div class="idea reveal">
+        <span class="num">03</span>
+        <h3>Every command is an ISTQB activity</h3>
+        <p>Each command implements a test-process activity — planning, monitoring &amp; control,
+           analysis, design, implementation, execution, completion — and emits proper testware:
+           test plans, case specs, defect reports, completion reports.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== QUICK START ====================== -->
+<section id="quickstart">
+  <div class="wrap">
+    <p class="kicker reveal">Quick start</p>
+    <h2 class="sec-title reveal">From zero to a running suite.</h2>
+    <p class="sec-intro reveal">
+      Two plugin commands per machine, one init per project. Everything after that reads the config.
+    </p>
+    <div class="steps">
+      <div class="step reveal">
+        <span class="n" aria-hidden="true">1</span>
+        <div>
+          <h3>Add the marketplace <small>once per machine</small></h3>
+          <div class="term">
+            <div class="term-bar"><i></i><i></i><i></i><span>claude</span></div>
+            <pre><span class="p">&gt; /plugin marketplace add</span> <span class="a">toronto-nigma/qa-toolkit</span></pre>
+          </div>
+        </div>
+      </div>
+      <div class="step reveal">
+        <span class="n" aria-hidden="true">2</span>
+        <div>
+          <h3>Install the plugin</h3>
+          <div class="term">
+            <div class="term-bar"><i></i><i></i><i></i><span>claude</span></div>
+            <pre><span class="p">&gt; /plugin install</span> <span class="a">qa@qa-toolkit</span></pre>
+          </div>
+        </div>
+      </div>
+      <div class="step reveal">
+        <span class="n" aria-hidden="true">3</span>
+        <div>
+          <h3>Initialize your project <small>once per repo</small></h3>
+          <div class="term">
+            <div class="term-bar"><i></i><i></i><i></i><span>your-project — claude</span></div>
+            <pre style="--lhs:29ch"><span class="ln"
+><span class="lhs"><span class="o">$</span> <span class="a">cd your-project</span></span></span><span class="ln"
+><span class="lhs"><span class="p">&gt; /qa:qa-init</span></span><span class="c"># interactive interview → ./qa.config.yml</span></span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== ROLES ====================== -->
+<section id="roles">
+  <div class="wrap">
+    <p class="kicker reveal">The five role playbooks</p>
+    <h2 class="sec-title reveal">Pick your role. Run the loop.</h2>
+    <p class="sec-intro reveal">
+      Each playbook gives a role's mission and its command loop, so one person can carry the entire
+      role through the agent. You can be all five — just switch playbooks as the day demands.
+      The roles hand work to each other at well-defined points; the
+      <a href="#lifecycle">lifecycle timeline</a> below shows the whole picture.
+    </p>
+
+    <!-- ——— Manual Tester ——— -->
+    <article class="role r-manual reveal" id="role-manual">
+      <div class="role-head">
+        <span class="role-glyph" aria-hidden="true">🔍</span>
+        <h3>Manual Tester</h3>
+        <span class="role-tag">Static · Design · Exploration</span>
+      </div>
+      <div class="role-body">
+        <div class="role-mission">
+          <p><strong>Mission:</strong> find defects early and validate the product against real
+             user needs — through static review, designed test cases, and skilled exploration.
+             Shift-left is where you're cheapest to the project: review every story
+             <em>before</em> dev finishes.</p>
+          <span class="istqb"><b>ISTQB home turf:</b> static testing (§3) · test analysis &amp; design (§4) · defect management (§5.5) · experience-based techniques · CTAL-TA</span>
+          <a class="role-link" href="WORKFLOWS.md#-manual-tester">Full playbook → WORKFLOWS.md</a>
+        </div>
+        <div class="role-flows">
+          <div class="flowbox">
+            <h4>Core loop — per user story</h4>
+            <p class="flow"><b>static-review</b><span class="arr">→</span><b>acceptance</b><span class="arr">→</span><b>test-cases</b><span class="arr">→</span><b>test-data</b><span class="arr">→</span><span class="dim">(execute)</span><span class="arr">→</span><b>exploratory</b><span class="arr">→</span><b>triage</b></p>
+          </div>
+          <div class="flowbox">
+            <h4>When the feature is bigger</h4>
+            <p class="flow"><b>test-design</b> <span class="dim">complex rules</span> · <b>combinatorial</b> <span class="dim">pairwise</span> · <b>mbt</b> <span class="dim">stateful flows</span> · <b>review-coverage</b> <span class="dim">gaps</span></p>
+          </div>
+        </div>
+      </div>
+      <p class="handoff"><b>Hands off to:</b> Automation Tester — stable manual cases become
+         <code>/qa:automate</code> candidates scored by ROI — and Test Leader, whose
+         <code>status-report</code> reads your execution results and defects.</p>
+    </article>
+
+    <!-- ——— Automation Tester ——— -->
+    <article class="role r-auto reveal" id="role-automation">
+      <div class="role-head">
+        <span class="role-glyph" aria-hidden="true">🤖</span>
+        <h3>Automation Tester</h3>
+        <span class="role-tag">Build · Run · Maintain</span>
+      </div>
+      <div class="role-body">
+        <div class="role-mission">
+          <p><strong>Mission:</strong> build and maintain a fast, deterministic, maintainable
+             automation suite at the right pyramid levels — and keep CI green <em>honestly</em>,
+             never masking real defects. Maintenance is half the job.</p>
+          <span class="istqb"><b>ISTQB home turf:</b> CT-TAE (gTAA architecture) · test implementation &amp; execution (§1.4) · maintainability · CTAL-TTA</span>
+          <blockquote class="pull">
+            "A genuine product defect goes to <code>triage</code> and the test keeps asserting
+            correct behavior. A green build you can't trust is worse than a red one."
+            <cite>The honesty rule</cite>
+          </blockquote>
+          <a class="role-link" href="WORKFLOWS.md#-automation-tester">Full playbook → WORKFLOWS.md</a>
+        </div>
+        <div class="role-flows">
+          <div class="flowbox">
+            <h4>Setup — once per project</h4>
+            <p class="flow"><b>automation-strategy</b><span class="arr">→</span><b>scaffold</b><span class="arr">→</span><b>test-env</b></p>
+          </div>
+          <div class="flowbox">
+            <h4>Core loop — per feature</h4>
+            <p class="flow"><b>automate</b><span class="arr">→</span><b>implement</b><span class="arr">→</span><b>api-automate</b> / <b>scan-ui</b> / <b>web-automate</b></p>
+          </div>
+          <div class="flowbox">
+            <h4>Maintenance loop — keep CI honest</h4>
+            <p class="flow"><b>fix-jenkins</b> · <b>fix-ci</b> · <b>flaky-hunt</b> · <b>self-heal</b> <span class="dim">— real defects →</span> <b>triage</b></p>
+          </div>
+        </div>
+      </div>
+      <p class="handoff"><b>Receives from:</b> Manual Tester (case CSVs) and Test Leader (risk priorities).
+         <b>Hands off to:</b> everyone — your suite is the safety net <code>regression</code>,
+         <code>status-report</code>, and <code>go-no-go</code> read from.</p>
+    </article>
+
+    <!-- ——— Performance Tester ——— -->
+    <article class="role r-perf reveal" id="role-performance">
+      <div class="role-head">
+        <span class="role-glyph" aria-hidden="true">⚡</span>
+        <h3>Performance Tester</h3>
+        <span class="role-tag">Plan · Load · Analyze</span>
+      </div>
+      <div class="role-body">
+        <div class="role-mission">
+          <p><strong>Mission:</strong> prove the system meets its performance SLAs under realistic
+             and extreme load — and catch degradation before users do. Thresholds live in
+             <code>qa.config.yml</code> and run as CI gates.</p>
+          <span class="istqb"><b>ISTQB home turf:</b> CT-PT — workload modeling · load / stress / spike / soak · threshold-based gates</span>
+          <blockquote class="pull">
+            "Never script before planning. <code>perf-test</code> without a
+            <code>perf-plan</code> tests a number, not a requirement."
+            <cite>Performance rule №1</cite>
+          </blockquote>
+          <a class="role-link" href="WORKFLOWS.md#-performance-tester">Full playbook → WORKFLOWS.md</a>
+        </div>
+        <div class="role-flows">
+          <div class="flowbox">
+            <h4>Core loop — per release or risk area</h4>
+            <p class="flow"><b>perf-plan</b><span class="arr">→</span><b>perf-test</b> <span class="dim">load → stress → spike → soak</span><span class="arr">→</span><b>dynamic-analysis</b></p>
+          </div>
+          <div class="flowbox">
+            <h4>Beyond load</h4>
+            <p class="flow"><b>nonfunctional</b> <span class="dim">reliability</span> · <b>shift-right</b> <span class="dim">prod monitoring</span> · <span class="dim">results feed</span> <b>go-no-go</b></p>
+          </div>
+        </div>
+      </div>
+      <p class="handoff"><b>Hands off to:</b> Test Leader / Manager — threshold pass-fail and
+         capacity headroom feed <code>go-no-go</code> and <code>quality-report</code>.</p>
+    </article>
+
+    <!-- ——— Test Leader ——— -->
+    <article class="role r-leader reveal" id="role-leader">
+      <div class="role-head">
+        <span class="role-glyph" aria-hidden="true">🧭</span>
+        <h3>Test Leader</h3>
+        <span class="role-tag">Plan · Monitor · Decide</span>
+      </div>
+      <div class="role-body">
+        <div class="role-mission">
+          <p><strong>Mission:</strong> run the testing of a release — decide <em>where</em> to test
+             deeply, track progress against the plan, take corrective action, and make the
+             evidence-based ship/hold recommendation. The risk register drives everything.</p>
+          <span class="istqb"><b>ISTQB home turf:</b> test planning, monitoring &amp; control (§5) · risk-based testing (§5.2) · completion · CTAL-TM operational</span>
+          <a class="role-link" href="WORKFLOWS.md#-test-leader">Full playbook → WORKFLOWS.md</a>
+        </div>
+        <div class="role-flows">
+          <div class="flowbox">
+            <h4>Release kickoff</h4>
+            <p class="flow"><b>risk-assessment</b><span class="arr">→</span><b>estimate</b><span class="arr">→</span><b>create-plan</b></p>
+          </div>
+          <div class="flowbox">
+            <h4>Weekly — monitoring &amp; control</h4>
+            <p class="flow"><b>status-report</b> · <b>review-coverage</b> · <b>regression</b> · <b>flaky-hunt</b></p>
+          </div>
+          <div class="flowbox">
+            <h4>Release endgame</h4>
+            <p class="flow"><b>coverage-measure</b><span class="arr">→</span><b>go-no-go</b><span class="arr">→</span><b>release-report</b></p>
+          </div>
+        </div>
+      </div>
+      <p class="handoff"><b>Receives from:</b> everyone — execution results, defects, perf thresholds,
+         coverage. <b>Hands off to:</b> Test Manager (reports roll up into <code>quality-report</code>)
+         and the org (the <code>go-no-go</code> decision). Remember: severity ≠ priority.</p>
+    </article>
+
+    <!-- ——— Test Manager ——— -->
+    <article class="role r-manager reveal" id="role-manager">
+      <div class="role-head">
+        <span class="role-glyph" aria-hidden="true">📊</span>
+        <h3>Test Manager</h3>
+        <span class="role-tag">Policy · People · Process</span>
+      </div>
+      <div class="role-body">
+        <div class="role-mission">
+          <p><strong>Mission:</strong> own the test <em>organization</em> — policy, strategy, people,
+             budget, process maturity, and the quality story told to executives. You work across
+             releases, not inside one.</p>
+          <span class="istqb"><b>ISTQB home turf:</b> CTAL-TM strategic · Expert Test Management · Improving the Test Process (TMMi)</span>
+          <a class="role-link" href="WORKFLOWS.md#-test-manager">Full playbook → WORKFLOWS.md</a>
+        </div>
+        <div class="role-flows">
+          <div class="flowbox">
+            <h4>Foundations — once, then yearly review</h4>
+            <p class="flow"><b>test-policy</b><span class="arr">→</span><b>create-strategy</b><span class="arr">→</span><b>automation-strategy</b><span class="arr">→</span><b>tool-select</b></p>
+          </div>
+          <div class="flowbox">
+            <h4>Management rhythm</h4>
+            <p class="flow"><b>quality-report</b> <span class="dim">monthly</span> · <b>team-plan</b> · <b>cost-of-quality</b> <span class="dim">quarterly</span> · <b>process-improvement</b> <span class="dim">half-yearly</span> · <b>audit-prep</b> <span class="dim">before audits</span></p>
+          </div>
+        </div>
+      </div>
+      <p class="handoff"><b>Receives from:</b> Test Leader (per-release reports) and Automation Tester
+         (<code>automation-audit</code> health scores). <b>Hands off to:</b> the organization —
+         policy, strategy, budget, and the quality narrative.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ====================== LIFECYCLE ====================== -->
+<section id="lifecycle">
+  <div class="wrap">
+    <p class="kicker reveal">The release lifecycle</p>
+    <h2 class="sec-title reveal">All five roles, one timeline.</h2>
+    <p class="sec-intro reveal">
+      How the playbooks interlock across one release — the same role colors as above, end to end.
+      Full map in <a href="WORKFLOWS.md#the-release-lifecycle--all-roles-on-one-timeline">WORKFLOWS.md</a>.
+    </p>
+
+    <div class="legend reveal" aria-label="Role color legend">
+      <span><span class="chip m">M</span> Manual</span>
+      <span><span class="chip a">A</span> Automation</span>
+      <span><span class="chip p">P</span> Performance</span>
+      <span><span class="chip l">L</span> Leader</span>
+      <span><span class="chip tm">TM</span> Manager</span>
+    </div>
+
+    <div class="timeline">
+      <div class="phase reveal">
+        <div class="phase-head"><h3>Plan</h3><span class="when">release kickoff</span></div>
+        <div class="phase-rule"></div>
+        <ul class="acts">
+          <li><span class="chip tm">TM</span><p class="flow"><b>test-policy</b> / <b>create-strategy</b> <span class="note">— standing, reviewed yearly</span></p></li>
+          <li><span class="chip l">L</span><p class="flow"><b>risk-assessment</b><span class="arr">→</span><b>estimate</b><span class="arr">→</span><b>create-plan</b> <span class="note">&lt;release&gt;</span></p></li>
+          <li><span class="chip a">A</span><p class="flow"><b>automation-strategy</b><span class="arr">→</span><b>scaffold</b> <span class="note">— once per project</span></p></li>
+          <li><span class="chip p">P</span><p class="flow"><b>perf-plan</b> <span class="note">&lt;high-risk area&gt;</span></p></li>
+        </ul>
+      </div>
+
+      <div class="phase reveal">
+        <div class="phase-head"><h3>Build</h3><span class="when">per story, repeating all sprint</span></div>
+        <div class="phase-rule"></div>
+        <ul class="acts">
+          <li><span class="chip m">M</span><p class="flow"><b>static-review</b><span class="arr">→</span><b>acceptance</b><span class="arr">→</span><b>test-cases</b><span class="arr">→</span><span class="note">execute</span><span class="arr">→</span><b>exploratory</b></p></li>
+          <li><span class="chip a">A</span><p class="flow"><b>automate</b><span class="arr">→</span><b>implement</b><span class="arr">→</span><b>api-automate</b> / <b>web-automate</b> / <b>test-data</b></p></li>
+          <li class="dual"><span class="chips"><span class="chip m">M</span><span class="chip a">A</span></span><p class="flow"><b>triage</b> <span class="note">&lt;any real defect&gt;</span></p></li>
+          <li><span class="chip a">A</span><p class="flow"><b>fix-jenkins</b> / <b>fix-ci</b> / <b>flaky-hunt</b> / <b>self-heal</b> <span class="note">— keep CI honest</span></p></li>
+        </ul>
+      </div>
+
+      <div class="phase reveal">
+        <div class="phase-head"><h3>Stabilize</h3><span class="when">release hardening</span></div>
+        <div class="phase-rule"></div>
+        <ul class="acts">
+          <li><span class="chip l">L</span><p class="flow"><b>status-report</b> <span class="note">weekly</span><span class="arr">→</span><span class="note">control actions</span></p></li>
+          <li><span class="chip l">L</span><p class="flow"><b>regression</b> <span class="note">&lt;changes&gt;</span> · <b>review-coverage</b></p></li>
+          <li><span class="chip p">P</span><p class="flow"><b>perf-test</b> <span class="note">load / stress / spike vs release candidate</span></p></li>
+          <li><span class="chip p">P</span><p class="flow"><b>security-scan</b> · <b>a11y-audit</b> <span class="note">— non-functional sweep</span></p></li>
+        </ul>
+      </div>
+
+      <div class="phase reveal">
+        <div class="phase-head"><h3>Ship</h3><span class="when">the gate</span></div>
+        <div class="phase-rule"></div>
+        <ul class="acts">
+          <li class="dual"><span class="chips"><span class="chip l">L</span><span class="chip tm">TM</span></span><p class="flow"><b>coverage-measure</b><span class="arr">→</span><b>go-no-go</b> <span class="note">— Leader gates, Manager signs off</span></p></li>
+          <li><span class="chip l">L</span><p class="flow"><b>release-report</b> <span class="note">— residual risk, lessons learned</span></p></li>
+        </ul>
+      </div>
+
+      <div class="phase reveal">
+        <div class="phase-head"><h3>Between releases</h3><span class="when">the long game</span></div>
+        <div class="phase-rule"></div>
+        <ul class="acts">
+          <li><span class="chip tm">TM</span><p class="flow"><b>quality-report</b> · <b>team-plan</b> · <b>cost-of-quality</b> · <b>process-improvement</b></p></li>
+          <li><span class="chip a">A</span><p class="flow"><b>automation-audit</b> · <b>static-analysis</b> <span class="note">— quarterly health check</span></p></li>
+          <li><span class="chip p">P</span><p class="flow"><b>perf-test</b> <span class="note">soak</span> + <b>dynamic-analysis</b> <span class="note">— quarterly</span></p></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== COMMANDS ====================== -->
+<section id="commands">
+  <div class="wrap">
+    <p class="kicker reveal">Command catalog</p>
+    <h2 class="sec-title reveal">All 59, grouped by activity.</h2>
+    <p class="sec-intro reveal">
+      A command for every ISTQB test-process activity. Hover any chip for its one-liner; the
+      <a href="COMMAND-GUIDE.md">Command Guide</a> has the full how-to and
+      <a href="COMMAND-EXAMPLES.md">worked examples</a> cover every command.
+    </p>
+
+    <div class="cat-grid">
+      <div class="cat reveal">
+        <header><h3>Planning &amp; management</h3><span class="count">8</span></header>
+        <p class="ref">CTFL §5 · CTAL-TM · Expert</p>
+        <div class="chips-wrap">
+          <span class="cmd" title="Interview you and generate the per-project qa.config.yml. Start here.">qa-init</span>
+          <span class="cmd" title="Author the Organizational Test Policy — top of the document hierarchy.">test-policy</span>
+          <span class="cmd" title="Generate the Organizational Test Strategy (ISO 29119-3).">create-strategy</span>
+          <span class="cmd" title="Generate a release/sprint Test Plan (ISO 29119-3).">create-plan</span>
+          <span class="cmd" title="Score product & project risks (likelihood × impact) — risk-based testing.">risk-assessment</span>
+          <span class="cmd" title="Test effort estimation, metrics- and expert-based.">estimate</span>
+          <span class="cmd" title="Evaluate & select a test tool: criteria, comparison, pilot plan.">tool-select</span>
+          <span class="cmd" title="Test process maturity assessment & improvement roadmap (TMMi/IDEAL).">process-improvement</span>
+        </div>
+      </div>
+
+      <div class="cat reveal">
+        <header><h3>Governance</h3><span class="count">5</span></header>
+        <p class="ref">CTAL-TM strategic · Expert TM</p>
+        <div class="chips-wrap">
+          <span class="cmd" title="Cross-release quality KPI dashboard / executive report.">quality-report</span>
+          <span class="cmd" title="Team capacity & skills — staffing vs backlog, skills matrix, training.">team-plan</span>
+          <span class="cmd" title="Formal release readiness gate — consolidated ship/hold with sign-off.">go-no-go</span>
+          <span class="cmd" title="Cost of Quality & QA ROI — prevention/appraisal/failure costs, budget case.">cost-of-quality</span>
+          <span class="cmd" title="Audit & compliance readiness — traceability evidence pack, conformance gaps.">audit-prep</span>
+        </div>
+      </div>
+
+      <div class="cat reveal">
+        <header><h3>Static testing, analysis &amp; design</h3><span class="count">10</span></header>
+        <p class="ref">CTFL §3–4 · CTAL-TA/TTA</p>
+        <div class="chips-wrap">
+          <span class="cmd" title="Static testing — review the test basis for testability & defects (shift-left).">static-review</span>
+          <span class="cmd" title="Static analysis of code — complexity, control/data flow, maintainability.">static-analysis</span>
+          <span class="cmd" title="Audit an existing automation project — gTAA, SOLID, anti-patterns, pyramid; scored report.">automation-audit</span>
+          <span class="cmd" title="Generate test cases with ISTQB techniques (EP, BVA, decision tables) + CSV.">test-cases</span>
+          <span class="cmd" title="Derive test conditions + cases for a feature — broader analysis context.">test-design</span>
+          <span class="cmd" title="Pairwise / classification-tree design for multi-parameter features.">combinatorial</span>
+          <span class="cmd" title="ATDD/BDD acceptance criteria & Gherkin scenarios.">acceptance</span>
+          <span class="cmd" title="Model-Based Testing — model a stateful flow, derive cases by coverage.">mbt</span>
+          <span class="cmd" title="Session-based exploratory testing charters (experience-based).">exploratory</span>
+          <span class="cmd" title="Audit coverage gaps vs strategy & risk; recommend missing tests.">review-coverage</span>
+        </div>
+      </div>
+
+      <div class="cat reveal">
+        <header><h3>Test levels &amp; change-related</h3><span class="count">6</span></header>
+        <p class="ref">CTFL §2.2 · §2.3</p>
+        <div class="chips-wrap">
+          <span class="cmd" title="Component (unit) testing — isolation, test doubles, branch coverage.">unit-test</span>
+          <span class="cmd" title="Integration testing — incremental strategy, stubs/drivers.">integration-test</span>
+          <span class="cmd" title="Maintenance testing — modification/migration/retirement + impact analysis.">maintenance-test</span>
+          <span class="cmd" title="Dynamic analysis — runtime memory/resource leaks, degradation over time.">dynamic-analysis</span>
+          <span class="cmd" title="Testing in production — synthetic monitoring, canary/A-B, feature flags.">shift-right</span>
+          <span class="cmd" title="Regression test selection & prioritization via impact analysis.">regression</span>
+        </div>
+      </div>
+
+      <div class="cat reveal">
+        <header><h3>Implementation</h3><span class="count">6</span></header>
+        <p class="ref">CTFL §1.4 · CT-TAE</p>
+        <div class="chips-wrap">
+          <span class="cmd" title="Build the automation framework — Playwright+TS, K6, Pact, CI pipeline.">scaffold</span>
+          <span class="cmd" title="Full automation pipeline — score ROI, select candidates, implement the top ones.">automate</span>
+          <span class="cmd" title="Turn cases into tests at the right pyramid level and run them.">implement</span>
+          <span class="cmd" title="Add a single focused test from a plain-English description.">add-test</span>
+          <span class="cmd" title="Typed data factories, builders, fixtures, seeding helpers.">test-data</span>
+          <span class="cmd" title="Provision/document the test environment & testware configuration.">test-env</span>
+        </div>
+      </div>
+
+      <div class="cat reveal">
+        <header><h3>Automation by surface</h3><span class="count">6</span></header>
+        <p class="ref">CT-TAE · CT-PT · CT-MAT</p>
+        <div class="chips-wrap">
+          <span class="cmd" title="Program-level Test Automation Strategy & gTAA architecture.">automation-strategy</span>
+          <span class="cmd" title="API automation from OpenAPI — schema, CRUD, auth matrix, negative/boundary.">api-automate</span>
+          <span class="cmd" title="Deep-dive a web UI — extract locators into Page Objects + covering cases.">scan-ui</span>
+          <span class="cmd" title="Web UI / E2E automation — POM, critical journeys, cross-browser.">web-automate</span>
+          <span class="cmd" title="Mobile automation — native (Appium) or responsive mobile-web.">mobile-automate</span>
+          <span class="cmd" title="Performance test planning — objectives, SLAs, workload model.">perf-plan</span>
+        </div>
+      </div>
+
+      <div class="cat reveal">
+        <header><h3>Execution — non-functional</h3><span class="count">8</span></header>
+        <p class="ref">CTFL §2.3 · CT-PT/SEC/UT/AI</p>
+        <div class="chips-wrap">
+          <span class="cmd" title="K6 performance test — load/stress/spike/soak with threshold gates.">perf-test</span>
+          <span class="cmd" title="axe accessibility checks vs the WCAG target.">a11y-audit</span>
+          <span class="cmd" title="Usability evaluation — heuristics, task scenarios.">usability-test</span>
+          <span class="cmd" title="Reliability, compatibility, portability, maintainability (ISO 25010).">nonfunctional</span>
+          <span class="cmd" title="Security baseline — SAST, SCA, DAST (OWASP ZAP), secret scan.">security-scan</span>
+          <span class="cmd" title="Pact contracts + can-i-deploy.">contract-sync</span>
+          <span class="cmd" title="Responsive/mobile-web testing — viewports, touch, network.">mobile-test</span>
+          <span class="cmd" title="Test AI/ML components — metrics, bias, robustness, drift.">ai-test</span>
+        </div>
+      </div>
+
+      <div class="cat reveal">
+        <header><h3>Maintenance, CI &amp; flakiness</h3><span class="count">4</span></header>
+        <p class="ref">testware maintenance &amp; reliability</p>
+        <div class="chips-wrap">
+          <span class="cmd" title="Diagnose & fix a failing pipeline / test run (any CI).">fix-ci</span>
+          <span class="cmd" title="Pull the latest Jenkins build's failed cases, fix, re-run locally until green.">fix-jenkins</span>
+          <span class="cmd" title="Find & fix flaky tests with deterministic fixes — not retries.">flaky-hunt</span>
+          <span class="cmd" title="Repair broken locators after UI changes — heals HOW we locate, never WHAT we verify.">self-heal</span>
+        </div>
+      </div>
+
+      <div class="cat reveal">
+        <header><h3>Monitoring, control &amp; completion</h3><span class="count">4</span></header>
+        <p class="ref">CTFL §5.3–5.5 · ISO 29119-3</p>
+        <div class="chips-wrap">
+          <span class="cmd" title="Test Status (Progress) Report — metrics + control actions mid-release.">status-report</span>
+          <span class="cmd" title="Measure structural / requirements / risk coverage.">coverage-measure</span>
+          <span class="cmd" title="Defect management — severity vs priority, ISTQB defect report.">triage</span>
+          <span class="cmd" title="Test Completion Report — exit criteria, residual risk, ship/hold.">release-report</span>
+        </div>
+      </div>
+
+      <div class="cat reveal">
+        <header><h3>AI-assisted &amp; reference</h3><span class="count">2</span></header>
+        <p class="ref">CT-GenAI · ISTQB Glossary</p>
+        <div class="chips-wrap">
+          <span class="cmd" title="Use GenAI to accelerate testing with ISTQB safeguards (oversight, privacy).">genai-assist</span>
+          <span class="cmd" title="On-demand ISTQB reference & coach — explain any concept, route to the right command.">istqb-coach</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="cat-total reveal">8 + 5 + 10 + 6 + 6 + 6 + 8 + 4 + 4 + 2 = <b>59 commands</b> — one for every ISTQB activity.</p>
+  </div>
+</section>
+
+<!-- ====================== DOCS ====================== -->
+<section id="docs">
+  <div class="wrap">
+    <p class="kicker reveal">Further reading</p>
+    <h2 class="sec-title reveal">Go deeper.</h2>
+    <p class="sec-intro reveal">
+      This page is the map; the markdown docs are the territory. All links open in this folder on GitHub.
+    </p>
+    <div class="doc-grid">
+      <a class="doc reveal" href="WORKFLOWS.md">
+        <span class="fname">WORKFLOWS.md</span>
+        <h3>Role playbooks</h3>
+        <p>How to work as each of the five roles — missions, command loops, cadences, hand-offs, and the cheat sheet.</p>
+        <span class="go">read →</span>
+      </a>
+      <a class="doc reveal" href="COMMAND-GUIDE.md">
+        <span class="fname">COMMAND-GUIDE.md</span>
+        <h3>Full command guide</h3>
+        <p>Every command's purpose, prerequisites, output, and next step — plus workflow recipes and a "which command?" index.</p>
+        <span class="go">read →</span>
+      </a>
+      <a class="doc reveal" href="COMMAND-EXAMPLES.md">
+        <span class="fname">COMMAND-EXAMPLES.md</span>
+        <h3>Worked examples</h3>
+        <p>A sample invocation for all 59 commands with a "correct when" check, anchored to one consistent sample project.</p>
+        <span class="go">read →</span>
+      </a>
+      <a class="doc reveal" href="ISTQB-COMPLIANCE.md">
+        <span class="fname">ISTQB-COMPLIANCE.md</span>
+        <h3>Standards traceability</h3>
+        <p>Every command mapped to its ISTQB syllabus reference and ISO/IEC/IEEE 29119-3 document type.</p>
+        <span class="go">read →</span>
+      </a>
+      <a class="doc reveal" href="ISTQB-COVERAGE.md">
+        <span class="fname">ISTQB-COVERAGE.md</span>
+        <h3>Syllabus coverage</h3>
+        <p>Which parts of the ISTQB body of knowledge the toolkit covers, syllabus by syllabus.</p>
+        <span class="go">read →</span>
+      </a>
+      <a class="doc reveal" href="GLOSSARY.md">
+        <span class="fname">GLOSSARY.md</span>
+        <h3>Glossary</h3>
+        <p>ISTQB Glossary-aligned definitions for every term the commands use — severity vs priority included.</p>
+        <span class="go">read →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== FOOTER ====================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.8.1</strong></span>
+      <span>59 commands</span>
+      <span>MIT license</span>
+      <span><a href="https://github.com/toronto-nigma/qa-toolkit">github.com/toronto-nigma/qa-toolkit</a></span>
+    </div>
+    <p class="foot-legal">
+      ISTQB® is a registered trademark of the International Software Testing Qualifications Board.
+      ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit implements their
+      concepts and terminology; it does not reproduce the syllabi.
+    </p>
+  </div>
+</footer>
+
+<script>
+/* Progressive enhancement only — the page is fully functional without JS. */
+document.documentElement.classList.add('js');
+
+/* Scroll-reveal */
+(function(){
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { rootMargin:'0px 0px -8% 0px', threshold:0.05 });
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+})();
+
+/* Nav scroll-spy */
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.navlinks a'));
+  var ids = links.map(function(a){ return a.getAttribute('href').slice(1); });
+  var sections = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  if (!('IntersectionObserver' in window) || !sections.length) return;
+  var current = null;
+  var spy = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){
+        current = e.target.id;
+        links.forEach(function(a){
+          a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+        });
+      }
+    });
+  }, { rootMargin:'-30% 0px -60% 0px' });
+  sections.forEach(function(s){ spy.observe(s); });
+})();
+</script>
+</body>
+</html>

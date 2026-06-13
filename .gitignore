@@ -23,3 +23,7 @@ reports/
 .env.*
 *.local.yml
 qa.config.local.yml
+
+# Local agent/editor tooling config
+.zencoder/
+*.local.json
