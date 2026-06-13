@@ -70,6 +70,7 @@ A command for every ISTQB activity, so a tester can run the **entire** workflow 
 > 🏠 **Start here — the visual guide:** [`docs/index.html`](docs/index.html) — a blog-style home page with the role playbooks, lifecycle map, and full catalog (enable GitHub Pages from `/docs` to host it).
 > 🧑‍💼 **Role playbooks:** [`docs/WORKFLOWS.md`](docs/WORKFLOWS.md) — how to work as a **Manual Tester, Automation Tester, Performance Tester, Test Leader, or Test Manager**: each role's mission, command loops, and cadence, plus the release-lifecycle map that ties them together.
 > 📖 **Full how-to:** [`docs/COMMAND-GUIDE.md`](docs/COMMAND-GUIDE.md) — every command's purpose, prerequisites, output, and next step, plus copy-paste **workflow recipes** and a "which command do I use?" index.
+> 🧠 **How it works + the theory:** [`docs/COMMAND-THEORY.md`](docs/COMMAND-THEORY.md) — for **each** command, the mechanics (what it reads, the steps it runs) plus the ISTQB technique/principle and ISO standard that **back it up** — and the shared theoretical spine all 60 sit on.
 > 🧪 **Worked examples:** [`docs/COMMAND-EXAMPLES.md`](docs/COMMAND-EXAMPLES.md) — a sample invocation for **every** command with a "Correct when" check, all anchored to one consistent sample project.
 > 📑 **Command reference + proof:** [`docs/command-reference.html`](docs/command-reference.html) — all 59 commands with a **worked sample output** for each (the actual ISTQB artifact it generates for the ShopEase sample project), a live filter box, and the verify-it-worked checklist. The "show me it works" page.
 > Full syllabus→command mapping: [`docs/ISTQB-COMPLIANCE.md`](docs/ISTQB-COMPLIANCE.md).
@@ -200,6 +201,7 @@ qa-toolkit/
 │   ├── index.html             # blog-style visual guide (GitHub Pages-ready)
 │   ├── WORKFLOWS.md           # role playbooks: manual/automation/perf tester, lead, manager
 │   ├── COMMAND-GUIDE.md       # full how-to for all 60 commands + workflow recipes
+│   ├── COMMAND-THEORY.md      # how each command works + the ISTQB/ISO theory behind it
 │   ├── COMMAND-EXAMPLES.md    # a worked sample invocation for every command
 │   ├── ISTQB-COMPLIANCE.md    # command → ISTQB syllabus traceability map
 │   └── GLOSSARY.md            # ISTQB Glossary-aligned terms
