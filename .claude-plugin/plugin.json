@@ -1,7 +1,7 @@
 {
   "name": "qa",
-  "version": "3.8.1",
-  "description": "Complete ISTQB-aligned QA toolkit for Web + REST API projects: 59 slash commands covering the full ISTQB body of knowledge (Foundation, Test Manager, Analyst, Technical Analyst, Agile, Automation, Performance, Security, Acceptance, Usability, AI/GenAI, Model-Based, Mobile, process improvement) plus an automation-project audit (architecture, SOLID, test-design quality) using Playwright+TypeScript / K6 / Pact. Follows CTFL v4.0 and ISO/IEC/IEEE 29119-3. Driven by a single per-project qa.config.yml.",
+  "version": "3.9.0",
+  "description": "Complete ISTQB-aligned QA toolkit for Web + REST API projects: 60 slash commands covering the full ISTQB body of knowledge (Foundation, Test Manager, Analyst, Technical Analyst, Agile, Automation, Performance, Security, Acceptance, Usability, AI/GenAI, Model-Based, Mobile, process improvement) plus an automation-project audit (architecture, SOLID, test-design quality) using Playwright+TypeScript / K6 / Pact. Follows CTFL v4.0 and ISO/IEC/IEEE 29119-3. Driven by a single per-project qa.config.yml.",
   "author": {
     "name": "Tony",
     "email": "toronto.nigma@gmail.com"

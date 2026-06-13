@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Manager — QA Toolkit role playbook</title>
+<meta name="description" content="The Test Manager playbook for the QA Toolkit: own the test organization — policy, strategy, people, budget, process maturity, and the quality story told to executives, across releases.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="roles.css">
+</head>
+<body class="r-manager">
+
+<!-- NAV -->
+<nav class="topnav" aria-label="Role navigation">
+  <div class="wrap">
+    <a class="wordmark" href="index.html">QA Toolkit<span class="v">v3.9.0</span></a>
+    <ul class="navlinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="manual-tester.html">Manual</a></li>
+      <li><a href="automation-tester.html">Automation</a></li>
+      <li><a href="performance-tester.html">Performance</a></li>
+      <li><a href="test-leader.html">Leader</a></li>
+      <li><a href="test-manager.html" class="active">Manager</a></li>
+      <li><a href="command-reference.html">Commands</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="rhero" id="top">
+  <div class="wrap">
+    <p class="kicker reveal">Role playbook · 05 / 05</p>
+    <div class="rhead reveal">
+      <span class="rglyph" aria-hidden="true">📊</span>
+      <div>
+        <h1>Test <em>Manager</em></h1>
+        <p class="role-tag">Policy · People · Process</p>
+      </div>
+    </div>
+    <p class="standfirst reveal"><strong>Mission:</strong> own the test <em>organization</em> — policy, strategy, people, budget, process maturity, and the quality story told to executives. You work across releases, not inside one.</p>
+    <span class="istqb reveal"><b>ISTQB home turf:</b> CTAL-TM strategic level · Expert Test Management · Improving the Test Process</span>
+    <div class="meta-row reveal">
+      <span><strong>11</strong> commands in your kit</span>
+      <span>across releases, not inside one</span>
+      <span>the quality story for execs</span>
+    </div>
+  </div>
+</header>
+
+<!-- FOUNDATIONS -->
+<section id="foundations">
+  <div class="wrap">
+    <p class="kicker reveal">Foundations — once, then reviewed yearly</p>
+    <h2 class="sec-title reveal">Set the organization's direction.</h2>
+    <p class="sec-intro reveal">These four are standing documents — the top of the hierarchy every release inherits. Review them yearly, not every sprint.</p>
+    <div class="term reveal">
+      <div class="term-bar"><i></i><i></i><i></i><span>test manager — foundations</span></div>
+<pre><span class="p">&gt; /qa:test-policy</span>                  <span class="c"># 1 · WHY the org tests — objectives, top of the document hierarchy</span>
+<span class="p">&gt; /qa:create-strategy</span>             <span class="c"># 2 · HOW this product is tested — levels, types, techniques, environments</span>
+<span class="p">&gt; /qa:automation-strategy</span>         <span class="c"># 3 · the automation program: gTAA, level split, ROI model</span>
+<span class="p">&gt; /qa:tool-select</span> <span class="a">"API test tool"</span>   <span class="c"># 4 · tooling decisions: criteria, comparison, pilot plan</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- RHYTHM -->
+<section id="rhythm">
+  <div class="wrap">
+    <p class="kicker reveal">The management rhythm</p>
+    <h2 class="sec-title reveal">What you run, and how often.</h2>
+    <table class="tbl reveal">
+      <thead><tr><th>Cadence</th><th>Command</th><th>What you get</th></tr></thead>
+      <tbody>
+        <tr><td>Monthly / quarterly</td><td><code>/qa:quality-report Q2</code></td><td>Executive KPI dashboard: escaped defects, coverage, MTTR, automation %, flaky rate — cross-release trends</td></tr>
+        <tr><td>Quarterly</td><td><code>/qa:team-plan 6mo</code></td><td>Capacity vs backlog, skills matrix, training &amp; onboarding plan</td></tr>
+        <tr><td>Quarterly</td><td><code>/qa:cost-of-quality</code></td><td>Prevention / appraisal / failure cost split, automation payback, the budget case</td></tr>
+        <tr><td>Per release</td><td><code>/qa:go-no-go &lt;release&gt;</code></td><td>You're the sign-off on the Test Leader's gate</td></tr>
+        <tr><td>Half-yearly</td><td><code>/qa:process-improvement</code></td><td>TMMi-based maturity assessment + improvement roadmap</td></tr>
+        <tr><td>Before audits</td><td><code>/qa:audit-prep ISO29119</code></td><td>Traceability evidence pack, conformance gaps</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- WHEN NUMBERS LOOK WRONG -->
+<section id="signals">
+  <div class="wrap">
+    <p class="kicker reveal">When the numbers look wrong</p>
+    <h2 class="sec-title reveal">From symptom to funded fix.</h2>
+    <div class="term reveal">
+      <div class="term-bar"><i></i><i></i><i></i><span>test manager — diagnose</span></div>
+<pre><span class="p">&gt; /qa:quality-report</span>        <span class="c"># escaped defects trending up? →</span>
+<span class="p">&gt; /qa:process-improvement</span>   <span class="c"># find the process root cause (late static testing? thin risk coverage?)</span>
+<span class="p">&gt; /qa:risk-assessment</span>       <span class="c"># re-aim the effort</span>
+<span class="p">&gt; /qa:cost-of-quality</span>       <span class="c"># quantify the failure cost to fund the fix</span></pre>
+    </div>
+    <blockquote class="pull reveal">Escaped defects trending up isn't a testing failure to punish — it's a process root cause to find and fund.<cite>The management lens</cite></blockquote>
+  </div>
+</section>
+
+<!-- HANDOFF -->
+<section id="handoff">
+  <div class="wrap">
+    <p class="kicker reveal">Where your work goes</p>
+    <h2 class="sec-title reveal">Hand-offs.</h2>
+    <div class="handoff reveal">
+      <div class="ho-row"><span class="ho-k">Receives ←</span><div><b>Test Leader</b> — per-release status &amp; completion reports.<br><b>Automation Tester</b> — <code>/qa:automation-audit</code> health scores.</div></div>
+      <div class="ho-row"><span class="ho-k">Hands off →</span><div><b>The organization</b> — policy, strategy, budget, and the quality narrative.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHEAT SHEET -->
+<section id="cheats">
+  <div class="wrap">
+    <p class="kicker reveal">Cheat sheet</p>
+    <h2 class="sec-title reveal">One line per situation.</h2>
+    <table class="tbl reveal">
+      <thead><tr><th>You need to…</th><th>Run</th></tr></thead>
+      <tbody>
+        <tr><td>Report quality to executives</td><td><code>/qa:quality-report &lt;period&gt;</code></td></tr>
+        <tr><td>Plan team capacity &amp; skills</td><td><code>/qa:team-plan &lt;horizon&gt;</code></td></tr>
+        <tr><td>Justify the QA budget</td><td><code>/qa:cost-of-quality</code></td></tr>
+        <tr><td>Improve the process</td><td><code>/qa:process-improvement</code></td></tr>
+        <tr><td>Prepare for an audit</td><td><code>/qa:audit-prep &lt;standard&gt;</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- OTHER ROLES -->
+<section id="other">
+  <div class="wrap">
+    <p class="kicker reveal">Switch hats</p>
+    <h2 class="sec-title reveal">The other four roles.</h2>
+    <p class="sec-intro reveal">You can be all five — switch playbooks as the day demands. See how the roles interlock on the <a href="index.html#lifecycle">release-lifecycle timeline</a>.</p>
+    <div class="crossroles reveal">
+      <a class="rolecard rc-manual" href="manual-tester.html"><span class="rc-glyph">🔍</span><span class="rc-name">Manual</span><span class="rc-tag">Static · Design · Explore</span></a>
+      <a class="rolecard rc-auto" href="automation-tester.html"><span class="rc-glyph">🤖</span><span class="rc-name">Automation</span><span class="rc-tag">Build · Run · Maintain</span></a>
+      <a class="rolecard rc-perf" href="performance-tester.html"><span class="rc-glyph">⚡</span><span class="rc-name">Performance</span><span class="rc-tag">Plan · Load · Analyze</span></a>
+      <a class="rolecard rc-leader" href="test-leader.html"><span class="rc-glyph">🧭</span><span class="rc-name">Leader</span><span class="rc-tag">Plan · Monitor · Decide</span></a>
+      <a class="rolecard rc-manager is-current"><span class="rc-glyph">📊</span><span class="rc-name">Manager</span><span class="rc-tag">You are here</span></a>
+    </div>
+    <div class="minidocs reveal">
+      <a href="WORKFLOWS.md">Full role playbooks (WORKFLOWS.md)</a>
+      <a href="COMMAND-GUIDE.md">Command guide</a>
+      <a href="COMMAND-EXAMPLES.md">Worked examples</a>
+      <a href="command-reference.html">Command reference</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.9.0</strong></span>
+      <span>60 commands</span>
+      <span>MIT license</span>
+      <span><a href="index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB® is a registered trademark of the International Software Testing Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){ document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');}); return; }
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

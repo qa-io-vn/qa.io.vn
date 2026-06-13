@@ -1,6 +1,6 @@
 # QA Toolkit — Full Command Guideline
 
-The complete operating manual for all **59 `/qa:*` commands**. For each command you get: what it does, **when** to use it, what it **needs** (prerequisites), what it **outputs**, and what to run **next**. It also gives ready-made **workflow recipes** and a **"which command do I use?"** index.
+The complete operating manual for all **60 `/qa:*` commands**. For each command you get: what it does, **when** to use it, what it **needs** (prerequisites), what it **outputs**, and what to run **next**. It also gives ready-made **workflow recipes** and a **"which command do I use?"** index.
 
 - New here? Read [§1 How the toolkit works](#1-how-the-toolkit-works) → [§2 Quick-start recipes](#2-quick-start-workflow-recipes), then dip into the [§4 command reference](#4-command-reference) as needed.
 - Want a copy-paste **sample invocation for every command** (with a "Correct when" check)? See [COMMAND-EXAMPLES.md](./COMMAND-EXAMPLES.md).
@@ -76,9 +76,11 @@ Copy-paste sequences for the common situations. Each step links to the detailed 
 
 ### E. A red build came in
 ```text
+/qa:ci                           # whole build: pull, bucket every failure, fix + confirm, harden ×3
+/qa:ci x                         # …then verify the full suite locally (extended gate)
+# or target one thing:
 /qa:fix-jenkins <build-url>      # pull failed cases, fix, re-run locally (Jenkins)
-# or, for any CI / a pasted log:
-/qa:fix-ci ci.log                # diagnose + fix the pipeline
+/qa:fix-ci ci.log                # diagnose + fix a single pipeline / pasted log (any CI)
 /qa:flaky-hunt                   # if failures are intermittent
 /qa:triage "<failure>"           # if it's a real product defect
 ```
@@ -101,7 +103,7 @@ Copy-paste sequences for the common situations. Each step links to the detailed 
 
 ---
 
-## 3. The command map (all 59 at a glance)
+## 3. The command map (all 60 at a glance)
 
 | Phase | Commands |
 |---|---|
@@ -112,7 +114,7 @@ Copy-paste sequences for the common situations. Each step links to the detailed 
 | **Implementation** | `scaffold` · `automate` · `implement` · `add-test` · `test-data` · `test-env` |
 | **Automation by surface** | `automation-strategy` · `api-automate` · `scan-ui` · `web-automate` · `mobile-automate` · `perf-plan` |
 | **Execution (non-functional)** | `perf-test` · `a11y-audit` · `usability-test` · `nonfunctional` · `security-scan` · `contract-sync` · `mobile-test` · `ai-test` |
-| **Maintenance, CI & flakiness** | `fix-ci` · `fix-jenkins` · `flaky-hunt` · `self-heal` |
+| **Maintenance, CI & flakiness** | `ci` · `fix-ci` · `fix-jenkins` · `flaky-hunt` · `self-heal` |
 | **Monitoring, control & completion** | `status-report` · `coverage-measure` · `triage` · `release-report` |
 | **AI-assisted & reference** | `genai-assist` · `istqb-coach` |
 
@@ -344,6 +346,12 @@ Copy-paste sequences for the common situations. Each step links to the detailed 
 
 ### 4.8 Maintenance, CI & flakiness
 
+**`/qa:ci ['x'|'full'] [build]`** — **End-to-end red-build orchestrator** (any CI). Pulls the **whole** failing build, buckets **every** failure (test defect / product defect / env / flaky), fixes the fixable ones, **confirms each locally**, and **hardens to green ×3**; real product defects are escalated via `triage`, never masked. `x`/`full` adds a mandatory-stability + full-suite local gate.
+- **When:** a build went red and you want the whole build triaged in one pass — not just one log.
+- **Needs:** `ci.platform` (+ `ci.jenkins_url`/`ci.jenkins_job` & `JENKINS_USER`/`JENKINS_API_TOKEN`, or `gh` for GitHub Actions) — or a build URL — or local JUnit artifacts.
+- **vs.** `fix-ci` (one pasted log/pipeline) and `fix-jenkins` (Jenkins-only pull); `ci` is the build-wide superset that adds the stability gate.
+- **Output:** `→ fixes + local confirm + green-×3 + Test Execution Log`; defects `→ triage`.
+
 **`/qa:fix-ci [log]`** — Diagnose & fix a failing **pipeline/test run** (any CI). Classifies root cause, applies safe fixes, reproduces locally.
 - **When:** build red, or local-pass/CI-fail; paste a log path.
 - **Output:** `→ fix + report`.
@@ -408,6 +416,7 @@ Copy-paste sequences for the common situations. Each step links to the detailed 
 | See what's under-tested | `review-coverage` / `coverage-measure` |
 | Assess an inherited automation suite (architecture/SOLID) | `automation-audit` |
 | Check source code quality | `static-analysis` |
+| Triage & fix a whole red build (any CI), end-to-end | `ci` |
 | Fix a red Jenkins build | `fix-jenkins` |
 | Fix any red pipeline / pasted log | `fix-ci` |
 | Deal with intermittent failures | `flaky-hunt` |
@@ -442,4 +451,4 @@ Copy-paste sequences for the common situations. Each step links to the detailed 
 
 ---
 
-*Generated for QA Toolkit v3.8.1 — 59 commands. Full syllabus traceability: [ISTQB-COMPLIANCE.md](./ISTQB-COMPLIANCE.md) · terminology: [GLOSSARY.md](./GLOSSARY.md).*
+*Generated for QA Toolkit v3.9.0 — 60 commands. Full syllabus traceability: [ISTQB-COMPLIANCE.md](./ISTQB-COMPLIANCE.md) · terminology: [GLOSSARY.md](./GLOSSARY.md).*

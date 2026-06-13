@@ -17,7 +17,7 @@ The toolkit follows the **ISTQB®** framework strictly — **Certified Tester Fo
 ```
   qa-toolkit (this repo, on GitHub)        Your project A          Your project B
   ┌──────────────────────────────┐                ┌───────────────┐       ┌───────────────┐
-  │ commands/  (59 /qa:* commands)│   install once │ qa.config.yml │       │ qa.config.yml │
+  │ commands/  (60 /qa:* commands)│   install once │ qa.config.yml │       │ qa.config.yml │
   │ skills/    (auto context)     │ ─────────────► │  (the only    │  ...  │  (different   │
   │ templates/ (strategy & plan)  │   via /plugin  │   per-project │       │   values)     │
   └──────────────────────────────┘                │   file)       │       │               │
@@ -63,7 +63,7 @@ Everything reads `qa.config.yml`, so you never re-specify your stack or threshol
 
 ---
 
-## Commands (59)
+## Commands (60)
 
 A command for every ISTQB activity, so a tester can run the **entire** workflow through the agent. Grouped by the ISTQB test-process activity each implements. All commands read `qa.config.yml`, respect its `tooling` toggles, and use ISTQB Glossary terminology.
 
@@ -152,6 +152,7 @@ A command for every ISTQB activity, so a tester can run the **entire** workflow 
 | `/qa:mobile-test [page]` | Responsive/mobile-web testing (viewports, touch, network). |
 | `/qa:ai-test <feature>` | Test **AI/ML** components (metrics, bias, robustness, drift). |
 | `/qa:regression [change]` | Regression test **selection & prioritization** (impact analysis). |
+| `/qa:ci ['x'\|'full'] [build]` | **End-to-end red-build triage** (any CI) — pull the whole failing build, bucket every failure, fix + confirm each locally, **harden to green ×3**, escalate real defects via `triage`; `x`/`full` adds a full-suite gate. The build-wide orchestrator over `fix-ci`/`fix-jenkins`. |
 | `/qa:fix-ci [log]` | Diagnose & fix a failing pipeline / test run (any CI). |
 | `/qa:fix-jenkins [build URL\|job path]` | Pull the **latest Jenkins build's failed cases**, fix each, re-run them locally until all pass. |
 | `/qa:flaky-hunt [path\|N runs]` | Find & fix flaky tests — deterministic fixes, no blind retries (testware maintenance). |
@@ -188,7 +189,7 @@ qa-toolkit/
 ├── .claude-plugin/
 │   ├── plugin.json            # plugin manifest (name: qa)
 │   └── marketplace.json       # marketplace manifest (clone & install target)
-├── commands/                  # the 59 /qa:* slash commands (one .md each)
+├── commands/                  # the 60 /qa:* slash commands (one .md each)
 ├── skills/
 │   └── qa-context/SKILL.md    # auto-loads qa.config.yml + ISTQB standing rules
 ├── templates/
@@ -198,7 +199,7 @@ qa-toolkit/
 ├── docs/
 │   ├── index.html             # blog-style visual guide (GitHub Pages-ready)
 │   ├── WORKFLOWS.md           # role playbooks: manual/automation/perf tester, lead, manager
-│   ├── COMMAND-GUIDE.md       # full how-to for all 59 commands + workflow recipes
+│   ├── COMMAND-GUIDE.md       # full how-to for all 60 commands + workflow recipes
 │   ├── COMMAND-EXAMPLES.md    # a worked sample invocation for every command
 │   ├── ISTQB-COMPLIANCE.md    # command → ISTQB syllabus traceability map
 │   └── GLOSSARY.md            # ISTQB Glossary-aligned terms

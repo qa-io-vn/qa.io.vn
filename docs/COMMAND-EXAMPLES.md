@@ -1,4 +1,4 @@
-# QA Toolkit — Worked Examples (all 59 commands)
+# QA Toolkit — Worked Examples (all 60 commands)
 
 A concrete, copy-pasteable **sample invocation for every command**, plus a **"Correct when"** check that proves it ran right. Every example is anchored to **one consistent sample project** so they chain into a real QA story — if you run them in order against that project, the artifacts reference each other.
 
@@ -343,6 +343,13 @@ Produces: `docs/qa/AI-TEST-product-recommendations.md` + automatable metric/data
 
 ## 8. Maintenance, CI & flakiness
 
+**`/qa:ci`**
+```text
+/qa:ci          # triage the whole latest red build
+/qa:ci x        # …then verify the full suite locally (extended gate)
+```
+Produces: the bucketed failing set (test defect / product defect / env / flaky), root-cause fixes confirmed locally, a green-×3 stability result per fixed case, real defects escalated via `triage`, and a Test Execution Log under `reports/`. ✓ **Correct when** it pulls the **whole** build's failures, fixes only the test/env/flaky ones, reports stability as `n/3` (not prose), escalates product defects instead of masking them, and never commits/triggers CI unless asked. *(Auto-fetch from config: `ci.platform` + `ci.jenkins_url`/`ci.jenkins_job` + `JENKINS_USER`/`JENKINS_API_TOKEN`, or `gh` for GitHub Actions.)*
+
 **`/qa:fix-ci`**
 ```text
 /qa:fix-ci reports/ci-build-482.log
@@ -431,4 +438,4 @@ Each step's output names the prior artifacts and the same `gates`/`risk_areas` v
 
 ---
 
-*QA Toolkit v3.8.1 — 59 commands. Examples use the shipped [`qa.config.example.yml`](../templates/qa.config.example.yml).*
+*QA Toolkit v3.9.0 — 60 commands. Examples use the shipped [`qa.config.example.yml`](../templates/qa.config.example.yml).*

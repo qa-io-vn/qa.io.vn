@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual Tester — QA Toolkit role playbook</title>
+<meta name="description" content="The Manual Tester playbook for the QA Toolkit: shift-left static review, ISTQB test-case design, exploratory sessions, and proper defect reports — the commands, the loop, and the cadence.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="roles.css">
+</head>
+<body class="r-manual">
+
+<!-- NAV -->
+<nav class="topnav" aria-label="Role navigation">
+  <div class="wrap">
+    <a class="wordmark" href="index.html">QA Toolkit<span class="v">v3.9.0</span></a>
+    <ul class="navlinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="manual-tester.html" class="active">Manual</a></li>
+      <li><a href="automation-tester.html">Automation</a></li>
+      <li><a href="performance-tester.html">Performance</a></li>
+      <li><a href="test-leader.html">Leader</a></li>
+      <li><a href="test-manager.html">Manager</a></li>
+      <li><a href="command-reference.html">Commands</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="rhero" id="top">
+  <div class="wrap">
+    <p class="kicker reveal">Role playbook · 01 / 05</p>
+    <div class="rhead reveal">
+      <span class="rglyph" aria-hidden="true">🔍</span>
+      <div>
+        <h1>Manual <em>Tester</em></h1>
+        <p class="role-tag">Static · Design · Exploration</p>
+      </div>
+    </div>
+    <p class="standfirst reveal"><strong>Mission:</strong> find defects early and validate the product against real user needs — through static review, designed test cases, and skilled exploration. Shift-left is where you're cheapest to the project: review every story <em>before</em> dev finishes.</p>
+    <span class="istqb reveal"><b>ISTQB home turf:</b> static testing (§3) · test analysis &amp; design (§4) · defect management (§5.5) · experience-based techniques · CTAL-TA</span>
+    <div class="meta-row reveal">
+      <span><strong>11</strong> commands in your kit</span>
+      <span>shift-left, every story</span>
+      <span>every defect → <strong>triage</strong></span>
+    </div>
+  </div>
+</header>
+
+<!-- CORE LOOP -->
+<section id="loop">
+  <div class="wrap">
+    <p class="kicker reveal">The core loop</p>
+    <h2 class="sec-title reveal">One user story, start to finish.</h2>
+    <p class="sec-intro reveal">Run this loop on every story. The first two steps happen <em>before</em> development completes — that is the whole point of shift-left.</p>
+    <div class="term reveal">
+      <div class="term-bar"><i></i><i></i><i></i><span>manual tester — per story</span></div>
+<pre><span class="p">&gt; /qa:static-review</span> <span class="a">"US-123 guest checkout"</span>   <span class="c"># 1 · review the story before dev finishes — find requirement defects now</span>
+<span class="p">&gt; /qa:acceptance</span> <span class="a">"US-123"</span>                    <span class="c"># 2 · agree testable acceptance criteria (ATDD / Gherkin) with the team</span>
+<span class="p">&gt; /qa:test-cases</span> <span class="a">"US-123"</span>                    <span class="c"># 3 · derive cases with EP, BVA, decision tables (+ CSV export)</span>
+<span class="p">&gt; /qa:test-data</span> <span class="a">order</span>                         <span class="c"># 4 · get the data you need to execute</span>
+<span class="o">  … execute the scripted cases against the test environment …</span>
+<span class="p">&gt; /qa:exploratory</span> <span class="a">"guest checkout"</span>          <span class="c"># 5 · session-based exploration around the scripts (charter, timebox)</span>
+<span class="p">&gt; /qa:triage</span> <span class="a">"checkout accepts expired card"</span>  <span class="c"># 6 · every real defect → ISTQB report (severity vs priority)</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- WHEN BIGGER -->
+<section id="bigger">
+  <div class="wrap">
+    <p class="kicker reveal">Scale the technique to the risk</p>
+    <h2 class="sec-title reveal">When the feature is bigger than one story.</h2>
+    <table class="tbl reveal">
+      <thead><tr><th>Situation</th><th>Reach for</th></tr></thead>
+      <tbody>
+        <tr><td>Complex business rules / states</td><td><code>/qa:test-design &lt;feature&gt;</code> — full conditions + cases, decision tables, state transitions</td></tr>
+        <tr><td>Many parameters combine (filters, options, configs)</td><td><code>/qa:combinatorial &lt;feature&gt;</code> — pairwise instead of exhaustive</td></tr>
+        <tr><td>A stateful flow (cart, order lifecycle, auth)</td><td><code>/qa:mbt &lt;flow&gt;</code> — model it, derive cases by coverage</td></tr>
+        <tr><td>"Did we miss anything?"</td><td><code>/qa:review-coverage &lt;area&gt;</code> — gap analysis vs risk</td></tr>
+        <tr><td>Unsure which technique applies</td><td><code>/qa:istqb-coach "when do I use decision tables?"</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- CADENCE -->
+<section id="cadence">
+  <div class="wrap">
+    <p class="kicker reveal">Your cadence</p>
+    <h2 class="sec-title reveal">When to run what.</h2>
+    <div class="flows">
+      <div class="flowbox reveal"><h4>Before dev completes</h4><p class="flow"><b>static-review</b><span class="arr">→</span><b>acceptance</b> <span class="dim">— shift-left; cheapest defects to catch</span></p></div>
+      <div class="flowbox reveal"><h4>Before execution</h4><p class="flow"><b>test-cases</b><span class="arr">→</span><b>test-data</b></p></div>
+      <div class="flowbox reveal"><h4>After scripted execution</h4><p class="flow"><b>exploratory</b> <span class="dim">— one session on the riskiest angle</span></p></div>
+      <div class="flowbox reveal"><h4>Every defect found</h4><p class="flow"><b>triage</b> <span class="dim">— never report a bug informally</span></p></div>
+      <div class="flowbox reveal"><h4>End of sprint</h4><p class="flow"><span class="dim">hand stable cases →</span> <b>automate</b> <span class="dim">your-cases.csv (scored by ROI)</span></p></div>
+    </div>
+    <blockquote class="pull reveal">Review the story <em>before</em> dev finishes — that is the moment a defect costs the project the least.<cite>The shift-left rule</cite></blockquote>
+  </div>
+</section>
+
+<!-- HANDOFF -->
+<section id="handoff">
+  <div class="wrap">
+    <p class="kicker reveal">Where your work goes</p>
+    <h2 class="sec-title reveal">Hand-offs.</h2>
+    <div class="handoff reveal">
+      <div class="ho-row"><span class="ho-k">Hands off →</span><div><b>Automation Tester</b> — your stable, repetitive manual cases become <code>/qa:automate</code> candidates, scored by ROI.<br><b>Test Leader</b> — your execution results and defects feed <code>/qa:status-report</code>.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHEAT SHEET -->
+<section id="cheats">
+  <div class="wrap">
+    <p class="kicker reveal">Cheat sheet</p>
+    <h2 class="sec-title reveal">One line per situation.</h2>
+    <table class="tbl reveal">
+      <thead><tr><th>You need to…</th><th>Run</th></tr></thead>
+      <tbody>
+        <tr><td>Start in a brand-new repo</td><td><code>/qa:qa-init</code> → <code>/qa:scaffold</code></td></tr>
+        <tr><td>Review a story before dev finishes</td><td><code>/qa:static-review &lt;story&gt;</code></td></tr>
+        <tr><td>Agree acceptance criteria</td><td><code>/qa:acceptance &lt;story&gt;</code></td></tr>
+        <tr><td>Turn a requirement into cases</td><td><code>/qa:test-cases &lt;req&gt;</code></td></tr>
+        <tr><td>Explore a risky area</td><td><code>/qa:exploratory &lt;area&gt;</code></td></tr>
+        <tr><td>Report a bug properly</td><td><code>/qa:triage "&lt;bug&gt;"</code></td></tr>
+        <tr><td>Learn / check an ISTQB concept</td><td><code>/qa:istqb-coach &lt;topic&gt;</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- OTHER ROLES -->
+<section id="other">
+  <div class="wrap">
+    <p class="kicker reveal">Switch hats</p>
+    <h2 class="sec-title reveal">The other four roles.</h2>
+    <p class="sec-intro reveal">You can be all five — switch playbooks as the day demands. See how the roles interlock on the <a href="index.html#lifecycle">release-lifecycle timeline</a>.</p>
+    <div class="crossroles reveal">
+      <a class="rolecard rc-manual is-current"><span class="rc-glyph">🔍</span><span class="rc-name">Manual</span><span class="rc-tag">You are here</span></a>
+      <a class="rolecard rc-auto" href="automation-tester.html"><span class="rc-glyph">🤖</span><span class="rc-name">Automation</span><span class="rc-tag">Build · Run · Maintain</span></a>
+      <a class="rolecard rc-perf" href="performance-tester.html"><span class="rc-glyph">⚡</span><span class="rc-name">Performance</span><span class="rc-tag">Plan · Load · Analyze</span></a>
+      <a class="rolecard rc-leader" href="test-leader.html"><span class="rc-glyph">🧭</span><span class="rc-name">Leader</span><span class="rc-tag">Plan · Monitor · Decide</span></a>
+      <a class="rolecard rc-manager" href="test-manager.html"><span class="rc-glyph">📊</span><span class="rc-name">Manager</span><span class="rc-tag">Policy · People · Process</span></a>
+    </div>
+    <div class="minidocs reveal">
+      <a href="WORKFLOWS.md">Full role playbooks (WORKFLOWS.md)</a>
+      <a href="COMMAND-GUIDE.md">Command guide</a>
+      <a href="COMMAND-EXAMPLES.md">Worked examples</a>
+      <a href="command-reference.html">Command reference</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.9.0</strong></span>
+      <span>60 commands</span>
+      <span>MIT license</span>
+      <span><a href="index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB® is a registered trademark of the International Software Testing Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){ document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');}); return; }
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

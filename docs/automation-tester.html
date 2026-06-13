@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automation Tester — QA Toolkit role playbook</title>
+<meta name="description" content="The Automation Tester playbook for the QA Toolkit: build a maintainable gTAA suite at the right pyramid levels, and keep CI green honestly — the setup, core, and maintenance loops, plus the quarterly health check.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="roles.css">
+</head>
+<body class="r-auto">
+
+<!-- NAV -->
+<nav class="topnav" aria-label="Role navigation">
+  <div class="wrap">
+    <a class="wordmark" href="index.html">QA Toolkit<span class="v">v3.9.0</span></a>
+    <ul class="navlinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="manual-tester.html">Manual</a></li>
+      <li><a href="automation-tester.html" class="active">Automation</a></li>
+      <li><a href="performance-tester.html">Performance</a></li>
+      <li><a href="test-leader.html">Leader</a></li>
+      <li><a href="test-manager.html">Manager</a></li>
+      <li><a href="command-reference.html">Commands</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="rhero" id="top">
+  <div class="wrap">
+    <p class="kicker reveal">Role playbook · 02 / 05</p>
+    <div class="rhead reveal">
+      <span class="rglyph" aria-hidden="true">🤖</span>
+      <div>
+        <h1>Automation <em>Tester</em></h1>
+        <p class="role-tag">Build · Run · Maintain</p>
+      </div>
+    </div>
+    <p class="standfirst reveal"><strong>Mission:</strong> build and maintain a fast, deterministic, maintainable automation suite at the right pyramid levels — and keep CI green <em>honestly</em>, never masking real defects. Maintenance is half the job.</p>
+    <span class="istqb reveal"><b>ISTQB home turf:</b> CT-TAE (gTAA architecture) · test implementation &amp; execution (§1.4) · maintainability · CTAL-TTA for white-box</span>
+    <div class="meta-row reveal">
+      <span><strong>13</strong> commands in your kit</span>
+      <span>maintenance is half the job</span>
+      <span>green honestly, never masked</span>
+    </div>
+  </div>
+</header>
+
+<!-- SETUP -->
+<section id="setup">
+  <div class="wrap">
+    <p class="kicker reveal">Once per project</p>
+    <h2 class="sec-title reveal">Stand up the architecture.</h2>
+    <p class="sec-intro reveal">Define the gTAA before you write a test — the architecture decides your level split, tooling, and maintainability targets. Everything below is generated from <code>qa.config.yml</code>.</p>
+    <div class="term reveal">
+      <div class="term-bar"><i></i><i></i><i></i><span>automation tester — setup</span></div>
+<pre><span class="p">&gt; /qa:automation-strategy</span>          <span class="c"># 1 · gTAA architecture: level split, tooling, CI, maintainability targets</span>
+<span class="p">&gt; /qa:scaffold</span>                     <span class="c"># 2 · build it: Playwright+TS · K6 · Pact · axe · CI pipeline</span>
+<span class="p">&gt; /qa:test-env</span> <span class="a">staging</span>             <span class="c"># 3 · document / provision the environment the suite runs against</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- CORE LOOP -->
+<section id="loop">
+  <div class="wrap">
+    <p class="kicker reveal">The core loop</p>
+    <h2 class="sec-title reveal">One feature, at the right level.</h2>
+    <p class="sec-intro reveal">Let <code>automate</code> decide <em>what</em> is worth automating by ROI; build it at the lowest level that proves the behavior (API &gt; component &gt; E2E).</p>
+    <div class="term reveal">
+      <div class="term-bar"><i></i><i></i><i></i><span>automation tester — per feature</span></div>
+<pre><span class="p">&gt; /qa:automate</span> <span class="a">"guest checkout"</span>        <span class="c"># 1 · WHAT to automate: score priority × complexity, pick by ROI</span>
+<span class="p">&gt; /qa:implement</span> <span class="a">"guest checkout"</span>       <span class="c"># 2 · build at the right level and run</span>
+<span class="p">&gt; /qa:test-data</span> <span class="a">order</span>                  <span class="c"># 3 · factories &amp; fixtures so every test owns its data</span>
+<span class="p">&gt; /qa:api-automate</span> <span class="a">/orders</span>             <span class="c"># 4 · surface deep-dives where needed:</span>
+<span class="p">&gt; /qa:scan-ui</span> <span class="a">https://app/checkout</span>     <span class="c">#     UI → page objects → covering cases</span>
+<span class="p">&gt; /qa:web-automate</span> <span class="a">"checkout journey"</span>   <span class="c">#     full E2E for the critical journey</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- MAINTENANCE -->
+<section id="maintain">
+  <div class="wrap">
+    <p class="kicker reveal">Keep CI honest</p>
+    <h2 class="sec-title reveal">The maintenance loop.</h2>
+    <p class="sec-intro reveal">A red build is a signal, not a chore. Start build-wide with <code>/qa:ci</code>; drop to the targeted commands when you already know the cause.</p>
+    <div class="term reveal">
+      <div class="term-bar"><i></i><i></i><i></i><span>automation tester — maintenance</span></div>
+<pre><span class="p">&gt; /qa:ci</span>                          <span class="c"># whole red build: bucket every failure, fix + confirm, harden to green ×3</span>
+<span class="p">&gt; /qa:ci</span> <span class="a">x</span>                        <span class="c"># …then verify the full suite locally (extended gate)</span>
+<span class="p">&gt; /qa:fix-jenkins</span>                 <span class="c"># Jenkins-only: pull failed cases, fix by root cause, re-run locally</span>
+<span class="p">&gt; /qa:fix-ci</span> <span class="a">ci.log</span>                <span class="c"># a single pasted log / any other CI</span>
+<span class="p">&gt; /qa:flaky-hunt</span>                  <span class="c"># intermittent → deterministic fixes, not retries</span>
+<span class="p">&gt; /qa:self-heal</span>                   <span class="c"># UI changed → repair locators (heals HOW we locate, never WHAT we verify)</span>
+<span class="p">&gt; /qa:triage</span> <span class="a">"&lt;failure&gt;"</span>           <span class="c"># the failure is a REAL product defect → escalate, leave the test red</span></pre>
+    </div>
+    <blockquote class="pull reveal"><code>fix-*</code>, <code>self-heal</code>, and <code>flaky-hunt</code> fix test/env/flakiness causes only. A genuine product defect goes to <code>triage</code> and the test keeps asserting correct behavior. A green build you can't trust is worse than a red one.<cite>The honesty rule</cite></blockquote>
+  </div>
+</section>
+
+<!-- HEALTH CHECK -->
+<section id="health">
+  <div class="wrap">
+    <p class="kicker reveal">Quarterly</p>
+    <h2 class="sec-title reveal">Health-check the suite itself.</h2>
+    <div class="flows">
+      <div class="flowbox reveal"><h4>Architecture &amp; anti-patterns</h4><p class="flow"><b>automation-audit</b> <span class="dim">— gTAA / SOLID / pyramid shape, scored</span></p></div>
+      <div class="flowbox reveal"><h4>Coverage</h4><p class="flow"><b>coverage-measure</b> <span class="dim">— structural + requirements + risk</span></p></div>
+      <div class="flowbox reveal"><h4>Testware quality</h4><p class="flow"><b>static-analysis</b> <span class="dim">— complexity &amp; maintainability of the tests</span></p></div>
+      <div class="flowbox reveal"><h4>Highest-value gaps</h4><p class="flow"><b>review-coverage</b> <span class="dim">— the missing tests that matter most</span></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HANDOFF -->
+<section id="handoff">
+  <div class="wrap">
+    <p class="kicker reveal">Where your work goes</p>
+    <h2 class="sec-title reveal">Hand-offs.</h2>
+    <div class="handoff reveal">
+      <div class="ho-row"><span class="ho-k">Receives ←</span><div><b>Manual Tester</b> — runs <code>/qa:automate</code> on their stable case CSVs.<br><b>Test Leader</b> — priorities from the risk register.</div></div>
+      <div class="ho-row"><span class="ho-k">Hands off →</span><div><b>Everyone</b> — your suite is the safety net that <code>/qa:regression</code>, <code>/qa:status-report</code>, and <code>/qa:go-no-go</code> read from.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHEAT SHEET -->
+<section id="cheats">
+  <div class="wrap">
+    <p class="kicker reveal">Cheat sheet</p>
+    <h2 class="sec-title reveal">One line per situation.</h2>
+    <table class="tbl reveal">
+      <thead><tr><th>You need to…</th><th>Run</th></tr></thead>
+      <tbody>
+        <tr><td>Decide what's worth automating</td><td><code>/qa:automate &lt;cases|feature&gt;</code></td></tr>
+        <tr><td>Build + run tests for a feature</td><td><code>/qa:implement &lt;feature&gt;</code></td></tr>
+        <tr><td>Triage a whole red build (any CI)</td><td><code>/qa:ci</code> <span style="color:var(--faint)">(<code>/qa:ci x</code> = full-suite gate)</span></td></tr>
+        <tr><td>Fix a red Jenkins build</td><td><code>/qa:fix-jenkins</code></td></tr>
+        <tr><td>Kill flaky tests</td><td><code>/qa:flaky-hunt</code></td></tr>
+        <tr><td>Repair tests after a UI change</td><td><code>/qa:self-heal</code></td></tr>
+        <tr><td>Health-check the whole suite</td><td><code>/qa:automation-audit</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- OTHER ROLES -->
+<section id="other">
+  <div class="wrap">
+    <p class="kicker reveal">Switch hats</p>
+    <h2 class="sec-title reveal">The other four roles.</h2>
+    <p class="sec-intro reveal">You can be all five — switch playbooks as the day demands. See how the roles interlock on the <a href="index.html#lifecycle">release-lifecycle timeline</a>.</p>
+    <div class="crossroles reveal">
+      <a class="rolecard rc-manual" href="manual-tester.html"><span class="rc-glyph">🔍</span><span class="rc-name">Manual</span><span class="rc-tag">Static · Design · Explore</span></a>
+      <a class="rolecard rc-auto is-current"><span class="rc-glyph">🤖</span><span class="rc-name">Automation</span><span class="rc-tag">You are here</span></a>
+      <a class="rolecard rc-perf" href="performance-tester.html"><span class="rc-glyph">⚡</span><span class="rc-name">Performance</span><span class="rc-tag">Plan · Load · Analyze</span></a>
+      <a class="rolecard rc-leader" href="test-leader.html"><span class="rc-glyph">🧭</span><span class="rc-name">Leader</span><span class="rc-tag">Plan · Monitor · Decide</span></a>
+      <a class="rolecard rc-manager" href="test-manager.html"><span class="rc-glyph">📊</span><span class="rc-name">Manager</span><span class="rc-tag">Policy · People · Process</span></a>
+    </div>
+    <div class="minidocs reveal">
+      <a href="WORKFLOWS.md">Full role playbooks (WORKFLOWS.md)</a>
+      <a href="COMMAND-GUIDE.md">Command guide</a>
+      <a href="COMMAND-EXAMPLES.md">Worked examples</a>
+      <a href="command-reference.html">Command reference</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.9.0</strong></span>
+      <span>60 commands</span>
+      <span>MIT license</span>
+      <span><a href="index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB® is a registered trademark of the International Software Testing Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){ document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');}); return; }
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

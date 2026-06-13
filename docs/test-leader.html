@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Leader — QA Toolkit role playbook</title>
+<meta name="description" content="The Test Leader playbook for the QA Toolkit: run the testing of a release — risk-based planning, monitoring &amp; control with corrective actions, and the evidence-based go/no-go ship decision.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="roles.css">
+</head>
+<body class="r-leader">
+
+<!-- NAV -->
+<nav class="topnav" aria-label="Role navigation">
+  <div class="wrap">
+    <a class="wordmark" href="index.html">QA Toolkit<span class="v">v3.9.0</span></a>
+    <ul class="navlinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="manual-tester.html">Manual</a></li>
+      <li><a href="automation-tester.html">Automation</a></li>
+      <li><a href="performance-tester.html">Performance</a></li>
+      <li><a href="test-leader.html" class="active">Leader</a></li>
+      <li><a href="test-manager.html">Manager</a></li>
+      <li><a href="command-reference.html">Commands</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="rhero" id="top">
+  <div class="wrap">
+    <p class="kicker reveal">Role playbook · 04 / 05</p>
+    <div class="rhead reveal">
+      <span class="rglyph" aria-hidden="true">🧭</span>
+      <div>
+        <h1>Test <em>Leader</em></h1>
+        <p class="role-tag">Plan · Monitor · Decide</p>
+      </div>
+    </div>
+    <p class="standfirst reveal"><strong>Mission:</strong> run the testing of a release — decide <em>where</em> to test deeply, track progress against the plan, take corrective action, and make the evidence-based ship/hold recommendation. The risk register drives everything.</p>
+    <span class="istqb reveal"><b>ISTQB home turf:</b> test planning, monitoring &amp; control (§5) · risk-based testing (§5.2) · completion · CTAL-TM operational level</span>
+    <div class="meta-row reveal">
+      <span><strong>9</strong> commands in your kit</span>
+      <span>risk drives everything</span>
+      <span>ship/hold with evidence</span>
+    </div>
+  </div>
+</header>
+
+<!-- KICKOFF -->
+<section id="kickoff">
+  <div class="wrap">
+    <p class="kicker reveal">Release kickoff</p>
+    <h2 class="sec-title reveal">Aim the effort before anyone tests.</h2>
+    <p class="sec-intro reveal">The risk assessment drives everything downstream: high-risk areas get <code>test-design</code> + <code>exploratory</code> depth; low-risk areas get standard <code>test-cases</code>. Brief the team from the register.</p>
+    <div class="term reveal">
+      <div class="term-bar"><i></i><i></i><i></i><span>test leader — kickoff</span></div>
+<pre><span class="p">&gt; /qa:risk-assessment</span> <span class="a">R2.4</span>                          <span class="c"># 1 · score product &amp; project risks (likelihood × impact) — drives everything</span>
+<span class="p">&gt; /qa:estimate</span> <span class="a">"R2.4 scope"</span>                         <span class="c"># 2 · effort estimation (metrics + expert based)</span>
+<span class="p">&gt; /qa:create-plan</span> <span class="a">R2.4 "guest checkout, saved cards"</span>  <span class="c"># 3 · the Test Plan: scope, approach, entry/exit, schedule</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- MID-RELEASE -->
+<section id="midrelease">
+  <div class="wrap">
+    <p class="kicker reveal">Mid-release — weekly or per milestone</p>
+    <h2 class="sec-title reveal">Monitor, then control.</h2>
+    <p class="sec-intro reveal">Monitoring is the measurement; control is the action. A status report that doesn't end in a decision is just a dashboard.</p>
+    <div class="term reveal">
+      <div class="term-bar"><i></i><i></i><i></i><span>test leader — weekly loop</span></div>
+<pre><span class="p">&gt; /qa:status-report</span> <span class="a">R2.4</span>               <span class="c"># progress vs plan, defect trends, coverage, entry/exit status…</span>
+<span class="o">                                     # …and it ends with corrective ACTIONS: reassign, descope, add sessions</span>
+<span class="p">&gt; /qa:review-coverage</span>                 <span class="c"># where is coverage thin vs the risk register?</span>
+<span class="p">&gt; /qa:regression</span> <span class="a">"payment refactor"</span>   <span class="c"># a change landed → select &amp; prioritize the regression set</span>
+<span class="p">&gt; /qa:flaky-hunt</span>                      <span class="c"># pass-rate noise hides real signal — keep the suite trustworthy</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ENDGAME -->
+<section id="endgame">
+  <div class="wrap">
+    <p class="kicker reveal">Release endgame</p>
+    <h2 class="sec-title reveal">The ship decision.</h2>
+    <div class="term reveal">
+      <div class="term-bar"><i></i><i></i><i></i><span>test leader — endgame</span></div>
+<pre><span class="p">&gt; /qa:coverage-measure</span>      <span class="c"># 1 · final coverage vs requirements &amp; risk</span>
+<span class="p">&gt; /qa:go-no-go</span> <span class="a">R2.4</span>        <span class="c"># 2 · the formal gate: all signals → ship/hold + conditions + sign-off</span>
+<span class="p">&gt; /qa:release-report</span> <span class="a">R2.4</span>  <span class="c"># 3 · Test Completion Report: exit criteria, residual risk, lessons learned</span></pre>
+    </div>
+    <blockquote class="pull reveal">Severity is product impact; priority is fix urgency — keep them separate. A ship decision with three open low-severity defects and a residual-risk statement is ISTQB-correct. "Zero bugs" is not a thing.<cite>Principle 1 at the gate</cite></blockquote>
+  </div>
+</section>
+
+<!-- HANDOFF -->
+<section id="handoff">
+  <div class="wrap">
+    <p class="kicker reveal">Where your work goes</p>
+    <h2 class="sec-title reveal">Hand-offs.</h2>
+    <div class="handoff reveal">
+      <div class="ho-row"><span class="ho-k">Receives ←</span><div><b>Everyone</b> — execution results, defects, performance thresholds, and coverage.</div></div>
+      <div class="ho-row"><span class="ho-k">Hands off →</span><div><b>Test Manager</b> — status &amp; completion reports roll up into <code>/qa:quality-report</code>.<br><b>The organization</b> — the <code>/qa:go-no-go</code> decision.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHEAT SHEET -->
+<section id="cheats">
+  <div class="wrap">
+    <p class="kicker reveal">Cheat sheet</p>
+    <h2 class="sec-title reveal">One line per situation.</h2>
+    <table class="tbl reveal">
+      <thead><tr><th>You need to…</th><th>Run</th></tr></thead>
+      <tbody>
+        <tr><td>Decide where to test deeply</td><td><code>/qa:risk-assessment &lt;release&gt;</code></td></tr>
+        <tr><td>Write the release test plan</td><td><code>/qa:create-plan &lt;release&gt; &lt;features&gt;</code></td></tr>
+        <tr><td>Report progress + take action</td><td><code>/qa:status-report &lt;release&gt;</code></td></tr>
+        <tr><td>Pick the regression set for a change</td><td><code>/qa:regression &lt;change&gt;</code></td></tr>
+        <tr><td>Make the ship / hold call</td><td><code>/qa:go-no-go &lt;release&gt;</code> → <code>/qa:release-report &lt;release&gt;</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- OTHER ROLES -->
+<section id="other">
+  <div class="wrap">
+    <p class="kicker reveal">Switch hats</p>
+    <h2 class="sec-title reveal">The other four roles.</h2>
+    <p class="sec-intro reveal">You can be all five — switch playbooks as the day demands. See how the roles interlock on the <a href="index.html#lifecycle">release-lifecycle timeline</a>.</p>
+    <div class="crossroles reveal">
+      <a class="rolecard rc-manual" href="manual-tester.html"><span class="rc-glyph">🔍</span><span class="rc-name">Manual</span><span class="rc-tag">Static · Design · Explore</span></a>
+      <a class="rolecard rc-auto" href="automation-tester.html"><span class="rc-glyph">🤖</span><span class="rc-name">Automation</span><span class="rc-tag">Build · Run · Maintain</span></a>
+      <a class="rolecard rc-perf" href="performance-tester.html"><span class="rc-glyph">⚡</span><span class="rc-name">Performance</span><span class="rc-tag">Plan · Load · Analyze</span></a>
+      <a class="rolecard rc-leader is-current"><span class="rc-glyph">🧭</span><span class="rc-name">Leader</span><span class="rc-tag">You are here</span></a>
+      <a class="rolecard rc-manager" href="test-manager.html"><span class="rc-glyph">📊</span><span class="rc-name">Manager</span><span class="rc-tag">Policy · People · Process</span></a>
+    </div>
+    <div class="minidocs reveal">
+      <a href="WORKFLOWS.md">Full role playbooks (WORKFLOWS.md)</a>
+      <a href="COMMAND-GUIDE.md">Command guide</a>
+      <a href="COMMAND-EXAMPLES.md">Worked examples</a>
+      <a href="command-reference.html">Command reference</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.9.0</strong></span>
+      <span>60 commands</span>
+      <span>MIT license</span>
+      <span><a href="index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB® is a registered trademark of the International Software Testing Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){ document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');}); return; }
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>
