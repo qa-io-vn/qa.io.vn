@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QA Toolkit — A field manual for ISTQB-aligned testing</title>
-<meta name="description" content="59 /qa:* slash commands for Claude Code. ISTQB CTFL v4.0 + Advanced/Specialist aligned. One qa.config.yml per project. Five role playbooks, one release lifecycle.">
+<meta name="description" content="64 /qa:* slash commands for Claude Code. ISTQB CTFL v4.0 + Advanced/Specialist aligned. One qa.config.yml per project. Five role playbooks, one release lifecycle.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -498,10 +498,10 @@ section{ padding:96px 0 88px; border-top:1px solid var(--hairline-2); }
   border:1px solid var(--hairline-2);
   border-radius:5px;
   padding:3px 9px;
-  cursor:help;
+  cursor:pointer; text-decoration:none;
   transition:color .15s ease, border-color .15s ease;
 }
-.cmd:hover{ color:var(--accent); border-color:rgba(94,226,160,.4); }
+.cmd:hover{ color:var(--accent); border-color:rgba(94,226,160,.4); text-decoration:none; }
 .cat-total{
   margin-top:26px;
   font-family:var(--mono); font-size:.76rem; letter-spacing:.08em; color:var(--dim);
@@ -571,7 +571,7 @@ html.js .reveal.in{ opacity:1; transform:none; }
 <!-- ====================== NAV ====================== -->
 <nav class="topnav" aria-label="Page navigation">
   <div class="wrap">
-    <a class="wordmark" href="#top">QA Toolkit<span class="v">v3.8.1</span></a>
+    <a class="wordmark" href="#top">QA Toolkit<span class="v">v3.10.0</span></a>
     <ul class="navlinks">
       <li><a href="#how">How it works</a></li>
       <li><a href="#quickstart">Quick start</a></li>
@@ -589,13 +589,13 @@ html.js .reveal.in{ opacity:1; transform:none; }
     <p class="kicker">A field manual for ISTQB-aligned testing</p>
     <h1>One toolkit. <em>Every</em> testing role.</h1>
     <p class="standfirst">
-      Fifty-nine <code>/qa:*</code> slash commands turn Claude&nbsp;Code into a full QA department —
+      Sixty-four <code>/qa:*</code> slash commands turn Claude&nbsp;Code into a full QA department —
       aligned with ISTQB CTFL&nbsp;v4.0 and the Advanced &amp; Specialist syllabi, documented to
       ISO/IEC/IEEE&nbsp;29119-3. Install once as a plugin; the only file that changes between
       projects is a single <code>qa.config.yml</code>.
     </p>
     <div class="meta-row">
-      <span><strong>v3.8.1</strong></span>
+      <span><strong>v3.10.0</strong></span>
       <span><strong>59</strong> commands</span>
       <span>MIT license</span>
       <span>ISTQB-aligned</span>
@@ -625,7 +625,7 @@ html.js .reveal.in{ opacity:1; transform:none; }
       <div class="idea reveal">
         <span class="num">01</span>
         <h3>Install once, identical everywhere</h3>
-        <p>The toolkit ships as a Claude Code <em>plugin</em>: 59 commands, auto-loading skills,
+        <p>The toolkit ships as a Claude Code <em>plugin</em>: 64 commands, auto-loading skills,
            and ISO-29119 document templates. Improve the toolkit in one place and every project
            gets the upgrade with <code>/plugin marketplace update</code>.</p>
       </div>
@@ -957,11 +957,12 @@ html.js .reveal.in{ opacity:1; transform:none; }
 <section id="commands">
   <div class="wrap">
     <p class="kicker reveal">Command catalog</p>
-    <h2 class="sec-title reveal">All 59, grouped by activity.</h2>
+    <h2 class="sec-title reveal">All 64, grouped by activity.</h2>
     <p class="sec-intro reveal">
-      A command for every ISTQB test-process activity. Hover any chip for its one-liner; the
-      <a href="COMMAND-GUIDE.md">Command Guide</a> has the full how-to and
-      <a href="COMMAND-EXAMPLES.md">worked examples</a> cover every command.
+      A command for every ISTQB test-process activity. <strong>Click any command</strong> for its dedicated
+      page — what it does, how it works, the theory behind it, and a worked example. See them all on the
+      <a href="commands/index.html">command catalog</a>; the <a href="COMMAND-GUIDE.md">Command Guide</a>
+      has the full how-to and <a href="COMMAND-EXAMPLES.md">worked examples</a> cover every command.
     </p>
 
     <div class="cat-grid">
@@ -969,14 +970,14 @@ html.js .reveal.in{ opacity:1; transform:none; }
         <header><h3>Planning &amp; management</h3><span class="count">8</span></header>
         <p class="ref">CTFL §5 · CTAL-TM · Expert</p>
         <div class="chips-wrap">
-          <span class="cmd" title="Interview you and generate the per-project qa.config.yml. Start here.">qa-init</span>
-          <span class="cmd" title="Author the Organizational Test Policy — top of the document hierarchy.">test-policy</span>
-          <span class="cmd" title="Generate the Organizational Test Strategy (ISO 29119-3).">create-strategy</span>
-          <span class="cmd" title="Generate a release/sprint Test Plan (ISO 29119-3).">create-plan</span>
-          <span class="cmd" title="Score product & project risks (likelihood × impact) — risk-based testing.">risk-assessment</span>
-          <span class="cmd" title="Test effort estimation, metrics- and expert-based.">estimate</span>
-          <span class="cmd" title="Evaluate & select a test tool: criteria, comparison, pilot plan.">tool-select</span>
-          <span class="cmd" title="Test process maturity assessment & improvement roadmap (TMMi/IDEAL).">process-improvement</span>
+          <a class="cmd" href="commands/qa-init.html" title="Interview you and generate the per-project qa.config.yml. Start here.">qa-init</a>
+          <a class="cmd" href="commands/test-policy.html" title="Author the Organizational Test Policy — top of the document hierarchy.">test-policy</a>
+          <a class="cmd" href="commands/create-strategy.html" title="Generate the Organizational Test Strategy (ISO 29119-3).">create-strategy</a>
+          <a class="cmd" href="commands/create-plan.html" title="Generate a release/sprint Test Plan (ISO 29119-3).">create-plan</a>
+          <a class="cmd" href="commands/risk-assessment.html" title="Score product & project risks (likelihood × impact) — risk-based testing.">risk-assessment</a>
+          <a class="cmd" href="commands/estimate.html" title="Test effort estimation, metrics- and expert-based.">estimate</a>
+          <a class="cmd" href="commands/tool-select.html" title="Evaluate & select a test tool: criteria, comparison, pilot plan.">tool-select</a>
+          <a class="cmd" href="commands/process-improvement.html" title="Test process maturity assessment & improvement roadmap (TMMi/IDEAL).">process-improvement</a>
         </div>
       </div>
 
@@ -984,11 +985,11 @@ html.js .reveal.in{ opacity:1; transform:none; }
         <header><h3>Governance</h3><span class="count">5</span></header>
         <p class="ref">CTAL-TM strategic · Expert TM</p>
         <div class="chips-wrap">
-          <span class="cmd" title="Cross-release quality KPI dashboard / executive report.">quality-report</span>
-          <span class="cmd" title="Team capacity & skills — staffing vs backlog, skills matrix, training.">team-plan</span>
-          <span class="cmd" title="Formal release readiness gate — consolidated ship/hold with sign-off.">go-no-go</span>
-          <span class="cmd" title="Cost of Quality & QA ROI — prevention/appraisal/failure costs, budget case.">cost-of-quality</span>
-          <span class="cmd" title="Audit & compliance readiness — traceability evidence pack, conformance gaps.">audit-prep</span>
+          <a class="cmd" href="commands/quality-report.html" title="Cross-release quality KPI dashboard / executive report.">quality-report</a>
+          <a class="cmd" href="commands/team-plan.html" title="Team capacity & skills — staffing vs backlog, skills matrix, training.">team-plan</a>
+          <a class="cmd" href="commands/go-no-go.html" title="Formal release readiness gate — consolidated ship/hold with sign-off.">go-no-go</a>
+          <a class="cmd" href="commands/cost-of-quality.html" title="Cost of Quality & QA ROI — prevention/appraisal/failure costs, budget case.">cost-of-quality</a>
+          <a class="cmd" href="commands/audit-prep.html" title="Audit & compliance readiness — traceability evidence pack, conformance gaps.">audit-prep</a>
         </div>
       </div>
 
@@ -996,16 +997,16 @@ html.js .reveal.in{ opacity:1; transform:none; }
         <header><h3>Static testing, analysis &amp; design</h3><span class="count">10</span></header>
         <p class="ref">CTFL §3–4 · CTAL-TA/TTA</p>
         <div class="chips-wrap">
-          <span class="cmd" title="Static testing — review the test basis for testability & defects (shift-left).">static-review</span>
-          <span class="cmd" title="Static analysis of code — complexity, control/data flow, maintainability.">static-analysis</span>
-          <span class="cmd" title="Audit an existing automation project — gTAA, SOLID, anti-patterns, pyramid; scored report.">automation-audit</span>
-          <span class="cmd" title="Generate test cases with ISTQB techniques (EP, BVA, decision tables) + CSV.">test-cases</span>
-          <span class="cmd" title="Derive test conditions + cases for a feature — broader analysis context.">test-design</span>
-          <span class="cmd" title="Pairwise / classification-tree design for multi-parameter features.">combinatorial</span>
-          <span class="cmd" title="ATDD/BDD acceptance criteria & Gherkin scenarios.">acceptance</span>
-          <span class="cmd" title="Model-Based Testing — model a stateful flow, derive cases by coverage.">mbt</span>
-          <span class="cmd" title="Session-based exploratory testing charters (experience-based).">exploratory</span>
-          <span class="cmd" title="Audit coverage gaps vs strategy & risk; recommend missing tests.">review-coverage</span>
+          <a class="cmd" href="commands/static-review.html" title="Static testing — review the test basis for testability & defects (shift-left).">static-review</a>
+          <a class="cmd" href="commands/static-analysis.html" title="Static analysis of code — complexity, control/data flow, maintainability.">static-analysis</a>
+          <a class="cmd" href="commands/automation-audit.html" title="Audit an existing automation project — gTAA, SOLID, anti-patterns, pyramid; scored report.">automation-audit</a>
+          <a class="cmd" href="commands/test-cases.html" title="Generate test cases with ISTQB techniques (EP, BVA, decision tables) + CSV.">test-cases</a>
+          <a class="cmd" href="commands/test-design.html" title="Derive test conditions + cases for a feature — broader analysis context.">test-design</a>
+          <a class="cmd" href="commands/combinatorial.html" title="Pairwise / classification-tree design for multi-parameter features.">combinatorial</a>
+          <a class="cmd" href="commands/acceptance.html" title="ATDD/BDD acceptance criteria & Gherkin scenarios.">acceptance</a>
+          <a class="cmd" href="commands/mbt.html" title="Model-Based Testing — model a stateful flow, derive cases by coverage.">mbt</a>
+          <a class="cmd" href="commands/exploratory.html" title="Session-based exploratory testing charters (experience-based).">exploratory</a>
+          <a class="cmd" href="commands/review-coverage.html" title="Audit coverage gaps vs strategy & risk; recommend missing tests.">review-coverage</a>
         </div>
       </div>
 
@@ -1013,12 +1014,12 @@ html.js .reveal.in{ opacity:1; transform:none; }
         <header><h3>Test levels &amp; change-related</h3><span class="count">6</span></header>
         <p class="ref">CTFL §2.2 · §2.3</p>
         <div class="chips-wrap">
-          <span class="cmd" title="Component (unit) testing — isolation, test doubles, branch coverage.">unit-test</span>
-          <span class="cmd" title="Integration testing — incremental strategy, stubs/drivers.">integration-test</span>
-          <span class="cmd" title="Maintenance testing — modification/migration/retirement + impact analysis.">maintenance-test</span>
-          <span class="cmd" title="Dynamic analysis — runtime memory/resource leaks, degradation over time.">dynamic-analysis</span>
-          <span class="cmd" title="Testing in production — synthetic monitoring, canary/A-B, feature flags.">shift-right</span>
-          <span class="cmd" title="Regression test selection & prioritization via impact analysis.">regression</span>
+          <a class="cmd" href="commands/unit-test.html" title="Component (unit) testing — isolation, test doubles, branch coverage.">unit-test</a>
+          <a class="cmd" href="commands/integration-test.html" title="Integration testing — incremental strategy, stubs/drivers.">integration-test</a>
+          <a class="cmd" href="commands/maintenance-test.html" title="Maintenance testing — modification/migration/retirement + impact analysis.">maintenance-test</a>
+          <a class="cmd" href="commands/dynamic-analysis.html" title="Dynamic analysis — runtime memory/resource leaks, degradation over time.">dynamic-analysis</a>
+          <a class="cmd" href="commands/shift-right.html" title="Testing in production — synthetic monitoring, canary/A-B, feature flags.">shift-right</a>
+          <a class="cmd" href="commands/regression.html" title="Regression test selection & prioritization via impact analysis.">regression</a>
         </div>
       </div>
 
@@ -1026,12 +1027,12 @@ html.js .reveal.in{ opacity:1; transform:none; }
         <header><h3>Implementation</h3><span class="count">6</span></header>
         <p class="ref">CTFL §1.4 · CT-TAE</p>
         <div class="chips-wrap">
-          <span class="cmd" title="Build the automation framework — Playwright+TS, K6, Pact, CI pipeline.">scaffold</span>
-          <span class="cmd" title="Full automation pipeline — score ROI, select candidates, implement the top ones.">automate</span>
-          <span class="cmd" title="Turn cases into tests at the right pyramid level and run them.">implement</span>
-          <span class="cmd" title="Add a single focused test from a plain-English description.">add-test</span>
-          <span class="cmd" title="Typed data factories, builders, fixtures, seeding helpers.">test-data</span>
-          <span class="cmd" title="Provision/document the test environment & testware configuration.">test-env</span>
+          <a class="cmd" href="commands/scaffold.html" title="Build the automation framework — Playwright+TS, K6, Pact, CI pipeline.">scaffold</a>
+          <a class="cmd" href="commands/automate.html" title="Full automation pipeline — score ROI, select candidates, implement the top ones.">automate</a>
+          <a class="cmd" href="commands/implement.html" title="Turn cases into tests at the right pyramid level and run them.">implement</a>
+          <a class="cmd" href="commands/add-test.html" title="Add a single focused test from a plain-English description.">add-test</a>
+          <a class="cmd" href="commands/test-data.html" title="Typed data factories, builders, fixtures, seeding helpers.">test-data</a>
+          <a class="cmd" href="commands/test-env.html" title="Provision/document the test environment & testware configuration.">test-env</a>
         </div>
       </div>
 
@@ -1039,12 +1040,12 @@ html.js .reveal.in{ opacity:1; transform:none; }
         <header><h3>Automation by surface</h3><span class="count">6</span></header>
         <p class="ref">CT-TAE · CT-PT · CT-MAT</p>
         <div class="chips-wrap">
-          <span class="cmd" title="Program-level Test Automation Strategy & gTAA architecture.">automation-strategy</span>
-          <span class="cmd" title="API automation from OpenAPI — schema, CRUD, auth matrix, negative/boundary.">api-automate</span>
-          <span class="cmd" title="Deep-dive a web UI — extract locators into Page Objects + covering cases.">scan-ui</span>
-          <span class="cmd" title="Web UI / E2E automation — POM, critical journeys, cross-browser.">web-automate</span>
-          <span class="cmd" title="Mobile automation — native (Appium) or responsive mobile-web.">mobile-automate</span>
-          <span class="cmd" title="Performance test planning — objectives, SLAs, workload model.">perf-plan</span>
+          <a class="cmd" href="commands/automation-strategy.html" title="Program-level Test Automation Strategy & gTAA architecture.">automation-strategy</a>
+          <a class="cmd" href="commands/api-automate.html" title="API automation from OpenAPI — schema, CRUD, auth matrix, negative/boundary.">api-automate</a>
+          <a class="cmd" href="commands/scan-ui.html" title="Deep-dive a web UI — extract locators into Page Objects + covering cases.">scan-ui</a>
+          <a class="cmd" href="commands/web-automate.html" title="Web UI / E2E automation — POM, critical journeys, cross-browser.">web-automate</a>
+          <a class="cmd" href="commands/mobile-automate.html" title="Mobile automation — native (Appium) or responsive mobile-web.">mobile-automate</a>
+          <a class="cmd" href="commands/perf-plan.html" title="Performance test planning — objectives, SLAs, workload model.">perf-plan</a>
         </div>
       </div>
 
@@ -1052,25 +1053,37 @@ html.js .reveal.in{ opacity:1; transform:none; }
         <header><h3>Execution — non-functional</h3><span class="count">8</span></header>
         <p class="ref">CTFL §2.3 · CT-PT/SEC/UT/AI</p>
         <div class="chips-wrap">
-          <span class="cmd" title="K6 performance test — load/stress/spike/soak with threshold gates.">perf-test</span>
-          <span class="cmd" title="axe accessibility checks vs the WCAG target.">a11y-audit</span>
-          <span class="cmd" title="Usability evaluation — heuristics, task scenarios.">usability-test</span>
-          <span class="cmd" title="Reliability, compatibility, portability, maintainability (ISO 25010).">nonfunctional</span>
-          <span class="cmd" title="Security baseline — SAST, SCA, DAST (OWASP ZAP), secret scan.">security-scan</span>
-          <span class="cmd" title="Pact contracts + can-i-deploy.">contract-sync</span>
-          <span class="cmd" title="Responsive/mobile-web testing — viewports, touch, network.">mobile-test</span>
-          <span class="cmd" title="Test AI/ML components — metrics, bias, robustness, drift.">ai-test</span>
+          <a class="cmd" href="commands/perf-test.html" title="K6 performance test — load/stress/spike/soak with threshold gates.">perf-test</a>
+          <a class="cmd" href="commands/a11y-audit.html" title="axe accessibility checks vs the WCAG target.">a11y-audit</a>
+          <a class="cmd" href="commands/usability-test.html" title="Usability evaluation — heuristics, task scenarios.">usability-test</a>
+          <a class="cmd" href="commands/nonfunctional.html" title="Reliability, compatibility, portability, maintainability (ISO 25010).">nonfunctional</a>
+          <a class="cmd" href="commands/security-scan.html" title="Security baseline — SAST, SCA, DAST (OWASP ZAP), secret scan.">security-scan</a>
+          <a class="cmd" href="commands/contract-sync.html" title="Pact contracts + can-i-deploy.">contract-sync</a>
+          <a class="cmd" href="commands/mobile-test.html" title="Responsive/mobile-web testing — viewports, touch, network.">mobile-test</a>
+          <a class="cmd" href="commands/ai-test.html" title="Test AI/ML components — metrics, bias, robustness, drift.">ai-test</a>
         </div>
       </div>
 
       <div class="cat reveal">
-        <header><h3>Maintenance, CI &amp; flakiness</h3><span class="count">4</span></header>
+        <header><h3>Maintenance, CI &amp; flakiness</h3><span class="count">5</span></header>
         <p class="ref">testware maintenance &amp; reliability</p>
         <div class="chips-wrap">
-          <span class="cmd" title="Diagnose & fix a failing pipeline / test run (any CI).">fix-ci</span>
-          <span class="cmd" title="Pull the latest Jenkins build's failed cases, fix, re-run locally until green.">fix-jenkins</span>
-          <span class="cmd" title="Find & fix flaky tests with deterministic fixes — not retries.">flaky-hunt</span>
-          <span class="cmd" title="Repair broken locators after UI changes — heals HOW we locate, never WHAT we verify.">self-heal</span>
+          <a class="cmd" href="commands/ci.html" title="End-to-end red-build triage (any CI) — bucket every failure, fix + confirm, harden to green ×3.">ci</a>
+          <a class="cmd" href="commands/fix-ci.html" title="Diagnose & fix a failing pipeline / test run (any CI).">fix-ci</a>
+          <a class="cmd" href="commands/fix-jenkins.html" title="Pull the latest Jenkins build's failed cases, fix, re-run locally until green.">fix-jenkins</a>
+          <a class="cmd" href="commands/flaky-hunt.html" title="Find & fix flaky tests with deterministic fixes — not retries.">flaky-hunt</a>
+          <a class="cmd" href="commands/self-heal.html" title="Repair broken locators after UI changes — heals HOW we locate, never WHAT we verify.">self-heal</a>
+        </div>
+      </div>
+
+      <div class="cat reveal">
+        <header><h3>Version control &amp; PR quality</h3><span class="count">4</span></header>
+        <p class="ref">CTFL §3 review · §2.3 impact · §5.3 gate</p>
+        <div class="chips-wrap">
+          <a class="cmd" href="commands/review-pr.html" title="QA review of a pull request — coverage of the diff, regression risk, testware quality, defects → merge call.">review-pr</a>
+          <a class="cmd" href="commands/commit.html" title="QA-gated commit — verify the change first (confirmation testing), then a Conventional Commits message. Never pushes.">commit</a>
+          <a class="cmd" href="commands/open-pr.html" title="Open a PR with a QA summary — what changed, what was tested, coverage delta, residual risk, linked defects.">open-pr</a>
+          <a class="cmd" href="commands/merge-gate.html" title="Evaluate a PR against the quality gates → documented merge / hold decision. Go/no-go at PR scope.">merge-gate</a>
         </div>
       </div>
 
@@ -1078,10 +1091,10 @@ html.js .reveal.in{ opacity:1; transform:none; }
         <header><h3>Monitoring, control &amp; completion</h3><span class="count">4</span></header>
         <p class="ref">CTFL §5.3–5.5 · ISO 29119-3</p>
         <div class="chips-wrap">
-          <span class="cmd" title="Test Status (Progress) Report — metrics + control actions mid-release.">status-report</span>
-          <span class="cmd" title="Measure structural / requirements / risk coverage.">coverage-measure</span>
-          <span class="cmd" title="Defect management — severity vs priority, ISTQB defect report.">triage</span>
-          <span class="cmd" title="Test Completion Report — exit criteria, residual risk, ship/hold.">release-report</span>
+          <a class="cmd" href="commands/status-report.html" title="Test Status (Progress) Report — metrics + control actions mid-release.">status-report</a>
+          <a class="cmd" href="commands/coverage-measure.html" title="Measure structural / requirements / risk coverage.">coverage-measure</a>
+          <a class="cmd" href="commands/triage.html" title="Defect management — severity vs priority, ISTQB defect report.">triage</a>
+          <a class="cmd" href="commands/release-report.html" title="Test Completion Report — exit criteria, residual risk, ship/hold.">release-report</a>
         </div>
       </div>
 
@@ -1089,13 +1102,13 @@ html.js .reveal.in{ opacity:1; transform:none; }
         <header><h3>AI-assisted &amp; reference</h3><span class="count">2</span></header>
         <p class="ref">CT-GenAI · ISTQB Glossary</p>
         <div class="chips-wrap">
-          <span class="cmd" title="Use GenAI to accelerate testing with ISTQB safeguards (oversight, privacy).">genai-assist</span>
-          <span class="cmd" title="On-demand ISTQB reference & coach — explain any concept, route to the right command.">istqb-coach</span>
+          <a class="cmd" href="commands/genai-assist.html" title="Use GenAI to accelerate testing with ISTQB safeguards (oversight, privacy).">genai-assist</a>
+          <a class="cmd" href="commands/istqb-coach.html" title="On-demand ISTQB reference & coach — explain any concept, route to the right command.">istqb-coach</a>
         </div>
       </div>
     </div>
 
-    <p class="cat-total reveal">8 + 5 + 10 + 6 + 6 + 6 + 8 + 4 + 4 + 2 = <b>59 commands</b> — one for every ISTQB activity.</p>
+    <p class="cat-total reveal">8 + 5 + 10 + 6 + 6 + 6 + 8 + 5 + 4 + 4 + 2 = <b>64 commands</b> — one for every ISTQB activity. <a href="commands/index.html">Browse all 64 as pages →</a></p>
   </div>
 </section>
 
@@ -1129,7 +1142,7 @@ html.js .reveal.in{ opacity:1; transform:none; }
       <a class="doc reveal" href="COMMAND-EXAMPLES.md">
         <span class="fname">COMMAND-EXAMPLES.md</span>
         <h3>Worked examples</h3>
-        <p>A sample invocation for all 59 commands with a "correct when" check, anchored to one consistent sample project.</p>
+        <p>A sample invocation for all 64 commands with a "correct when" check, anchored to one consistent sample project.</p>
         <span class="go">read →</span>
       </a>
       <a class="doc reveal" href="ISTQB-COMPLIANCE.md">
@@ -1158,8 +1171,8 @@ html.js .reveal.in{ opacity:1; transform:none; }
 <footer>
   <div class="wrap">
     <div class="foot-line">
-      <span>QA Toolkit <strong>v3.8.1</strong></span>
-      <span>59 commands</span>
+      <span>QA Toolkit <strong>v3.10.0</strong></span>
+      <span>64 commands</span>
       <span>MIT license</span>
       <span><a href="https://github.com/toronto-nigma/qa-toolkit">github.com/toronto-nigma/qa-toolkit</a></span>
     </div>

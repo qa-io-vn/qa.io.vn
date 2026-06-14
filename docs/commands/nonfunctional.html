@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:nonfunctional — Non-functional test design · QA Toolkit</title>
+<meta name="description" content="Design and (where automatable) run reliability/compatibility/portability/maintainability tests against measurable ISO/IEC 25010 criteria.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#f0b03c">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#test-execution-functional-non-functional">Test execution — functional &amp; non-functional</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>nonfunctional</h1>
+<p class="ctitle reveal">Non-functional test design</p>
+<p class="standfirst reveal">Design and (where automatable) run reliability/compatibility/portability/maintainability tests against measurable ISO/IEC 25010 criteria.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:nonfunctional &lt;characteristic, e.g. reliability, compatibility, portability, maintainability&gt;</code></div>
+<div class="meta-row reveal"><span>Test execution — functional &amp; non-functional</span><span>CTFL v4.0 §2.2.2 · CTAL-TTA (Specialist) · ISO/IEC 25010</span><span>Performance · Automation</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Covers the non-functional characteristics beyond performance/security/a11y: fixes the targeted ISO/IEC 25010 characteristic and its measurable sub-characteristics, derives test conditions and cases with acceptance criteria, implements the automatable ones, and reports results as numbers vs criteria. Routes perf/security/usability targets to their dedicated commands.</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>When testing reliability, compatibility, portability, maintainability, or functional-suitability aspects of quality.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml for paths, tooling, browser/device matrix, gates/SLAs, risk_areas; a target 25010 characteristic.</p></div>
+<div class="ov-card"><h3>Output</h3><p>ISO/IEC/IEEE 29119-3 Test Design + Test Case Specification -&gt; docs_dir/NONFUNCTIONAL-&lt;characteristic&gt;.md, plus Test Procedures under tests_dir and Execution Log when run.</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Read config; route perf/security/usability targets to their owning command</li><li>Resolve the characteristic from arguments (default to highest-risk area)</li><li>Fix the 25010 sub-characteristics in scope, each with a measurable criterion from gates</li><li>Derive test conditions and cases, tracing each to a sub-characteristic and criterion</li><li>Implement the automatable cases with configured tooling</li><li>Run against non-prod where feasible and report results vs criteria with pass/fail</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>Non-functional test design (CTFL v4.0 §2.2.2; CTAL-TTA) targeting ISO/IEC 25010 product-quality characteristics — each made measurable so it can be gated.</p><p class="istqb-tag">CTFL v4.0 §2.2.2 · CTAL-TTA (Specialist) · ISO/IEC 25010</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>nonfunctional</span></div><pre><span class="p">&gt; /qa:nonfunctional reliability</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> It maps to an ISO/IEC 25010 characteristic with measurable criteria.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="perf-test.html">/qa:perf-test</a><a class="chip" href="security-scan.html">/qa:security-scan</a><a class="chip" href="a11y-audit.html">/qa:a11y-audit</a><a class="chip" href="contract-sync.html">/qa:contract-sync</a><a class="chip" href="risk-assessment.html">/qa:risk-assessment</a><a class="chip" href="status-report.html">/qa:status-report</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-performance" href="../performance-tester.html">Performance</a><a class="chip role-automation" href="../automation-tester.html">Automation</a></div></div></div><nav class="prevnext"><a class="pn prev" href="usability-test.html"><span>&larr; Prev</span><b>/qa:usability-test</b></a><a class="pn allc" href="index.html">All commands</a><a class="pn next" href="security-scan.html"><span>Next &rarr;</span><b>/qa:security-scan</b></a></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,2267 @@
+[
+  {
+    "name": "qa-init",
+    "title": "Generate the project QA config",
+    "group": "Test planning & management",
+    "tagline": "Interview you and generate the per-project qa.config.yml \u2014 the single file every other /qa command reads.",
+    "usage": "/qa:qa-init",
+    "whatItDoes": "Detects project signals (package manifest, API spec, CI files, test dirs), asks you for what it cannot infer, validates against the template schema, then writes qa.config.yml at the repo root. It seeds the context \u2014 stack, tooling toggles, CI, gates, risk areas \u2014 that every later planning artifact consumes.",
+    "when": "First thing in any new project; re-run to refresh the config. Most other commands degrade to 'create qa.config.yml first' without it.",
+    "needs": "Nothing \u2014 it creates the config. Reads detected signals (package.json, openapi/swagger, CI files, test dirs).",
+    "output": "Project test-context configuration (29119-3 context input that feeds the Organizational Test Strategy and Test Plan) -> ./qa.config.yml.",
+    "howItWorks": [
+      "Detect project signals from manifests, API spec, CI files, test dirs",
+      "Pre-fill stack/CI/spec path/test dir from those signals",
+      "Interview the user (grouped questions) for anything not inferable",
+      "Run pre-write validation: schema match, valid YAML, no invented values, mandatory minimum",
+      "Emit a readiness checklist (populated vs TBD per section)",
+      "Write ./qa.config.yml and a structured summary with counts and next steps"
+    ],
+    "theory": "Realizes the first step of the ISTQB test-planning activity \u2014 establishing project context (CTFL v4.0 \u00a71.4). The config is the ISO/IEC/IEEE 29119-3 context input every downstream work product reads, which turns Principle 6 (testing is context-dependent) into an engineering mechanism: identical commands behave per-project because only the config differs.",
+    "istqb": "CTFL v4.0 \u00a71.4 \u00b7 \u00a75.1",
+    "example": {
+      "cmd": "/qa:qa-init",
+      "correctWhen": "qa.config.yml exists at repo root with your real project, stack, tooling, gates, and risk_areas filled in (not generic defaults)."
+    },
+    "related": [
+      "create-strategy",
+      "scaffold",
+      "test-policy"
+    ],
+    "roles": [
+      "leader",
+      "manager",
+      "automation",
+      "manual"
+    ]
+  },
+  {
+    "name": "test-policy",
+    "title": "Organizational Test Policy",
+    "group": "Test planning & management",
+    "tagline": "Author the Organizational Test Policy \u2014 the highest-level statement of why the org tests and what quality means, above any single project.",
+    "usage": "/qa:test-policy",
+    "whatItDoes": "Writes the top tier of the test-documentation hierarchy: testing objectives expressed as ISO/IEC 25010 quality characteristics, the value of testing, guiding principles, mandated standards, and how value is measured. It states intent (WHY/WHAT) only and deliberately delegates the HOW to the Test Strategy.",
+    "when": "When establishing org-wide QA governance, or yearly review of the policy. It is long-lived and should rarely change.",
+    "needs": "qa.config.yml (run /qa:qa-init first) \u2014 binds paths, tooling, gates, risk_areas, team, stack.",
+    "output": "ISO/IEC/IEEE 29119-2 Organizational Test Policy -> <paths.docs_dir>/TEST-POLICY.md.",
+    "howItWorks": [
+      "Config guard: stop and route to /qa:qa-init if config is missing",
+      "Resolve scope to the whole org (or a supplied product line / regime)",
+      "Load the policy template and follow its sections in order",
+      "Produce purpose/scope, objectives as 25010 characteristics, value of testing, principles, roles, mandated standards, testware governance, measurement, revision history",
+      "Keep all HOW out \u2014 delegate process/technique/tooling detail to the Strategy",
+      "Write TEST-POLICY.md to the docs dir"
+    ],
+    "theory": "The Policy is the highest tier of the ISTQB/ISO 29119 document hierarchy (policy -> strategy -> plan). Separating WHY (policy) from HOW (strategy) is the standard's own layering; quality goals tie to gates and coverage so value is measured, not asserted (Principle 1).",
+    "istqb": "ISO/IEC/IEEE 29119-2 \u00b7 CTAL-TM \u00b7 Test Management (Expert)",
+    "example": {
+      "cmd": "/qa:test-policy",
+      "correctWhen": "It states org-level testing objectives/principles above any single project (not a per-release plan) and keeps the HOW out."
+    },
+    "related": [
+      "create-strategy",
+      "process-improvement"
+    ],
+    "roles": [
+      "manager"
+    ]
+  },
+  {
+    "name": "create-strategy",
+    "title": "Organizational Test Strategy",
+    "group": "Test planning & management",
+    "tagline": "Generate or refresh the program-wide Test Strategy from qa.config.yml \u2014 levels, types, techniques, automation, environments, entry/exit criteria.",
+    "usage": "/qa:create-strategy",
+    "whatItDoes": "Produces the long-lived, project-general test approach: it maps test levels and types to your configured stack, carries gates thresholds verbatim into entry/exit criteria, derives risk tiers from risk_areas, and omits sections for any disabled tooling. It tailors the seven test-process activities to the project's agile cadence.",
+    "when": "When you need the overall QA approach for the product. Sits between the Test Policy (above) and the per-release Test Plan (below).",
+    "needs": "qa.config.yml (run /qa:qa-init first) \u2014 paths, every tooling toggle, ci.platform/browsers, gates, risk_areas, team, test_data, environments, process.",
+    "output": "ISO/IEC/IEEE 29119-3 Organizational Test Strategy -> <paths.docs_dir>/TEST-STRATEGY.md.",
+    "howItWorks": [
+      "Config guard: stop and route to /qa:qa-init if missing",
+      "Parse config as single source of truth (paths, tooling, stack, ci, gates, risk_areas, process)",
+      "Load the strategy template and follow its section order",
+      "Include a section per enabled tooling.* toggle; omit and list disabled ones as out of scope",
+      "Carry gates thresholds verbatim into entry/exit-criteria and metrics",
+      "Derive risk tiers and test depth from risk_areas (risk = likelihood \u00d7 impact)",
+      "Write TEST-STRATEGY.md, project-general and long-lived"
+    ],
+    "theory": "Test planning at program scope (CTFL \u00a75.1; CTAL-TM; agile mapping per CTFL-AT). The ISO/IEC/IEEE 29119-3 Organizational Test Strategy is product/org-wide and long-lived, distinct from a release Test Plan; building it from config enforces context-dependence (Principle 6) and keeps the test basis -> result traceability chain whole.",
+    "istqb": "CTFL v4.0 \u00a75.1 \u00b7 CTAL-TM \u00b7 CTFL-AT",
+    "example": {
+      "cmd": "/qa:create-strategy",
+      "correctWhen": "The level distribution, tooling, and CI match qa.config.yml, disabled tools are listed out of scope, and it follows the ISO 29119-3 strategy structure."
+    },
+    "related": [
+      "test-policy",
+      "create-plan",
+      "automation-strategy",
+      "scaffold"
+    ],
+    "roles": [
+      "manager",
+      "leader"
+    ]
+  },
+  {
+    "name": "create-plan",
+    "title": "Release/sprint Test Plan",
+    "group": "Test planning & management",
+    "tagline": "Build a release- or sprint-scoped Test Plan from the config plus a release name and feature list \u2014 scope, approach, entry/exit criteria, schedule, risks.",
+    "usage": "/qa:create-plan <release-id> [comma-separated features]",
+    "whatItDoes": "Combines qa.config.yml with a release ID and feature list into a complete Test Plan: features in/out tagged by risk tier, in-scope test types limited to enabled tooling, entry/exit criteria using the exact gates thresholds, sample Given/When/Then cases per feature, a risk register, RACI, and a residual-risk section. It links to the Strategy rather than repeating it.",
+    "when": "When planning a specific release or sprint. Derives from the Organizational Test Strategy.",
+    "needs": "qa.config.yml (run /qa:qa-init first) \u2014 paths, tooling, gates, risk_areas, team, test_data, process.sprint_length_weeks. Plus the release ID and features as args.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Plan -> <paths.docs_dir>/TEST-PLAN-<release-id>.md.",
+    "howItWorks": [
+      "Parse release ID (first token) and feature list from $ARGUMENTS; ask if empty",
+      "Config guard: stop and route to /qa:qa-init if missing",
+      "Load the plan template",
+      "Build scope with features tagged by risk tier and only enabled test types",
+      "Set entry/exit criteria from the exact gates thresholds",
+      "Add sample cases (happy/negative/authz/non-functional) per feature",
+      "Add risk register, RACI from team, residual-risk section; write TEST-PLAN-<id>.md"
+    ],
+    "theory": "The Test Plan work product (CTFL \u00a75.1; ISO/IEC/IEEE 29119-3). A plan is risk- and context-driven, so it consumes the risk register and config rather than a fixed template; every feature traces basis -> condition -> case and gates carry verbatim into exit criteria, keeping the chain auditable.",
+    "istqb": "CTFL v4.0 \u00a75.1 \u00b7 ISO/IEC/IEEE 29119-3",
+    "example": {
+      "cmd": "/qa:create-plan R2.4 \"guest checkout, saved cards\"",
+      "correctWhen": "Scope = the two features, exit criteria = the gates (e.g. \u226598% pass, block on S1/S2), and it cites the release's risk areas."
+    },
+    "related": [
+      "risk-assessment",
+      "create-strategy",
+      "test-cases",
+      "implement",
+      "status-report"
+    ],
+    "roles": [
+      "leader"
+    ]
+  },
+  {
+    "name": "risk-assessment",
+    "title": "Product Risk Register",
+    "group": "Test planning & management",
+    "tagline": "Score product and project risks (likelihood \u00d7 impact), assign a tier, and derive the per-tier test response \u2014 risk-based testing.",
+    "usage": "/qa:risk-assessment [release or area]",
+    "whatItDoes": "Identifies product (quality) and project risks, scores each likelihood \u00d7 impact for a 1\u201325 risk level, assigns a Low/Medium/High/Critical tier from fixed bands, and derives test depth and technique per tier. It assigns owners (required at risk level \u226513) and outputs a sorted register with tier summary.",
+    "when": "At the start of a release, or whenever you need to prioritize where to test deeply (Principle 4). Drives plan scope, estimate depth, and exit-criteria thinking.",
+    "needs": "qa.config.yml (run /qa:qa-init first) \u2014 paths, risk_areas tiers, tooling toggles, gates, team (for owners).",
+    "output": "ISO/IEC/IEEE 29119-3 Product Risk Register -> <paths.docs_dir>/risk-register-<scope>.md.",
+    "howItWorks": [
+      "Config guard; resolve scope to args or default to risk_areas.critical",
+      "Load the risk-register template",
+      "Identify product (quality) and project risks, seeded from risk_areas and features in scope",
+      "Score each likelihood(1\u20135) \u00d7 impact(1\u20135) = risk level(1\u201325); assign a tier from the fixed bands",
+      "Derive test response by tier (deeper/earlier/more independent for higher risk)",
+      "Assign owners (required at level \u226513) and mitigation triggers",
+      "Write the sorted register with a tier summary; reconcile with config risk_areas"
+    ],
+    "theory": "Risk-based testing (CTFL \u00a75.2; CTAL-TM). It operationalizes Principle 2 (exhaustive testing is impossible) and Principle 4 (defects cluster) \u2014 depth follows risk so finite effort lands where failure hurts most; the register is the 29119-3 work product that the plan, exit evaluation, and completion report's residual-risk statement consume.",
+    "istqb": "CTFL v4.0 \u00a75.2 \u00b7 CTAL-TM",
+    "example": {
+      "cmd": "/qa:risk-assessment R2.4",
+      "correctWhen": "Each risk has a likelihood\u00d7impact score and payments/checkout/auth land in the top tier with a heavier test response."
+    },
+    "related": [
+      "create-plan",
+      "estimate",
+      "review-coverage",
+      "test-design",
+      "status-report"
+    ],
+    "roles": [
+      "leader"
+    ]
+  },
+  {
+    "name": "estimate",
+    "title": "Test effort estimation",
+    "group": "Test planning & management",
+    "tagline": "Estimate testing effort for a release, feature, or backlog using both metrics-based and expert-based ISTQB techniques, expressed as a range.",
+    "usage": "/qa:estimate <release / feature / backlog scope>",
+    "whatItDoes": "Scopes the work, tags each item by risk tier, then produces a metrics-based estimate (from repo/CI history) and an independent expert-based bottom-up estimate per test-process activity, reconciles the two, applies risk/automation/environment/regression/contingency adjustment factors, and reports a low\u2013high person-day range with a confidence level.",
+    "when": "When sizing a test effort or sprint capacity. Feeds the Test Plan's schedule and resourcing.",
+    "needs": "qa.config.yml recommended (risk tiers, gates, tooling, environments, test_data); proceeds with stated assumptions if missing. Reads repo signals (test counts, CI durations) as the metrics baseline.",
+    "output": "Test-effort input to the ISO/IEC/IEEE 29119-3 Test Plan (resourcing & schedule) -> <paths.docs_dir>/ESTIMATE-<release>.md (not a standalone 29119-3 work product).",
+    "howItWorks": [
+      "Establish scope; tag items by risk tier; record applicable levels and types",
+      "Metrics-based estimate from repo/CI ratios; mark (no baseline) where absent",
+      "Expert-based bottom-up estimate per ISTQB activity and test type",
+      "Reconcile the two; explain divergences over ~30%",
+      "Apply adjustment factors (risk, automation split, env/data, regression, contingency)",
+      "Produce total as a low\u2013high range with a stated confidence level"
+    ],
+    "theory": "ISTQB test estimation techniques (CTAL-TM) supporting the Test Plan within the planning activity. Two complementary techniques are used because each corrects the other's bias; the output is a forecast expressed as a range, never a single false-precise number (Principle 1 \u2014 an estimate is not a guarantee).",
+    "istqb": "CTAL-TM \u00b7 CTFL v4.0 \u00a75.1",
+    "example": {
+      "cmd": "/qa:estimate \"R2.4 \u2014 guest checkout + saved cards\"",
+      "correctWhen": "It shows both a metrics-based and an expert-based figure with assumptions and a reconciled range, not a single guess."
+    },
+    "related": [
+      "risk-assessment",
+      "create-plan",
+      "team-plan"
+    ],
+    "roles": [
+      "leader",
+      "manager"
+    ]
+  },
+  {
+    "name": "tool-select",
+    "title": "Tool evaluation & selection",
+    "group": "Test planning & management",
+    "tagline": "Evaluate and select a testing tool with the ISTQB process \u2014 category, weighted criteria matrix, benefits/risks, pilot \u2014 as an ROI decision record.",
+    "usage": "/qa:tool-select <tool category or need, e.g. 'visual testing', 'API mocking'>",
+    "whatItDoes": "Classifies the need into an ISTQB tool category, scores 2\u20134 candidates against eight weighted criteria into a deterministic matrix, weighs benefits and risks, then recommends one option (or 'retain current tool') with a time-boxed pilot/PoC and numeric go/no-go success criteria. Uses web search for current candidates.",
+    "when": "When choosing a new testing tool or justifying the current toolchain. Feeds the Test Automation Strategy.",
+    "needs": "qa.config.yml (run /qa:qa-init first) \u2014 paths, stack, tooling incl. ci.platform, gates, risk_areas. Uses WebSearch for current candidates.",
+    "output": "Tool Evaluation decision record (input to the Test Automation Strategy; no dedicated 29119-3 work product) -> <paths.docs_dir>/TOOL-EVALUATION-<category>.md.",
+    "howItWorks": [
+      "Config guard; resolve the need from args or default to the top tooling gap on risk_areas.critical",
+      "Classify the need into one ISTQB tool category",
+      "Define 8 weighted criteria (stack fit, language, CI/reporting, learning curve, cost, maintenance, community, lock-in)",
+      "Survey 2\u20134 candidates (WebSearch); score each cell 1\u20135 and compute weighted totals",
+      "Apply decision rules (\u226510% lead, disqualify a 1 on a weight-5 criterion)",
+      "List benefits and mitigated risks for the leader",
+      "Recommend one option + a time-boxed pilot with numeric go/no-go criteria; write the record"
+    ],
+    "theory": "The ISTQB tool-selection process (CT-TAE / Test Automation Strategy; generic tool support CTFL \u00a76). Framed as an ROI/investment decision so the answer is never 'adopt every tool'; a tool does not replace test design or judgment (Principle 1).",
+    "istqb": "CT-TAE \u00b7 Test Automation Strategy \u00b7 CTFL v4.0 \u00a76",
+    "example": {
+      "cmd": "/qa:tool-select \"visual regression testing\"",
+      "correctWhen": "It lists candidates with benefits/risks, weighted scoring criteria, and a pilot recommendation tied to the matrix."
+    },
+    "related": [
+      "automation-strategy",
+      "scaffold",
+      "automation-audit"
+    ],
+    "roles": [
+      "manager",
+      "automation"
+    ]
+  },
+  {
+    "name": "process-improvement",
+    "title": "Test-process maturity & improvement",
+    "group": "Test planning & management",
+    "tagline": "Assess test-process maturity and recommend prioritized improvements using an ISTQB 'Improving the Test Process' / IDEAL lens \u2014 advisory only.",
+    "usage": "/qa:process-improvement [focus area]",
+    "whatItDoes": "Collects real signals (escaped defects, flaky count, pipeline duration, coverage gaps, traceability orphans), scores each ISTQB process area against a deterministic maturity rubric, diagnoses the top gaps, and produces an IDEAL-structured action plan with success metrics, effort, priority, and owners. Writes one report and changes no code or CI.",
+    "when": "At retrospectives, test-process audits, or when escaped defects, flakiness, or slow pipelines signal the process needs work.",
+    "needs": "qa.config.yml (run /qa:qa-init first) \u2014 paths, tooling, gates, risk_areas, process, team. Reads repo signals (test counts, flaky markers, CI files).",
+    "output": "Test Process Improvement Report (improvement-plan work product, not a 29119-3 testware document) -> <paths.docs_dir>/PROCESS-IMPROVEMENT-<date>.md.",
+    "howItWorks": [
+      "Config guard; resolve focus from args or default to risk_areas.critical",
+      "Collect quantifiable signals from real evidence; mark unavailable ones unknown",
+      "Score each ISTQB process area at the highest level whose criterion is fully evidenced (TMMi-style rubric)",
+      "Record current level, the specific quantifiable gap to the next, and the evidence",
+      "Diagnose top gaps tied to their real signals",
+      "Recommend improvements via the IDEAL cycle with metrics, effort, priority, owner",
+      "Write the report; route the top gap to the matching command"
+    ],
+    "theory": "ISTQB Expert 'Improving the Test Process' plus the IDEAL cycle (Initiating\u2013Diagnosing\u2013Establishing\u2013Acting\u2013Learning), with CTAL-TM metrics as inputs. The maturity model (TMMi/TPI) is used only as a diagnostic lens, not a compliance checkbox; the command is advisory and a human owns acting on it (Principle 1).",
+    "istqb": "Improving the Test Process (Expert) \u00b7 IDEAL \u00b7 CTAL-TM",
+    "example": {
+      "cmd": "/qa:process-improvement \"flaky pipeline + escaped checkout defects\"",
+      "correctWhen": "It assesses maturity (TMMi/IDEAL-style) and gives prioritized, owned improvement actions backed by named signals."
+    },
+    "related": [
+      "test-policy",
+      "create-strategy",
+      "risk-assessment",
+      "quality-report",
+      "cost-of-quality"
+    ],
+    "roles": [
+      "manager"
+    ]
+  },
+  {
+    "name": "quality-report",
+    "title": "Cross-release quality dashboard",
+    "group": "Test planning & management",
+    "tagline": "Produce a cross-release quality KPI dashboard / executive report \u2014 trends for escaped defects, coverage, pass rate, MTTR, automation %, flaky rate.",
+    "usage": "/qa:quality-report [period or release range]",
+    "whatItDoes": "Aggregates per-release metrics into leadership-facing trends, mapping each KPI to its ISTQB term and ISO/IEC 25010 characteristic. It gathers only from enabled tooling, marks disabled/absent sources rather than fabricating, applies RAG thresholds (overridden by gates), and gives a top-3-concerns narrative for executives.",
+    "when": "For management/stakeholder quality reporting across releases. Distinct from status-report (one in-flight release) and release-report (end-of-test completion).",
+    "needs": "qa.config.yml \u2014 paths, tooling toggles, gates, risk_areas (degrades gracefully if missing). Reads results history, coverage, prior STATUS/RELEASE reports.",
+    "output": "Cross-release management quality report (aggregates 29119-3 Test Status / Completion Reports; not itself a 29119-3 work product) -> <paths.docs_dir>/QUALITY-REPORT-<period>.md.",
+    "howItWorks": [
+      "Config guard; resolve the period from args or default to the last 3 releases",
+      "Confirm the KPI set with a metric -> ISTQB-term -> ISO 25010 mapping table",
+      "Gather each enabled metric over the period; mark disabled/absent sources, never fabricate",
+      "Trend each metric with direction vs prior period; apply RAG thresholds (overridden by gates)",
+      "Interpret for executives: top-3 concerns tied to metric, trend, and risk_areas",
+      "Write the scorecard, mapping table, narrative, and residual-risk note"
+    ],
+    "theory": "Test measurement & reporting at management level (CTAL-TM; CTFL \u00a75.3). It summarizes the 29119-3 per-release reports over time without replacing them; each KPI maps to an ISO/IEC 25010 characteristic so quality is measurable, and uncovered KPIs are named (Principle 1).",
+    "istqb": "CTAL-TM \u00b7 CTFL v4.0 \u00a75.3",
+    "example": {
+      "cmd": "/qa:quality-report \"Q2-2026\"",
+      "correctWhen": "It trends escaped defects, coverage, pass rate, MTTR, automation %, and flaky rate across releases with RAG status."
+    },
+    "related": [
+      "status-report",
+      "release-report",
+      "process-improvement",
+      "cost-of-quality"
+    ],
+    "roles": [
+      "manager"
+    ]
+  },
+  {
+    "name": "team-plan",
+    "title": "QA capacity & skills plan",
+    "group": "Test planning & management",
+    "tagline": "Plan QA team capacity and skills \u2014 staffing vs backlog, a skills matrix, gaps, key-person risk, and a training/onboarding plan.",
+    "usage": "/qa:team-plan [release / quarter]",
+    "whatItDoes": "Builds a skills matrix rating each team member (0\u20133) against config-derived competencies, computes available capacity vs demand in person-days with the arithmetic shown, flags gaps and single-point-of-knowledge risks, and recommends cross-train/hire/external actions plus a training and onboarding plan. It also states the appropriate level of tester independence.",
+    "when": "For resourcing decisions and team development. Advisory and human-owned \u2014 a manager approves staffing/hiring/training.",
+    "needs": "qa.config.yml (run /qa:qa-init first) \u2014 paths, enabled tooling, risk_areas, team, process. Asks the user for the QA roster (people, FTE, skill ratings) \u2014 never invented.",
+    "output": "QA resourcing & staffing plan (complements the 29119-3 Test Plan resourcing section; no dedicated 29119-3 document) -> <paths.docs_dir>/TEAM-PLAN-<horizon>.md.",
+    "howItWorks": [
+      "Config guard; resolve horizon from args or the release cadence window",
+      "Ask the user for the QA roster (role, FTE/availability, skill ratings); record only planning-relevant data",
+      "Build a skills matrix vs config-derived competencies on a 0\u20133 scale",
+      "Set required levels by risk (\u22652 for risk_areas.critical, else \u22651); flag gaps and key-person risks",
+      "Compute available capacity vs demand in person-days; classify the balance",
+      "Recommend cross-train/hire/external per gap; add training/onboarding plan and independence level"
+    ],
+    "theory": "Test-team management (CTAL-TM / Expert). Tester independence (levels of independence) is the Foundation anchor; capacity and skills-matrix techniques are complementary management practice. Output is advisory \u2014 staffing decisions require manager approval (Principle 1).",
+    "istqb": "CTAL-TM \u00b7 Test Management (Expert) \u00b7 CTFL v4.0 (tester independence)",
+    "example": {
+      "cmd": "/qa:team-plan \"Q3-2026\"",
+      "correctWhen": "It maps staffing/skills to the upcoming backlog and flags gaps plus a training plan, with capacity arithmetic shown."
+    },
+    "related": [
+      "estimate",
+      "process-improvement"
+    ],
+    "roles": [
+      "manager"
+    ]
+  },
+  {
+    "name": "go-no-go",
+    "title": "Release readiness gate",
+    "group": "Test planning & management",
+    "tagline": "Run a formal release go/no-go review \u2014 consolidate every quality signal into a documented ship/hold decision with conditions, residual risk, and sign-off.",
+    "usage": "/qa:go-no-go <release-id>",
+    "whatItDoes": "Pulls the sibling Release and Status reports (never re-deriving), evaluates each gate (pass rate, open defects by severity, perf, security, a11y, contracts, regression, residual risk) against a deterministic decision table, renders a readiness scorecard, and applies an aggregate rule to a GO / GO-with-conditions / NO-GO outcome with a stakeholder sign-off block.",
+    "when": "At the release gate, as the formal ship/hold decision. Pairs with status-report and release-report.",
+    "needs": "qa.config.yml \u2014 paths, gates, tooling toggles, risk_areas (assumes conservative defaults if missing). Quality signals must exist (RELEASE-REPORT/STATUS-REPORT/TEST-PLAN, results).",
+    "output": "Release Go/No-Go Decision Record (governance extension of the 29119-3 Test Completion Report; no dedicated 29119-3 template) -> <paths.docs_dir>/GO-NO-GO-<release>.md.",
+    "howItWorks": [
+      "Config guard; resolve the release from args (or default to in-flight critical work)",
+      "Consolidate inputs from the matching Release/Status/Plan reports; flag missing ones as gaps",
+      "Evaluate G1\u2013G8 gates against the deterministic decision table (met/not-met/waived)",
+      "Render a readiness scorecard with measured values and evidence per gate",
+      "Apply the aggregate rule: any blocker not met forces NO-GO or GO-with-conditions",
+      "Confirm rollback + post-deploy plan and a stakeholder sign-off table; write the record"
+    ],
+    "theory": "Release decision against exit criteria plus residual risk (CTFL \u00a75.3; CTAL-TM release-decision practice). It is a cross-functional decision record layered over the 29119-3 reports, embodying Principle 1 \u2014 ship with stated residual risk, never claim 'zero bugs'; in doubt, default to the more conservative outcome.",
+    "istqb": "CTFL v4.0 \u00a75.3 \u00b7 CTAL-TM",
+    "example": {
+      "cmd": "/qa:go-no-go R2.4",
+      "correctWhen": "It consolidates the signals into a single ship/hold decision against the gates, with residual risk and sign-off lines."
+    },
+    "related": [
+      "release-report",
+      "status-report",
+      "coverage-measure",
+      "triage"
+    ],
+    "roles": [
+      "leader",
+      "manager"
+    ]
+  },
+  {
+    "name": "cost-of-quality",
+    "title": "Cost of Quality & QA ROI",
+    "group": "Test planning & management",
+    "tagline": "Analyze Cost of Quality and automation ROI \u2014 prevention/appraisal/failure costs, cost of poor quality, and payback \u2014 to justify the QA budget.",
+    "usage": "/qa:cost-of-quality [scope / period]",
+    "whatItDoes": "Builds a Cost of Quality model splitting prevention / appraisal / internal-failure / external-failure costs, estimates the cost of poor quality from defect/incident data, computes automation one-time vs recurring cost vs saving with a payback period and break-even, and makes a prioritized investment business case. Uses real figures only, labeling missing inputs as placeholders.",
+    "when": "For QA economics and business cases \u2014 justifying or sizing the QA budget. Advisory; flag for human/finance review before budget decisions.",
+    "needs": "qa.config.yml recommended (risk tiers, tooling, environments, process.release_cadence, gates); proceeds with stated assumptions if missing. Reads defect/incident/automation baseline signals.",
+    "output": "Test-economics / value-of-testing input to the 29119-3 Organizational Test Strategy / Policy / Test Plan (not itself a 29119-3 document) -> <paths.docs_dir>/COST-OF-QUALITY-<scope>.md.",
+    "howItWorks": [
+      "List assumptions and data completeness first; label each input actual/estimated/(placeholder)",
+      "Build the CoQ model: prevention/appraisal/internal-failure/external-failure as ranges",
+      "Estimate cost of poor quality from defect/incident data over the period",
+      "Compute automation ROI: one-time vs recurring cost vs saving",
+      "Derive payback period and break-even with the cycle assumption stated",
+      "Make a prioritized business case tied to CoQ categories and expected reductions"
+    ],
+    "theory": "Value of testing & test economics (CTAL-TM), grounded in the cost-of-defects/shift-left rationale (Principle 3): defects get exponentially more expensive the later they are caught, which funds prevention. Costs are ranges with stated confidence (Principle 1 \u2014 a cost model is a forecast, not an audited statement).",
+    "istqb": "CTAL-TM \u00b7 CTFL v4.0 \u00a71 (cost of defects)",
+    "example": {
+      "cmd": "/qa:cost-of-quality \"2026 automation programme\"",
+      "correctWhen": "It splits prevention/appraisal/failure costs and shows automation ROI/payback with the cycle assumption stated."
+    },
+    "related": [
+      "process-improvement",
+      "quality-report",
+      "risk-assessment",
+      "automation-strategy"
+    ],
+    "roles": [
+      "manager"
+    ]
+  },
+  {
+    "name": "audit-prep",
+    "title": "Audit & compliance readiness",
+    "group": "Test planning & management",
+    "tagline": "Assemble an audit-readiness evidence pack \u2014 documentation completeness, traceability sample-checks, standards conformance, and a severity-ordered gap list.",
+    "usage": "/qa:audit-prep [standard / release / scope]",
+    "whatItDoes": "Confirms the expected 29119-3 work products exist and are current, sample-checks the bidirectional traceability chain (at least one per critical risk area), assesses ISTQB/ISO 29119 process conformance, verifies retained execution evidence and sign-offs, and lists every gap with a severity, remediation, and owner. It alters no existing record \u2014 only the readiness report.",
+    "when": "Before an internal or external audit or compliance review.",
+    "needs": "qa.config.yml \u2014 paths, tooling toggles, gates, risk_areas (assumes conservative defaults if missing). Reads existing QA docs and standards references (ISTQB-COMPLIANCE.md / ISTQB-AUDIT.md).",
+    "output": "Audit-readiness evidence pack over the 29119-3 work product set (no dedicated 29119-3 template) -> <paths.docs_dir>/AUDIT-READINESS-<scope>.md.",
+    "howItWorks": [
+      "Config guard; resolve scope from args or default to ISTQB/ISO 29119-3 conformance on risk_areas.critical",
+      "Check documentation completeness: each work product present / present-but-outdated / missing",
+      "Sample-check the bidirectional traceability chain (\u22651 per critical area, min 3); mark intact or break",
+      "Assess ISTQB / ISO 29119 process conformance per activity (conformant/partial/non-conformant)",
+      "Confirm retained execution evidence, sign-offs, env/config management, defect lifecycle",
+      "List severity-ordered gaps with remediation and owners; write the evidence pack"
+    ],
+    "theory": "Test documentation, traceability & conformance evidence (CTFL \u00a71.4.4; ISO/IEC/IEEE 29119-3). Auditability rests on bidirectional traceability being intact and work products being named to the standard; the pass names what it does NOT cover (unsampled chains) rather than implying audit-ready certainty (Principle 1).",
+    "istqb": "CTFL v4.0 \u00a71.4.4 \u00b7 ISO/IEC/IEEE 29119-3",
+    "example": {
+      "cmd": "/qa:audit-prep \"ISO-29119\"",
+      "correctWhen": "It assembles a traceability + evidence pack and flags conformance gaps by severity."
+    },
+    "related": [
+      "review-coverage",
+      "release-report",
+      "go-no-go"
+    ],
+    "roles": [
+      "manager"
+    ]
+  },
+  {
+    "name": "static-review",
+    "title": "ISTQB static testing of the test basis",
+    "group": "Static testing, analysis & design",
+    "tagline": "Review a story, spec or API spec for testability and defects before any tests are written \u2014 shift-left review findings; source-code analysis is routed to static-analysis.",
+    "usage": "/qa:static-review <story / spec / file to review> [informal|walkthrough|technical|inspection]",
+    "whatItDoes": "Reviews the test basis (requirements, user stories, acceptance criteria, OpenAPI spec) for testability, completeness, consistency and clarity, and returns a Review Report of findings; it writes no files and modifies no test object.",
+    "when": "Before writing tests for a story/spec, to find requirement defects while they are cheapest to fix (Principle 3).",
+    "needs": "qa.config.yml (risk_areas drives subject selection); a test-basis item (story/spec/file) or empty to default to risk_areas.critical.",
+    "output": "ISO/IEC/IEEE 29119-3 Review Report (review findings), returned inline (no file written).",
+    "howItWorks": [
+      "Read config; establish subject and select review type by hint or risk tier",
+      "Review the test basis for testability, completeness, consistency, correctness & clarity",
+      "Review the API spec for gaps that weaken contract/API tests",
+      "Route any source-code static analysis to /qa:static-analysis (out of scope here)",
+      "Produce the Review Report as a findings table ordered by severity, with counts per type and severity"
+    ],
+    "theory": "Static testing (CTFL v4.0 \u00a73): reviewing the basis realizes Principle 3 (early testing) \u2014 a defect found in the requirement never becomes a defect in code. Formality scales from informal review to inspection. Principle 1: shows presence of defects, not absence.",
+    "istqb": "CTFL v4.0 \u00a73 \u00b7 CTAL-TTA",
+    "example": {
+      "cmd": "/qa:static-review \"docs/stories/guest-checkout.md\" walkthrough",
+      "correctWhen": "It lists testability issues/ambiguities in the story (the test basis) before any tests are written, ordered by severity with counts per type."
+    },
+    "related": [
+      "test-cases",
+      "test-design",
+      "static-analysis",
+      "acceptance"
+    ],
+    "roles": [
+      "manual"
+    ]
+  },
+  {
+    "name": "test-cases",
+    "title": "Generate ISTQB test cases",
+    "group": "Static testing, analysis & design",
+    "tagline": "Derive concrete test cases from a requirement, story, endpoint or file using ISTQB design techniques \u2014 a Test Case Specification with negative and boundary coverage, not just happy path.",
+    "usage": "/qa:test-cases <requirement text | story | endpoint | path/to/file>",
+    "whatItDoes": "Runs the ISTQB analysis-to-design flow: derives test conditions, picks the right technique per condition (EP, BVA, decision table, state transition, experience-based, ATDD), and writes a Test Case Specification with risk-based priority and detail plus a coverage summary.",
+    "when": "Whenever you need to create or derive concrete test cases for an item.",
+    "needs": "qa.config.yml (risk_areas tiers map to priority; paths.docs_dir is the write target); a requirement/story/endpoint/file, or empty to default to the first risk_areas.critical item.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Case Specification -> docs/TEST-CASES-<item>.md (+ optional CSV export).",
+    "howItWorks": [
+      "Test analysis: derive test conditions, tag each with a risk level, flag basis gaps",
+      "Technique selection: pick the right CTFL v4.0 Ch.4 technique per condition",
+      "Test design: write atomic, independent cases covering positive, negative, boundary, error and authorization paths",
+      "Map each case's risk tier to priority (critical->P1 \u2026 low->P3) and set risk-based detail level",
+      "Quality checks for atomicity, coverage, traceability; run self-check; write the spec + coverage summary"
+    ],
+    "theory": "Test analysis -> design (CTFL v4.0 \u00a71.4, \u00a74) using EP, BVA, decision tables and state transition \u2014 how you sample the infinite input space well (Principle 2) and aim where defects cluster (Principle 4, boundaries). Pairwise/use-case are labeled Advanced (CTAL-TA), never Foundation.",
+    "istqb": "CTFL v4.0 \u00a71.4 \u00b7 \u00a74 \u00b7 CTAL-TA (Advanced techniques)",
+    "example": {
+      "cmd": "/qa:test-cases \"As a guest I can check out with a saved card\"",
+      "correctWhen": "Each case names its technique (EP/BVA/decision table) and includes negative and boundary cases, not just the happy path; output is a Test Case Specification at docs/qa/."
+    },
+    "related": [
+      "test-design",
+      "static-review",
+      "implement",
+      "combinatorial"
+    ],
+    "roles": [
+      "manual"
+    ]
+  },
+  {
+    "name": "test-design",
+    "title": "ISTQB test analysis & design for a feature",
+    "group": "Static testing, analysis & design",
+    "tagline": "Derive test conditions then cases across the full technique set (EP, BVA, decision table, state transition, ATDD) for a feature \u2014 broader design context than single-item test-cases.",
+    "usage": "/qa:test-design <feature / story / endpoint>",
+    "whatItDoes": "Performs the analysis activity (derive and risk-tag test conditions) and the design activity (derive cases with the technique and coverage item recorded per case), classifies and prioritizes each case, keeps bidirectional traceability, and writes a Test Design + Test Case Specification with a counted coverage summary.",
+    "when": "Designing the test approach for a whole feature, especially with complex business rules or states.",
+    "needs": "qa.config.yml (paths.docs_dir, stack.api_spec_path, risk_areas, enabled tooling.*); a feature/story/endpoint, or empty to default to the first risk_areas.critical area.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Design Specification + Test Case Specification -> docs/TEST-DESIGN-<item>.md.",
+    "howItWorks": [
+      "Test analysis: read the basis, list and risk-tag test conditions, flag basis defects",
+      "Test design: derive cases per condition using CTFL v4.0 \u00a74 techniques, recording technique + coverage item",
+      "Classify each case by level and type and set priority/detail from risk",
+      "Maintain the bidirectional traceability chain basis->condition->case->coverage item",
+      "Output the design + case specs with a counts-based coverage summary; run quality gate and self-check"
+    ],
+    "theory": "The test design activity (CTFL v4.0 \u00a71.4, \u00a74): match the technique to the structure of the problem \u2014 rules->decision tables, states->state transition, ranges->BVA. Advanced techniques (domain analysis, pairwise/classification tree) are labeled CTAL-TA, not Foundation.",
+    "istqb": "CTFL v4.0 \u00a71.4 \u00b7 \u00a74 \u00b7 CTAL-TA",
+    "example": {
+      "cmd": "/qa:test-design \"checkout payment\"",
+      "correctWhen": "It derives test conditions -> cases with coverage items and labeled techniques, and the coverage summary states counts (conditions, cases by priority/level/type)."
+    },
+    "related": [
+      "test-cases",
+      "combinatorial",
+      "static-review",
+      "implement"
+    ],
+    "roles": [
+      "manual",
+      "leader"
+    ]
+  },
+  {
+    "name": "combinatorial",
+    "title": "Combinatorial test design",
+    "group": "Static testing, analysis & design",
+    "tagline": "Cover a many-parameter feature with pairwise, classification-tree or orthogonal-array cases \u2014 strong interaction coverage with far fewer tests than exhaustive.",
+    "usage": "/qa:combinatorial <feature with multiple parameters>",
+    "whatItDoes": "Models each parameter and its partitions/constraints, computes the full Cartesian size, generates a constraint-honoring combinatorial set at the chosen strength, adds boundary/negative supplements, and reports the reduction and interaction-coverage metrics with per-case traceability.",
+    "when": "Several inputs/options combine and exhaustive testing is infeasible (Principle 2).",
+    "needs": "qa.config.yml (paths.docs_dir, risk_areas drive strength raises); a multi-parameter feature, or empty to default to the highest-priority risk_areas.critical entry with multiple inputs.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Case Specification -> docs/COMBINATORIAL-<feature>.md.",
+    "howItWorks": [
+      "Model parameters: partitions (EP first), invalid values, and constraints",
+      "Compute the full Cartesian size as the reduction baseline",
+      "Choose technique and strength by rule (pairwise default; raise to 3-wise only for critical/high)",
+      "Generate the combination set honoring every constraint",
+      "Add boundary/negative cases combinatorics won't catch",
+      "Record per-case traceability + report reduction % and n-way interaction coverage"
+    ],
+    "theory": "Combinatorial techniques are Advanced (CTAL-TA) black-box \u2014 pairwise/classification tree were removed from CTFL v4.0 Foundation. A direct realization of Principle 2: most defects involve one or two factors, so all-pairs coverage catches them without the combinatorial explosion.",
+    "istqb": "CTFL v4.0 \u00a71.4 (design) \u00b7 CTAL-TA (combinatorial, Advanced)",
+    "example": {
+      "cmd": "/qa:combinatorial \"checkout: 3 payment methods \u00d7 2 shipping \u00d7 4 countries\"",
+      "correctWhen": "It gives a pairwise/classification-tree set far smaller than the 24 exhaustive combos while covering all pairs, with the reduction % and interaction coverage stated."
+    },
+    "related": [
+      "test-design",
+      "test-cases",
+      "implement",
+      "api-automate"
+    ],
+    "roles": [
+      "manual"
+    ]
+  },
+  {
+    "name": "acceptance",
+    "title": "Acceptance test design (ATDD/BDD)",
+    "group": "Static testing, analysis & design",
+    "tagline": "Author agreed, testable acceptance criteria and Given/When/Then scenarios collaboratively before development \u2014 the story's definition of done, with each criterion traced to a scenario.",
+    "usage": "/qa:acceptance <user story or feature>",
+    "whatItDoes": "Takes a Three Amigos view to surface ambiguities, writes specific/measurable/verifiable acceptance criteria (the test conditions), expresses them as Gherkin scenarios (the test cases), classifies each for automation and acceptance-testing form, and keeps criterion->scenario traceability.",
+    "when": "Turning a user story into agreed, testable acceptance tests before development (shift-left).",
+    "needs": "qa.config.yml (paths.docs_dir, risk_areas, enabled tooling.* for execution level, stack.api_spec_path where a criterion maps to an endpoint); a story, or empty to default to the first risk_areas.critical area.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Case Specification (acceptance level) -> docs/ACCEPTANCE-<story>.md.",
+    "howItWorks": [
+      "Three Amigos perspective: surface assumptions/ambiguities, route basis defects to /qa:static-review",
+      "Write acceptance criteria (test conditions) that are specific, measurable, verifiable, each risk-tagged",
+      "Express each criterion as Given/When/Then scenarios (one observable outcome each), using Scenario Outline for data sets",
+      "Classify each scenario: test level, CT-AcT acceptance form, priority",
+      "Maintain criterion->scenario traceability; output criteria table, scenario spec and counted coverage summary"
+    ],
+    "theory": "ATDD is the CTFL v4.0 \u00a74.5 collaboration-based design technique; the acceptance-testing forms (UAT, operational, contractual/regulatory, alpha/beta) belong to CT-AcT and are kept distinct from \u00a74.5. Agreeing tests before development is shift-left (Principle 3) and defends against the absence-of-errors fallacy (Principle 7).",
+    "istqb": "CTFL v4.0 \u00a74.5 (ATDD) \u00b7 \u00a72.2 (acceptance level) \u00b7 CT-AcT (forms)",
+    "example": {
+      "cmd": "/qa:acceptance \"Guest checkout with a saved card\"",
+      "correctWhen": "It produces Given/When/Then scenarios agreed as the acceptance criteria (ATDD), each criterion traced to a scenario, with counts in the coverage summary."
+    },
+    "related": [
+      "static-review",
+      "test-design",
+      "implement",
+      "test-cases"
+    ],
+    "roles": [
+      "manual"
+    ]
+  },
+  {
+    "name": "mbt",
+    "title": "Model-Based Testing",
+    "group": "Static testing, analysis & design",
+    "tagline": "Model a stateful flow as a state machine and derive cases to a stated coverage criterion (all-states / all-transitions / 0-switch) \u2014 provable completeness instead of ad-hoc cases.",
+    "usage": "/qa:mbt <feature / stateful flow>",
+    "whatItDoes": "Builds a behavioral state-transition model (transition table + Mermaid stateDiagram-v2), picks and justifies a coverage criterion from risk, derives cases (including invalid-transition negatives) to meet it, keeps model->case traceability, and reports counts against the criterion.",
+    "when": "Complex stateful flows (order lifecycle, payment/3DS, session, subscription) where model coverage beats ad-hoc cases.",
+    "needs": "qa.config.yml (paths.docs_dir, stack.api_spec_path, risk_areas drives the criterion); a stateful flow, or empty to default to the first risk_areas.critical area.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Design Specification (model + derived Test Case Specification) -> docs/MBT-<feature>.md.",
+    "howItWorks": [
+      "Build the model: states, events, transitions, guards, actions, initial/final states",
+      "Represent it as both a transition table and a Mermaid stateDiagram-v2",
+      "Choose the coverage criterion (all-states / all-transitions / transition-pairs) and justify from risk",
+      "Derive cases to meet it, including invalid-transition negative cases",
+      "Maintain basis->model element->case->coverage item traceability; report counts vs the criterion achieved"
+    ],
+    "theory": "Model-Based Testing (CT-MBT) applying the state-transition technique (CTFL v4.0 \u00a74.2) via an explicit model, so coverage is a property of the model and completeness is provable. The maintainable model is the single source for regenerating tests (counters the pesticide paradox, Principle 5).",
+    "istqb": "CT-MBT \u00b7 CTFL v4.0 \u00a74.2 (state transition)",
+    "example": {
+      "cmd": "/qa:mbt \"order lifecycle: cart \u2192 placed \u2192 paid \u2192 shipped \u2192 delivered\"",
+      "correctWhen": "It models the states/transitions and derives cases by a stated coverage criterion, reporting e.g. 14/14 transitions covered."
+    },
+    "related": [
+      "test-design",
+      "test-cases",
+      "static-review",
+      "implement"
+    ],
+    "roles": [
+      "manual"
+    ]
+  },
+  {
+    "name": "exploratory",
+    "title": "Session-based exploratory testing",
+    "group": "Static testing, analysis & design",
+    "tagline": "Plan time-boxed, risk-driven charters with heuristics and oracles plus a reusable session sheet \u2014 experience-based testing that complements, never replaces, scripted coverage.",
+    "usage": "/qa:exploratory <feature / area to explore>",
+    "whatItDoes": "Derives risk-ordered charters (Explore.../with.../to discover...) with risk-based time-boxes and priority, supplies error-guessing/checklist/tour guidance and oracles per charter, and provides a session sheet to record bugs, issues, coverage and a debrief.",
+    "when": "High-risk or newly changed areas; as a complement to scripted tests.",
+    "needs": "qa.config.yml (paths.*, risk_areas drive charter selection/priority); an area, or empty to default one charter per risk_areas.critical area.",
+    "output": "ISO/IEC/IEEE 29119-3 testware \u2014 exploratory charter set + session sheet -> docs/EXPLORATORY-<feature>.md.",
+    "howItWorks": [
+      "Read config and resolve the target (default to risk_areas.critical if empty)",
+      "Derive charters per area, time-boxed by risk tier (critical 90m / high 60m / med-low 45m) with matching priority",
+      "Guide each session with error guessing, checklist heuristics and named tours",
+      "State oracles per charter \u2014 how a problem is recognized",
+      "Produce a reusable session sheet; report counts of charters vs areas covered/deferred"
+    ],
+    "theory": "Experience-based techniques \u2014 exploratory / checklist-based / error guessing (CTFL v4.0 \u00a74.4) under session-based test management (CTAL-TA). Finds defects scripted cases miss and targets defect clusters (Principle 4); complements scripted coverage, never replaces it (Principle 1).",
+    "istqb": "CTFL v4.0 \u00a74.4 \u00b7 CTAL-TA (session-based test management)",
+    "example": {
+      "cmd": "/qa:exploratory \"payments\"",
+      "correctWhen": "It gives time-boxed charters (mission, areas, ideas, oracles) for a risk_areas.critical area, with counts of charters vs areas covered."
+    },
+    "related": [
+      "test-design",
+      "risk-assessment",
+      "triage",
+      "usability-test"
+    ],
+    "roles": [
+      "manual",
+      "leader"
+    ]
+  },
+  {
+    "name": "static-analysis",
+    "title": "Static analysis of source code",
+    "group": "Static testing, analysis & design",
+    "tagline": "Analyze source without running it \u2014 complexity, control-/data-flow, coding-standard and maintainability metrics \u2014 and report defect-prone units early; writes only the report, never the code.",
+    "usage": "/qa:static-analysis [path / module]",
+    "whatItDoes": "Runs the configured analyzers/linters (or analyzes manually), measures cyclomatic complexity, nesting, size and parameter count against thresholds, surfaces control-/data-flow and coding-standard/security concerns, ranks findings by severity and risk area, and recommends testability-improving refactors.",
+    "when": "Assess code quality and find defect-prone units early (shift-left); distinct from reviewing the test basis (static-review).",
+    "needs": "qa.config.yml (paths.reports_dir/docs_dir, tooling.security.sast, gates/limits, risk_areas) \u2014 inferred from the repo if absent; a path/module, or empty to default to risk_areas.critical source.",
+    "output": "Static Analysis Report (static-analysis findings record; scores ISO/IEC 25010 maintainability) -> reports/STATIC-ANALYSIS.md.",
+    "howItWorks": [
+      "Read config and set scope from $ARGUMENTS (default to critical source)",
+      "Run the configured analyzer(s)/linters present in the repo, or analyze manually",
+      "Measure per-unit metrics (complexity, nesting, size, params) against thresholds",
+      "Surface control-/data-flow concerns and coding-standard/security patterns",
+      "Prioritize findings by severity and risk area; recommend concrete refactors",
+      "Write the report with metrics and findings tables; read-only on the code"
+    ],
+    "theory": "Static analysis is a form of static testing where code is analyzed not executed (CTFL v4.0 \u00a73.1; CTAL-TTA control-/data-flow/complexity techniques). Shift-left for code (Principle 3); defects cluster in complex units (Principle 4). Scores ISO/IEC 25010 maintainability sub-characteristics.",
+    "istqb": "CTFL v4.0 \u00a73.1 \u00b7 CTAL-TTA \u00b7 ISO/IEC 25010 (maintainability)",
+    "example": {
+      "cmd": "/qa:static-analysis src/checkout",
+      "correctWhen": "It reports cyclomatic complexity/maintainability per unit, cites file:line evidence, and modifies no files."
+    },
+    "related": [
+      "static-review",
+      "coverage-measure",
+      "security-scan",
+      "triage"
+    ],
+    "roles": [
+      "automation"
+    ]
+  },
+  {
+    "name": "automation-audit",
+    "title": "Automation project audit",
+    "group": "Static testing, analysis & design",
+    "tagline": "Score an inherited automation suite end-to-end \u2014 gTAA architecture, SOLID & clean code, test-design quality, anti-patterns, pyramid, CI \u2014 into a maturity scorecard with prioritized, routed fixes. Read-only.",
+    "usage": "/qa:automation-audit [path / module to focus on]",
+    "whatItDoes": "Treats the automation codebase as the test object: maps it to the gTAA, evaluates SOLID/clean-code, test-case/design quality (ISTQB + FIRST), anti-patterns/flakiness, pyramid distribution and CI health, then writes a scored health report with a prioritized remediation roadmap routed to the commands that do the work. Modifies nothing in the audited suite.",
+    "when": "Onboarding or inheriting a suite, or a periodic (quarterly) health check.",
+    "needs": "qa.config.yml (paths.* for report location, tooling.*, gates, risk_areas) \u2014 stack/risk inferred from the repo if absent; a path/module to focus on, or the whole project.",
+    "output": "Automation Project Assessment Report (static-testing review of testware; scores ISO/IEC 25010 maintainability) -> docs/AUTOMATION-AUDIT.md.",
+    "howItWorks": [
+      "Scope from $ARGUMENTS; read representative files across each layer (not grep counts alone)",
+      "Architecture & gTAA layering: separation of concerns, structure, config, data, reporting",
+      "SOLID & design principles applied to test code, with file:line evidence",
+      "Test-case & design quality (ISTQB techniques + FIRST), assertion quality, traceability",
+      "Anti-patterns & flakiness (hard waits, fragile selectors, hardcoded secrets, skips)",
+      "Pyramid/level distribution and CI/CD health; write a maturity scorecard + routed roadmap"
+    ],
+    "theory": "Static testing of testware + CT-TAE architecture assessment, scored against ISO/IEC 25010 maintainability (modularity, reusability, analysability, modifiability, testability). The audit is sampled, not exhaustive (Principle 2); it reports residual risk, never 'the suite is defect-free' (Principle 1); analysis must never mutate the thing it judges.",
+    "istqb": "CTFL v4.0 \u00a73.1 \u00b7 CT-TAE \u00b7 ISO/IEC 25010 (maintainability)",
+    "example": {
+      "cmd": "/qa:automation-audit tests",
+      "correctWhen": "It scores Architecture/SOLID/Design-quality/Anti-patterns/Pyramid/CI (1\u20135), cites file:line evidence, and changes no code."
+    },
+    "related": [
+      "static-analysis",
+      "review-coverage",
+      "automation-strategy",
+      "self-heal"
+    ],
+    "roles": [
+      "automation"
+    ]
+  },
+  {
+    "name": "review-coverage",
+    "title": "Coverage & traceability review",
+    "group": "Static testing, analysis & design",
+    "tagline": "Audit coverage gaps against strategy and risk, verify the bidirectional traceability chain in both directions, and rank the highest-value missing tests. Read-only.",
+    "usage": "/qa:review-coverage [area or path to focus on]",
+    "whatItDoes": "Maps what coverage exists per level/type for each in-scope item, audits the traceability chain for forward gaps and backward orphans, compares against risk_areas (critical/high must have layered coverage), detects inversions and missing negative/boundary/contract/non-functional cases, and outputs a risk-ranked gap table with counts.",
+    "when": "When you ask 'what's under-tested?' or want a coverage review against the risk register.",
+    "needs": "qa.config.yml (paths.*, tooling.* toggles, gates, risk_areas) \u2014 stops if missing; an area/path, or empty to default to risk_areas.critical areas.",
+    "output": "Coverage/traceability gap analysis (contributes to the ISO/IEC/IEEE 29119-3 Test Status (Progress) Report, coverage dimension) -> report (prioritized gap table).",
+    "howItWorks": [
+      "Map what exists: which levels/types cover each feature/endpoint/journey in scope",
+      "Audit the bidirectional traceability chain for forward gaps and backward orphans",
+      "Compare against risk_areas \u2014 every critical/high area must have layered coverage",
+      "Detect inversions and missing negative/authorization/boundary/contract/non-functional cases",
+      "Assign a risk tier to each gap; output a prioritized gap table with a counts summary"
+    ],
+    "theory": "Test monitoring (coverage) + analysis (CTFL v4.0 \u00a75.3; \u00a71.4.4 traceability). Counters the pesticide paradox (Principle 5) by surfacing what the current suite no longer protects; an absent gap does not prove an area is defect-free (Principle 1).",
+    "istqb": "CTFL v4.0 \u00a75.3 \u00b7 \u00a71.4.4 (traceability)",
+    "example": {
+      "cmd": "/qa:review-coverage checkout",
+      "correctWhen": "It names specific untested conditions/endpoints for checkout and ranks them by risk, reporting forward gaps and backward orphans with counts."
+    },
+    "related": [
+      "test-design",
+      "implement",
+      "coverage-measure",
+      "risk-assessment"
+    ],
+    "roles": [
+      "manual",
+      "automation",
+      "leader"
+    ]
+  },
+  {
+    "name": "unit-test",
+    "title": "Component (unit) testing",
+    "group": "Test levels & change-related testing",
+    "tagline": "Design or strengthen tests at the lowest level \u2014 isolation, test doubles, and statement/branch coverage targets driven by risk.",
+    "usage": "/qa:unit-test <module / component / file>",
+    "whatItDoes": "Designs, reviews, and strengthens developer-owned component tests in isolation, derives cases with black-box plus white-box techniques, and measures statement/branch coverage.",
+    "when": "When you need unit/component test guidance and structural coverage at the component level; before or during development of a unit.",
+    "needs": "qa.config.yml; a unit runner from tooling.unit (or inferred from package.json and confirmed); paths.tests_dir; risk_areas to set the coverage target.",
+    "output": "Component test procedures / automated test scripts (ISO/IEC/IEEE 29119-3 Test Procedure Specification) plus a statement/branch coverage report, under paths.tests_dir.",
+    "howItWorks": [
+      "Read config and resolve the unit runner from tooling.unit",
+      "Resolve the target component from arguments (or default to risk_areas.critical)",
+      "Test the unit in isolation using test doubles (stubs/mocks/fakes)",
+      "Derive cases with black-box (EP, BVA, decision table) and white-box statement/branch coverage",
+      "Set the coverage target from risk_areas (branch for critical, statement floor otherwise)",
+      "Implement/extend tests, run with coverage enabled, report counts and remaining gaps"
+    ],
+    "theory": "The component test level (CTFL \u00a72.2). Cases from black-box techniques (\u00a74.2) plus white-box statement/branch coverage (\u00a74.3) \u2014 the level where white-box coverage is meaningful. Coverage is a guardrail, not a vanity metric (Principle 7).",
+    "istqb": "CTFL v4.0 \u00a72.2 \u00b7 \u00a74.2 \u00b7 \u00a74.3",
+    "example": {
+      "cmd": "/qa:unit-test \"src/pricing/discount.ts\"",
+      "correctWhen": "It targets statement/branch coverage with test doubles and isolates the unit."
+    },
+    "related": [
+      "coverage-measure",
+      "integration-test",
+      "implement",
+      "add-test",
+      "static-review"
+    ],
+    "roles": [
+      "automation",
+      "manual"
+    ]
+  },
+  {
+    "name": "integration-test",
+    "title": "Integration testing",
+    "group": "Test levels & change-related testing",
+    "tagline": "Design component and system integration tests \u2014 strategy (incremental vs big-bang), test doubles, and an interface coverage table.",
+    "usage": "/qa:integration-test <components / systems / interface>",
+    "whatItDoes": "Classifies the integration level, picks an integration strategy, derives interface conditions and cases, and builds an interface coverage table; implements at the API/integration level where feasible.",
+    "when": "When testing interactions between components or between the system and external services/systems.",
+    "needs": "qa.config.yml; paths.docs_dir; paths.tests_dir; tooling.mocking (service virtualization); tooling.contract; environments; risk_areas.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Design Specification for the interfaces under test -> paths.docs_dir/INTEGRATION-TEST-<target>.md.",
+    "howItWorks": [
+      "Read config and resolve the integration target from arguments",
+      "Classify each interface as component-integration vs system-integration",
+      "Choose an integration strategy (top-down / bottom-up / functional, or big-bang) and record stubs/drivers/mocks",
+      "Derive interface conditions and cases with EP, BVA, decision table; cover error/timeout/sequencing/transaction paths",
+      "Build the interface coverage table and mark virtualized vs real externals",
+      "Implement at the API/integration level, run against environments, report interface coverage as counts"
+    ],
+    "theory": "The integration test levels (CTFL \u00a72.2.1). Interfaces, not units, are the risk surface; incremental integration localizes the fault when something breaks. Integration points are where defects cluster (Principle 4).",
+    "istqb": "CTFL v4.0 \u00a72.2.1 \u00b7 \u00a74.2",
+    "example": {
+      "cmd": "/qa:integration-test \"checkout \u2192 payment-gateway\"",
+      "correctWhen": "It states an integration strategy (incremental) and uses stubs/drivers for the gateway."
+    },
+    "related": [
+      "api-automate",
+      "implement",
+      "contract-sync",
+      "unit-test",
+      "web-automate",
+      "static-review"
+    ],
+    "roles": [
+      "automation",
+      "manual"
+    ]
+  },
+  {
+    "name": "maintenance-test",
+    "title": "Maintenance testing",
+    "group": "Test levels & change-related testing",
+    "tagline": "Plan testing for changes to a deployed system \u2014 modification, migration, or retirement \u2014 with impact analysis driving confirmation and regression.",
+    "usage": "/qa:maintenance-test <change / migration / retirement scope>",
+    "whatItDoes": "Classifies the maintenance trigger, runs impact analysis on direct and indirect effects, then specifies and runs confirmation testing of the change plus regression of impacted areas.",
+    "when": "When testing patches, upgrades, data migrations, or decommissioning of a deployed system.",
+    "needs": "qa.config.yml; paths.*; tooling.* toggles; gates (entry/exit criteria); risk_areas; recent git diff helps infer empty scope.",
+    "output": "Maintenance Test Plan (ISO/IEC/IEEE 29119-3, scoped to a maintenance release) -> paths.docs_dir/MAINTENANCE-<scope>.md.",
+    "howItWorks": [
+      "Guard config, then resolve the maintenance scope (or infer from the recent-changes diff)",
+      "Classify the trigger: Modification, Migration, or Retirement",
+      "Run impact analysis on direct and indirect effects, mapping each to risk_areas",
+      "Delegate regression selection/prioritization to /qa:regression",
+      "Specify and run confirmation testing of the change plus the selected regression set (add data/rollback tests for migration)",
+      "Set entry/exit from gates, state residual risk, write the plan and hand to /qa:release-report"
+    ],
+    "theory": "Maintenance testing + impact analysis (CTFL \u00a72.3) driving the two change-related test types \u2014 confirmation and regression (\u00a72.2.2). Impact analysis is what makes regression scoping evidence-based, not run-everything.",
+    "istqb": "CTFL v4.0 \u00a72.3 \u00b7 \u00a72.2.2",
+    "example": {
+      "cmd": "/qa:maintenance-test \"migrate payments to Stripe API v2\"",
+      "correctWhen": "It includes impact analysis plus a confirmation/regression scope for the change."
+    },
+    "related": [
+      "regression",
+      "triage",
+      "release-report"
+    ],
+    "roles": [
+      "leader",
+      "automation",
+      "manual"
+    ]
+  },
+  {
+    "name": "dynamic-analysis",
+    "title": "Dynamic analysis",
+    "group": "Test levels & change-related testing",
+    "tagline": "Run the system under load and watch for runtime defects \u2014 memory/resource leaks, handle exhaustion, and degradation over time.",
+    "usage": "/qa:dynamic-analysis <feature / flow / endpoint>",
+    "whatItDoes": "Exercises the system while running, captures baseline and timed resource snapshots, trends each metric against an explicit leak rule, and isolates a suspected root cause.",
+    "when": "When hunting faults that only surface at runtime under sustained load, not statically.",
+    "needs": "qa.config.yml; paths.*; tooling.* (a stack-appropriate profiler); gates.performance/risk_areas for the load profile; a production-like environment for valid results.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Execution Log extended with profiling/leak evidence -> paths.docs_dir/DYNAMIC-ANALYSIS-<scope>.md.",
+    "howItWorks": [
+      "Guard config, resolve the target flow/endpoint, and validate a profiler exists for the detected stack",
+      "Define the scenario: load profile (config-sourced), duration (>=8h or >=500 iterations), baseline metrics",
+      "Instrument the profiler and capture/validate the t=0 baseline snapshot",
+      "Run the duration, capturing snapshots at 25/50/75/100% (5 datapoints per metric)",
+      "Trend each resource and apply the >5%-growth-without-release leak rule with severity",
+      "Pass the 9-point quality gate, then write the report; route confirmed leaks to /qa:triage"
+    ],
+    "theory": "Dynamic analysis (CTAL-TTA) \u2014 finds faults invisible to static analysis because they only manifest during execution. Complements static-analysis (no execution) and perf-test (workload-driven). A specialist/Advanced-track topic, not CTFL Foundation.",
+    "istqb": "CTAL-TTA (dynamic analysis)",
+    "example": {
+      "cmd": "/qa:dynamic-analysis \"cart session handling\"",
+      "correctWhen": "It targets runtime leaks/handle-exhaustion/degradation over time, not static defects."
+    },
+    "related": [
+      "triage",
+      "perf-test",
+      "static-analysis",
+      "shift-right"
+    ],
+    "roles": [
+      "performance",
+      "automation"
+    ]
+  },
+  {
+    "name": "shift-right",
+    "title": "Testing in production (shift-right)",
+    "group": "Test levels & change-related testing",
+    "tagline": "Verify quality in the live environment safely \u2014 synthetic monitoring, SLO checks, canary/A-B and feature-flag validation, post-deploy smoke.",
+    "usage": "/qa:shift-right [feature / journey]",
+    "whatItDoes": "Designs production-safe synthetic checks, SLIs/SLOs, and progressive-delivery validation (canary/A-B/flags), evaluates production health, and records a promote/hold/roll-back verdict.",
+    "when": "When verifying quality in the live environment that pre-release testing cannot fully reach; post-deploy.",
+    "needs": "qa.config.yml; live environment access; paths.*; tooling.* (e2e/api); gates (SLO thresholds); risk_areas; environments; team (approvers).",
+    "output": "ISO/IEC/IEEE 29119-3 Production Verification Report -> paths.reports_dir/production-verification-<scope>.md, plus synthetic-check scripts under paths.tests_dir.",
+    "howItWorks": [
+      "Resolve scope to the risk_areas.critical journeys (or the named feature/journey)",
+      "Define synthetic checks / post-deploy smoke per journey against production-safe endpoints",
+      "Define SLIs and SLOs, deriving thresholds from gates and verifying telemetry exposes each signal",
+      "Validate progressive delivery: canary promotion/rollback criteria, A/B guardrails, feature-flag kill-switch",
+      "Evaluate production health (healthy/degraded/roll back) and record a promote/hold/roll-back decision",
+      "Preserve the risk-area -> check -> SLI/SLO -> result traceability and state production residual risk"
+    ],
+    "theory": "Testing in production / continuous testing (Quality in DevOps). Extends coverage to real conditions but explicitly complements, never replaces, shift-left testing (Principle 3). Done safely: read-only, synthetic data, no load/destructive tests against production.",
+    "istqb": "Quality in DevOps (Specialist) \u00b7 ISO/IEC/IEEE 29119-3 Production Verification Report",
+    "example": {
+      "cmd": "/qa:shift-right \"checkout\"",
+      "correctWhen": "It defines synthetic monitors, observability checks, and canary/feature-flag validation for production."
+    },
+    "related": [
+      "dynamic-analysis",
+      "release-report",
+      "triage"
+    ],
+    "roles": [
+      "performance",
+      "automation",
+      "leader"
+    ]
+  },
+  {
+    "name": "scaffold",
+    "title": "Scaffold the test automation framework",
+    "group": "Test implementation",
+    "tagline": "Build the gTAA framework, fixtures, config, and CI pipeline from qa.config.yml.",
+    "usage": "/qa:scaffold",
+    "whatItDoes": "Generates the test-automation architecture and testware the rest of the toolkit runs on: runner config, folder structure, fixtures, sample specs, plus performance/contract/a11y/security and a CI pipeline per the config's tooling toggles. Produces the scaffold of work products, not finished test cases.",
+    "when": "First-time setup of test automation in a project, before commands that run tests.",
+    "needs": "qa.config.yml (run /qa:qa-init first); honors paths.*, tooling.* toggles, ci.*, gates, risk_areas, stack.*.",
+    "output": "Test-automation framework + CI pipeline under paths.tests_dir / paths.reports_dir (29119-3 Test Procedure Specification scaffold + Test Data / Environment Requirements).",
+    "howItWorks": [
+      "Guard on qa.config.yml; read paths/tooling/ci/gates/risk_areas/stack and never hardcode",
+      "Skip any capability whose tooling toggle is unset and record it in 'not scaffolded (and why)'",
+      "Scaffold the framework/language core: runner config, folder structure, fixtures, one sample Page Object + E2E + API spec",
+      "Add enabled extras: performance, contract, accessibility, visual, security stubs",
+      "Generate the CI pipeline for ci.platform with a fast PR gate and nightly/pre-release stages",
+      "Enforce quality rules: stable selectors, no hard waits, per-test data via factories, no hardcoded secrets",
+      "Validate: install deps, run the build/type-check, run a framework smoke run of the samples"
+    ],
+    "theory": "Test implementation (CTFL v4.0 \u00a71.4, \u00a76; CT-TAE) \u2014 you cannot implement or execute tests without the testware architecture (gTAA) first; built from config so it matches the project's actual stack.",
+    "istqb": "CTFL v4.0 \u00a71.4 \u00b7 \u00a76 \u00b7 CT-TAE",
+    "example": {
+      "cmd": "/qa:scaffold",
+      "correctWhen": "The runner runs the sample spec and the structure matches the config's tooling and ci settings."
+    },
+    "related": [
+      "implement",
+      "web-automate",
+      "api-automate",
+      "test-design",
+      "test-data",
+      "test-env",
+      "flaky-hunt",
+      "self-heal"
+    ],
+    "roles": [
+      "automation"
+    ]
+  },
+  {
+    "name": "automate",
+    "title": "Run the full ISTQB automation pipeline",
+    "group": "Test implementation",
+    "tagline": "Score ROI, pick automation candidates, design cases, plan, and implement the top ones.",
+    "usage": "/qa:automate <path to manual test cases | requirement | feature>",
+    "whatItDoes": "One pipeline: filter unsuitable items, score priority (value) and complexity (cost), select candidates on a 5x5 ROI matrix, design the automated cases, produce a phased plan, and implement the Phase-1 candidates. Automation is treated as an ROI investment decision, never 'automate everything.'",
+    "when": "Deciding what to automate, or converting manual test cases into automated tests.",
+    "needs": "qa.config.yml (run /qa:qa-init first); manual cases / requirement / feature input; honors paths.*, tooling.*, risk_areas, process.sprint_length_weeks.",
+    "output": "Automation Plan -> paths.docs_dir/AUTOMATION-PLAN-<item>.md (Test Plan) plus implemented Phase-1 scripts under paths.tests_dir (Test Procedure Specification).",
+    "howItWorks": [
+      "Guard config and resolve the input (manual cases, requirement, or feature -> its TEST-CASES doc)",
+      "Suitability filter: drop items unsuitable for automation and keep them manual with a reason",
+      "Score PRIORITY 1-5 (P1..P5), risk-led",
+      "Score COMPLEXITY 1-5 (C1..C5)",
+      "Select candidates on the 5x5 priority x complexity ROI matrix and assign the lowest effective test level",
+      "Design the automated cases preserving bidirectional traceability",
+      "Plan the phased rollout mapped to sprints; implement the Phase-1 (P1) candidates and run them"
+    ],
+    "theory": "CT-TAE + risk-based prioritization (CTFL \u00a75.2) + implementation/execution (\u00a71.4). Automating by ROI rather than wholesale is the economic core of CT-TAE; the pyramid pushes work to the lowest effective level.",
+    "istqb": "CT-TAE \u00b7 CTFL v4.0 \u00a75.2 \u00b7 \u00a71.4",
+    "example": {
+      "cmd": "/qa:automate \"docs/manual/checkout-cases.csv\"",
+      "correctWhen": "It scores each case by ROI/complexity and automates the high-value ones first."
+    },
+    "related": [
+      "implement",
+      "scaffold",
+      "test-cases",
+      "test-data"
+    ],
+    "roles": [
+      "automation"
+    ]
+  },
+  {
+    "name": "implement",
+    "title": "Implement and run tests for a feature",
+    "group": "Test implementation",
+    "tagline": "Turn cases into tests at the right pyramid level (E2E/API/component/contract) and run them.",
+    "usage": "/qa:implement <feature or story description>",
+    "whatItDoes": "Takes existing test cases for a feature and implements them as executable procedures at the cheapest effective level, then runs them. The generic implementation engine: logic to unit, endpoints to API, UI behavior to component, journeys to E2E. Failures that are real defects are escalated, not masked.",
+    "when": "You want to write/add and execute tests for a specific feature or story.",
+    "needs": "qa.config.yml (run /qa:qa-init first) and a framework (run /qa:scaffold); honors paths.tests_dir, paths.reports_dir, stack.api_spec_path, tooling.* runner toggles, risk_areas, gates.",
+    "output": "Tests under paths.tests_dir with run results in paths.reports_dir (29119-3 Test Procedure Specification + Test Execution Log / Results).",
+    "howItWorks": [
+      "Read config and resolve runners/paths; if the framework tree is empty, route to /qa:scaffold",
+      "Resolve the target feature from arguments (default to the first risk_areas.critical item if empty)",
+      "Read the basis: OpenAPI endpoints and existing test cases; design first via /qa:test-design if none exist",
+      "Decide coverage by the pyramid and risk tier (unit / API / component / E2E / contract; flag non-functional needs)",
+      "Reuse existing fixtures, page objects, and typed API clients; provision data via /qa:test-data factories",
+      "Write procedures with stable selectors, web-first assertions, no hard waits, each test owning its data",
+      "Execute with the configured runner; fix test defects, escalate real product defects to /qa:triage"
+    ],
+    "theory": "Test implementation + execution (CTFL v4.0 \u00a71.4) \u2014 the activity that converts the design (cases) into procedures and actually runs them.",
+    "istqb": "CTFL v4.0 \u00a71.4",
+    "example": {
+      "cmd": "/qa:implement \"guest checkout\"",
+      "correctWhen": "Logic lands at the lowest effective level (API/component) and only the journey is E2E, with web-first assertions."
+    },
+    "related": [
+      "test-design",
+      "scaffold",
+      "test-data",
+      "triage",
+      "regression"
+    ],
+    "roles": [
+      "automation"
+    ]
+  },
+  {
+    "name": "add-test",
+    "title": "Add a single focused test",
+    "group": "Test implementation",
+    "tagline": "From a plain-English description, pick the ISTQB technique, then implement and run one test.",
+    "usage": "/qa:add-test <what the test should verify>",
+    "whatItDoes": "The single-case fast path: treats the description as the test basis for one condition, picks the cheapest effective level and exactly one CTFL v4.0 design technique, places the test in an existing spec where possible, writes it, and runs just that test.",
+    "when": "One-off 'add a test that...' requests for a single behavior.",
+    "needs": "qa.config.yml (run /qa:qa-init first) and a test framework (run /qa:scaffold if none); honors tooling.*, paths.tests_dir, stack.api_spec_path, test_data.*, risk_areas.",
+    "output": "One implemented and run test procedure/script added under paths.tests_dir (29119-3 Test Procedure Specification).",
+    "howItWorks": [
+      "Resolve the condition from arguments (default to the first risk_areas.critical item if empty)",
+      "Pick the cheapest effective test level for what is being verified",
+      "Select exactly one CTFL v4.0 Chapter 4 technique via the decision tree and record it",
+      "Place the test in an existing spec covering the same feature/level; only create a new file if none fits",
+      "Write the test with stable selectors, web-first assertions, no hard waits, owning its data, and a trace comment",
+      "Run just this test; fix it if it is the test's fault, or escalate to /qa:triage if it is a real defect"
+    ],
+    "theory": "Test design + implementation (CTFL v4.0 \u00a71.4, \u00a74) compressed to one case \u2014 the quick path; test-cases (design) and implement (multi-level) are the full-suite paths.",
+    "istqb": "CTFL v4.0 \u00a71.4 \u00b7 \u00a74",
+    "example": {
+      "cmd": "/qa:add-test \"password reset link expires after 30 minutes\"",
+      "correctWhen": "It adds a single self-validating test with real assertions that owns its data and names the one technique used."
+    },
+    "related": [
+      "test-cases",
+      "implement",
+      "scaffold",
+      "triage"
+    ],
+    "roles": [
+      "automation"
+    ]
+  },
+  {
+    "name": "test-data",
+    "title": "Generate test-data factories and fixtures",
+    "group": "Test implementation",
+    "tagline": "Typed factories, builders, fixtures, and seeding/cleanup helpers, synthetic-only.",
+    "usage": "/qa:test-data <entity or domain, e.g. user, order>",
+    "whatItDoes": "Builds typed, parallel-safe data factories/builders for an entity, paired seeding and teardown helpers, and wires them into fixtures so specs get data declaratively. Synthetic data only; secrets pulled from the configured store, never hardcoded.",
+    "when": "Tests need data setup for an entity or domain.",
+    "needs": "qa.config.yml (run /qa:qa-init first); an entity backed by a test condition or OpenAPI schema; a fixtures/framework (run /qa:scaffold if none). Honors paths.*, test_data.*, stack.*, tooling.*, risk_areas.",
+    "output": "Typed factories/fixtures + seed/cleanup helpers under paths.tests_dir, plus paths.docs_dir/TEST-DATA-<entity>.md (29119-3 Test Data / Environment Requirements).",
+    "howItWorks": [
+      "Read config and resolve test_data.*/stack.*/paths.*; route to /qa:qa-init if config is missing",
+      "Resolve the entity; require it to map to a test condition or an OpenAPI schema (else route to /qa:test-design)",
+      "Build typed factories/builders that are contract-valid, parallel-safe (unique id per call), in the repo's language",
+      "Add seeding (prefer api over db) with a paired teardown in reverse dependency order",
+      "Enforce sensitive-data rules: synthetic/anonymized only, secrets from test_data.secrets_store",
+      "Wire factories into existing fixtures so specs get data declaratively",
+      "Write the Test Data Requirements doc with a traceability table and a measurable coverage summary"
+    ],
+    "theory": "Test implementation (CTFL v4.0 \u00a71.4) \u2014 preparing test data is implementation testware; synthetic-only data enforces the no-real-PII privacy rule applied throughout the toolkit.",
+    "istqb": "CTFL v4.0 \u00a71.4",
+    "example": {
+      "cmd": "/qa:test-data \"order\"",
+      "correctWhen": "Data is synthetic-only and each test can build/own its own order (parallel-safe)."
+    },
+    "related": [
+      "test-design",
+      "test-env",
+      "scaffold",
+      "implement"
+    ],
+    "roles": [
+      "automation"
+    ]
+  },
+  {
+    "name": "test-env",
+    "title": "Provision and document the test environment",
+    "group": "Test implementation",
+    "tagline": "Define, provision, and gate a reproducible test environment from qa.config.yml.",
+    "usage": "/qa:test-env [environment name, e.g. ci | qa | staging]",
+    "whatItDoes": "Defines Test Environment Requirements for one environment (components/versions, config, baseline data state, virtualized dependencies, supported levels, risk coverage), provisions reproducible isolated artifacts (docker-compose/env/seed/mocks), and runs a readiness checklist that gates the env READY only if every item passes. Owns environment provisioning, not data factories.",
+    "when": "Setting up, documenting, or verifying a test environment.",
+    "needs": "qa.config.yml (run /qa:qa-init first); a framework under paths.tests_dir (run /qa:scaffold if none). Honors paths.*, tooling.*, ci.*, environments[], risk_areas, test_data.*.",
+    "output": "Test Environment Requirements -> paths.docs_dir/environments/<name>.md plus provisioning artifacts under paths.tests_dir (29119-3 Test Environment Requirements).",
+    "howItWorks": [
+      "Config guard, then read paths/tooling/ci/environments/risk_areas/test_data",
+      "Resolve the target environment from arguments or environments[] (default to a single ci env if absent)",
+      "Define Test Environment Requirements: components/versions, config, baseline data state, virtualized deps, supported levels, risk coverage",
+      "Provision reproducible, isolated, parallel-safe artifacts (docker-compose/env/seed hooks/mock servers) under paths.tests_dir",
+      "Run the readiness checklist (PASS/FAIL) and a smoke check; gate READY only if every item passes",
+      "Write the requirements doc and a coverage summary; reference secrets via test_data.secrets_store only"
+    ],
+    "theory": "Test implementation \u2014 environment setup so testware can execute (CTFL v4.0 \u00a71.4, \u00a76; CT-TAE). Controlled environments make results reproducible and defects diagnosable; declares the required data state while /qa:test-data builds the factories.",
+    "istqb": "CTFL v4.0 \u00a71.4 \u00b7 \u00a76 \u00b7 CT-TAE",
+    "example": {
+      "cmd": "/qa:test-env qa",
+      "correctWhen": "It documents the qa environment (URL, data, config) from the environments list and gates readiness PASS/FAIL."
+    },
+    "related": [
+      "test-data",
+      "scaffold",
+      "fix-ci",
+      "fix-jenkins",
+      "implement"
+    ],
+    "roles": [
+      "automation"
+    ]
+  },
+  {
+    "name": "automation-strategy",
+    "title": "Program-level test automation strategy and gTAA",
+    "group": "Test automation by surface",
+    "tagline": "Define the long-lived automation architecture: objectives, level split, tool fit, CI, maintainability, metrics, ROI.",
+    "usage": "/qa:automation-strategy",
+    "whatItDoes": "Produces the program-level Test Automation Strategy for the product (long-lived, automation-specific, above any single feature or release): objectives and business case, scope, the four gTAA layers, automation approaches, pyramid level distribution, tooling fit, CI/CD integration, maintainability strategy, metrics, and risks. Treats automation as an investment/ROI decision, never 'automate everything.'",
+    "when": "When you need to set or review the overall automation approach above any single feature or release; once per project, or as a refactor target for an inherited suite.",
+    "needs": "qa.config.yml (paths, tooling toggles, gates, risk_areas); discovery scan of existing framework/CI; automation-strategy-template.md.",
+    "output": "Test Automation Strategy work product (gTAA per CT-TAE; ISO/IEC/IEEE 29119-3 alignment) -> docs/AUTOMATION-STRATEGY.md (paths.docs_dir).",
+    "howItWorks": [
+      "Guard config and resolve scope argument (default focus risk_areas.critical)",
+      "State objectives and business case tied to measurable success criteria",
+      "Set scope: levels and surfaces in vs out, per enabled tooling",
+      "Define the four gTAA layers (generation, definition, execution, adaptation)",
+      "Choose and justify automation approaches (data/keyword/BDD/model)",
+      "Set the pyramid level distribution and map each level to tooling",
+      "Confirm tooling fit and CI/CD integration with gate rules",
+      "Specify maintainability strategy, metrics with thresholds, and risks"
+    ],
+    "theory": "Generic Test Automation Architecture (gTAA) plus program-level automation strategy (CT-TAE); ROI/investment framing; SUT decoupled from tests via the adaptation layer.",
+    "istqb": "CT-TAE (gTAA) \u00b7 Test Automation Strategy (Specialist) \u00b7 ISO/IEC/IEEE 29119-3",
+    "example": {
+      "cmd": "/qa:automation-strategy",
+      "correctWhen": "Defines the gTAA 4 layers, the pyramid split, and maintainability/metrics \u2014 program-level, not per-feature."
+    },
+    "related": [
+      "api-automate",
+      "web-automate",
+      "mobile-automate",
+      "perf-plan",
+      "automate",
+      "scaffold",
+      "automation-audit",
+      "tool-select"
+    ],
+    "roles": [
+      "automation",
+      "leader"
+    ]
+  },
+  {
+    "name": "api-automate",
+    "title": "API test automation from the OpenAPI spec",
+    "group": "Test automation by surface",
+    "tagline": "Build or extend automated REST tests from the spec: schema, CRUD, auth/role matrix, negative and boundary, data-driven.",
+    "usage": "/qa:api-automate <endpoint / resource / feature>",
+    "whatItDoes": "Derives test conditions per spec operation and implements automated API tests covering happy path, negative and boundary (EP/BVA), authorization (decision-table role matrix plus object-level/IDOR checks), schema validation, state and side effects, and cross-cutting concerns. Uses typed clients derived from the spec, data-driven cases, and independent parallel-safe tests; runs them and reports coverage as counts.",
+    "when": "For API test automation \u2014 building or extending automated tests for an endpoint, resource, or feature against the OpenAPI/Swagger contract.",
+    "needs": "qa.config.yml; OpenAPI/Swagger spec (stack.api_spec_path) as the test basis; framework present; tooling.api/language; environments base_url_api; test_data.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Procedure Specification(s) (API scripts) under paths.tests_dir (api/ subtree) + Test Execution Log when run + a counts coverage summary.",
+    "howItWorks": [
+      "Read config, validate input, and resolve the target to spec operations",
+      "Derive conditions per operation across the six categories",
+      "Apply EP/BVA and a decision-table role matrix; add an IDOR/BOLA check",
+      "Validate every response against the OpenAPI schema",
+      "Data-drive repeated partitions; use spec-derived typed clients",
+      "Keep tests independent, parallel-safe, and tagged by risk tier",
+      "Implement, run with tooling.api, wire smoke into the PR gate",
+      "Report coverage as counts (operations in scope/covered/deferred)"
+    ],
+    "theory": "Automation (CT-TAE) at the component-integration / API level with black-box techniques over API inputs; OpenAPI spec is the test basis, so the spec defines correctness; API/integration points cluster defects (Principle 4).",
+    "istqb": "CT-TAE \u00b7 CTFL v4.0 \u00a72.2.1 \u00b7 \u00a74.2",
+    "example": {
+      "cmd": "/qa:api-automate \"/orders\"",
+      "correctWhen": "Tests are generated from the OpenAPI spec with schema validation, CRUD, an auth/role matrix, and negative/boundary cases."
+    },
+    "related": [
+      "automation-strategy",
+      "contract-sync",
+      "perf-test",
+      "integration-test",
+      "test-data",
+      "web-automate",
+      "flaky-hunt"
+    ],
+    "roles": [
+      "automation"
+    ]
+  },
+  {
+    "name": "scan-ui",
+    "title": "Discover a running UI into page objects and test cases",
+    "group": "Test automation by surface",
+    "tagline": "Deep-dive a web UI to extract stable locators and actions into page objects, then generate cases covering every element and flow.",
+    "usage": "/qa:scan-ui <url or page/flow> [auth role]",
+    "whatItDoes": "Crawls a running UI (bounded to base_url_web origin, capped at 10 pages), extracts every interactive element with its role/name/test-id and state, derives the most stable locator and action per element, writes/extends Page Object classes (assertions kept in specs), and generates test cases covering presence/state, actions, input validation (EP/BVA), navigation, and negative paths. Marks expected results not derivable from the UI as TODO and reports element coverage as counts.",
+    "when": "To bootstrap or expand UI automation from a running app \u2014 discovering elements into page objects and covering cases.",
+    "needs": "qa.config.yml; running app + stack.base_url_web; E2E framework present (tooling.e2e via scaffold); test-case-template.md; optional saved storageState per role.",
+    "output": "Test Procedure Specification (page objects under paths.tests_dir/pages/ + specs under e2e/) and a Test Case Specification doc at docs/UI-SCAN-<target>.md + a counts coverage summary; temp _scan/ probe removed.",
+    "howItWorks": [
+      "Guard config and resolve the target (URL / page-flow / auth role)",
+      "Run a temporary exploration script to discover every interactive element",
+      "Choose the most stable locator and infer the action(s) per element",
+      "Generate or extend Page Object files, reusing existing POMs",
+      "Derive conditions and generate covering test cases with EP/BVA",
+      "Mark non-derivable expected results TODO: confirm with requirements",
+      "Output page objects, the cases doc, and a coverage summary",
+      "Run smoke specs, remove the _scan/ probe, then hand off"
+    ],
+    "theory": "Test analysis and design using the running UI as the test basis, implemented with the Page Object Model; POM is the maintainability pattern (ISO 25010) that keeps UI tests from rotting; oracle caveat \u2014 the scanner knows what exists, not always the correct business outcome.",
+    "istqb": "CTFL v4.0 \u00a71.4 \u00b7 \u00a74 \u00b7 CT-TAE (POM) \u00b7 ISO/IEC/IEEE 29119-3",
+    "example": {
+      "cmd": "/qa:scan-ui http://localhost:3000/checkout",
+      "correctWhen": "Every interactive element gets a stable locator and at least one covering case, and the temp probe is removed."
+    },
+    "related": [
+      "web-automate",
+      "self-heal",
+      "test-cases",
+      "scaffold",
+      "tool-select"
+    ],
+    "roles": [
+      "automation"
+    ]
+  },
+  {
+    "name": "web-automate",
+    "title": "Web UI / E2E automation at the system level",
+    "group": "Test automation by surface",
+    "tagline": "Build or extend system-level E2E tests for critical user journeys: POM, per-role auth state, cross-browser, gated a11y/visual hooks.",
+    "usage": "/qa:web-automate <feature / user journey / page>",
+    "whatItDoes": "Builds or extends automated Web UI / E2E tests for a user journey: selects critical journeys by risk (pushing checks down to API/component where cheaper), encapsulates selectors/actions in page objects with assertions in specs, uses only stable role/label/test-id locators, sets up per-role auth state and synthetic data, relies on web-first assertions with no hard waits, runs cross-browser per ci.browsers, and adds config-gated accessibility/visual checks. Reports journeys, risk tier, and browsers/viewports run.",
+    "when": "For web UI test automation \u2014 building or extending E2E coverage of a feature, journey, or page.",
+    "needs": "qa.config.yml; E2E framework present (tooling.e2e/language via scaffold); running app for execution; ci.browsers; test_data; optional tooling.accessibility/visual.",
+    "output": "Test Procedure / script (ISO/IEC/IEEE 29119-3 Test Procedure Specification) under paths.tests_dir/e2e/ + the run's Test Execution Log from the e2e reporter.",
+    "howItWorks": [
+      "Guard config; resolve the journey as test basis",
+      "Select journeys by risk; push checks down to API/component where cheaper",
+      "Encapsulate selectors/actions in page objects (assertions in specs)",
+      "Use only stable role/label/test-id locators",
+      "Set up per-role auth state; seed synthetic data; each test owns its data",
+      "Use web-first assertions with no hard waits",
+      "Run cross-browser per ci.browsers and record viewports",
+      "Add config-gated a11y/visual hooks; place, run, and wire smoke into the PR gate"
+    ],
+    "theory": "Automation (CT-TAE) at the system test level; the test pyramid governs scope \u2014 reserve E2E for genuine journeys and push cheaper checks down to API/component; flakiness is a test defect.",
+    "istqb": "CT-TAE \u00b7 CTFL v4.0 \u00a72.2",
+    "example": {
+      "cmd": "/qa:web-automate \"guest checkout journey\"",
+      "correctWhen": "Tests use POM + auth state, run cross-browser per ci.browsers, with no hard waits."
+    },
+    "related": [
+      "scan-ui",
+      "api-automate",
+      "mobile-test",
+      "a11y-audit",
+      "test-data",
+      "flaky-hunt",
+      "triage",
+      "automation-strategy"
+    ],
+    "roles": [
+      "automation"
+    ]
+  },
+  {
+    "name": "mobile-automate",
+    "title": "Mobile test automation (native/cross-platform or mobile-web)",
+    "group": "Test automation by surface",
+    "tagline": "Automate iOS/Android app flows via Appium or a device farm \u2014 gestures, lifecycle, network, platform differences \u2014 with a device-matrix table.",
+    "usage": "/qa:mobile-automate <feature / flow> [native|web]",
+    "whatItDoes": "Routes the surface from tooling.mobile (native/cross-platform via Appium or device farm, vs responsive mobile-web handed to mobile-test), builds the device/OS matrix from config, and automates the applicable CT-MAT concerns: functional flows via accessibility IDs, gestures, app lifecycle and interrupts, network conditions, platform differences, install/upgrade and on-device performance. Uses per-platform screen objects, stable accessibility-ID locators, synthetic data, and parallel CI runs; emits a device-matrix traceability table.",
+    "when": "For mobile test automation \u2014 iOS/Android native or cross-platform apps (or mobile web), automating a feature or flow on device.",
+    "needs": "qa.config.yml; tooling.mobile set (route to tool-select if unset); tooling.mobile_device_matrix; native: Appium/device farm config; test_data; CI platform.",
+    "output": "Test Procedure Specification (ISO/IEC/IEEE 29119-3) + Test Execution Log under paths.reports_dir, tests under paths.tests_dir/mobile/, plus a device-matrix coverage table.",
+    "howItWorks": [
+      "Guard config and resolve the target flow (and surface) as test basis",
+      "Route the mobile surface from tooling.mobile (native vs web vs tool-select)",
+      "Build the real-vs-emulated device/OS matrix from config",
+      "Automate the applicable CT-MAT concerns for the flow",
+      "Engineer per-platform screen objects with stable accessibility IDs",
+      "Use synthetic data; run device parallelism in CI",
+      "Run, fix test defects, escalate product defects via triage",
+      "Emit the device-matrix traceability table with residual gaps"
+    ],
+    "theory": "CT-MAT executed through CT-TAE; mobile UI automation is system-level and expensive, so the test pyramid still applies \u2014 only genuine end-to-end flows belong on-device.",
+    "istqb": "CT-MAT (Specialist) \u00b7 CT-TAE",
+    "example": {
+      "cmd": "/qa:mobile-automate \"checkout\" web",
+      "correctWhen": "Tests cover the mobile_device_matrix (e.g. iPhone 14, Pixel 7) viewports/touch."
+    },
+    "related": [
+      "mobile-test",
+      "perf-plan",
+      "perf-test",
+      "tool-select",
+      "automation-strategy",
+      "test-data",
+      "triage",
+      "flaky-hunt"
+    ],
+    "roles": [
+      "automation"
+    ]
+  },
+  {
+    "name": "perf-plan",
+    "title": "Performance test planning (objectives, SLAs, workload model)",
+    "group": "Test automation by surface",
+    "tagline": "Plan performance testing before scripting: objectives, SLAs, operational profile, workload model, test types, entry/exit \u2014 risk-driven.",
+    "usage": "/qa:perf-plan [release / system area]",
+    "whatItDoes": "Produces a performance test plan (29119-3 Test Plan, performance scope) with objectives tied to risks/SLAs, acceptance criteria carrying gates.performance values verbatim as pass/fail rules, an operational profile and workload model (transaction mix, volumes, concurrency, think-times, arrival pattern), the test types to run (load/stress/spike/soak/capacity), a non-prod system and data choice, a risk-to-workload traceability register, measurable entry/exit criteria, schedule, and metrics. Precedes scripting in perf-test.",
+    "when": "Before scripting load tests \u2014 to set objectives and SLAs and model the operational profile so perf-test enforces a tested requirement, not just a number.",
+    "needs": "qa.config.yml (paths, gates.performance, risk_areas, environments, test_data, tooling.performance); plan-template.md for document structure.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Plan (performance scope) -> docs/PERF-PLAN-<scope>.md (paths.docs_dir).",
+    "howItWorks": [
+      "Guard config and resolve scope (default risk_areas.critical)",
+      "State objectives, one per question, tied to a risk or SLA",
+      "Carry gates.performance SLAs verbatim as pass/fail rules",
+      "Model the operational profile and workload (mix, concurrency, arrival)",
+      "Select the performance test types and justify each by risk/objective",
+      "Pick a non-prod environment and production-scale data; require APM",
+      "Build the bidirectional risk-to-workload traceability register",
+      "Set measurable entry/exit criteria, schedule, and metrics"
+    ],
+    "theory": "CT-PT planning in the 29119-3 Test Plan shape, risk-driven (risk-based testing), targeting performance efficiency (ISO/IEC 25010); planning first turns 'a number' into a tested requirement.",
+    "istqb": "CT-PT \u00b7 ISO/IEC/IEEE 29119-3 (Test Plan) \u00b7 CTFL v4.0 \u00a75.2 \u00b7 ISO/IEC 25010",
+    "example": {
+      "cmd": "/qa:perf-plan \"checkout\"",
+      "correctWhen": "It sets objectives/SLAs from gates.performance and a workload model (operational profile), feeding perf-test."
+    },
+    "related": [
+      "perf-test",
+      "mobile-automate",
+      "automation-strategy",
+      "risk-assessment",
+      "nonfunctional"
+    ],
+    "roles": [
+      "performance"
+    ]
+  },
+  {
+    "name": "perf-test",
+    "title": "K6 performance test",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Script (and optionally run) a K6 load/stress/spike/soak test with pass/fail thresholds from config gates.",
+    "usage": "/qa:perf-test <endpoint or journey> [load|stress|spike|soak]",
+    "whatItDoes": "Builds an executable K6 performance script for an endpoint or journey, encodes the response-time/error-rate/throughput SLAs from qa.config.yml as run-failing thresholds, and optionally smoke-runs it against a non-prod target. Tests ISO/IEC 25010 performance efficiency (and reliability for soak).",
+    "when": "After /qa:perf-plan defines the workload model and SLAs, to execute load, stress, spike, or soak testing.",
+    "needs": "qa.config.yml with tooling.performance: k6 and gates.performance SLAs; a non-prod target if running; ideally a PERF-PLAN-*.md for the workload model.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Execution Log (K6 JSON summary) under paths.reports_dir, plus the K6 Test Procedure under paths.tests_dir/performance/.",
+    "howItWorks": [
+      "Read config; gate that tooling.performance is k6",
+      "Resolve target/type from arguments (default load; default target to risk_areas.critical)",
+      "Derive workload model from PERF-PLAN-*.md or gates.performance",
+      "Build the K6 script with per-type stages (load/stress/spike/soak)",
+      "Encode gates.performance SLAs as options.thresholds so a breach fails the run",
+      "Wire the runner and JSON summary export",
+      "Optionally smoke-run against non-prod and report p95/p99/error-rate vs thresholds"
+    ],
+    "theory": "Performance testing execution (CT-PT Specialist). Thresholds-as-gates make performance efficiency (and soak reliability) objectively pass/fail, not subjective.",
+    "istqb": "CT-PT (Specialist) \u00b7 ISO/IEC 25010 performance efficiency / reliability \u00b7 CTFL v4.0 \u00a72.2.2",
+    "example": {
+      "cmd": "/qa:perf-test \"/checkout\" load",
+      "correctWhen": "Thresholds equal the gates (p95 <= 500ms, p99 <= 1000ms, error <= 1%, 100 rps) and the build fails if breached."
+    },
+    "related": [
+      "perf-plan",
+      "dynamic-analysis",
+      "nonfunctional",
+      "status-report",
+      "release-report"
+    ],
+    "roles": [
+      "performance"
+    ]
+  },
+  {
+    "name": "a11y-audit",
+    "title": "Accessibility audit (axe)",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Scaffold or run automated accessibility (axe) checks against the configured WCAG target, then write the execution log.",
+    "whatItDoes": "Wires or runs automated accessibility scans against the WCAG level in config across key page states, applies the configured blocking-severity gate, files each blocking violation as a defect, and flags the manual checks a tool cannot cover. Maps to ISO/IEC 25010 Usability (accessibility sub-characteristic).",
+    "usage": "/qa:a11y-audit [page name or URL]",
+    "when": "For an accessibility audit, or to add a11y tests to a page or flow.",
+    "needs": "qa.config.yml with tooling.accessibility set (e.g. axe), gates.accessibility_standard, gates.a11y_block_on, stack.base_url_web; a reachable environment to run.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Execution Log -> docs_dir/A11Y-RESULTS-<target>.md, with raw scan output under reports_dir and an Incident (Defect) Report per blocking violation.",
+    "howItWorks": [
+      "Read config; gate that tooling.accessibility is enabled",
+      "Resolve target page(s) (default to risk_areas.critical when empty)",
+      "Wire the axe scan via a reusable helper at the configured WCAG level",
+      "Scan each key page state (logged out/in, forms, modals, error states)",
+      "Apply the gate: fail on gates.a11y_block_on severities; burndown the rest",
+      "Run or scaffold, capturing results; log each blocking violation as a defect",
+      "State the manual residual axe cannot prove (keyboard, focus, screen-reader, contrast, zoom)"
+    ],
+    "theory": "Non-functional accessibility testing mapped to ISO/IEC 25010 Usability (accessibility sub-characteristic); evaluation lineage is CT-UT. WCAG provides the external, measurable criterion.",
+    "istqb": "CT-UT / accessibility (Specialist) \u00b7 WCAG \u00b7 ISO/IEC 25010 Usability \u00b7 CTFL v4.0 \u00a72.2.2",
+    "example": {
+      "cmd": "/qa:a11y-audit \"/checkout\"",
+      "correctWhen": "It audits against WCAG 2.1 AA and blocks on critical/serious per gates.a11y_block_on."
+    },
+    "related": [
+      "usability-test",
+      "web-automate",
+      "triage",
+      "release-report"
+    ],
+    "roles": [
+      "manual",
+      "automation"
+    ]
+  },
+  {
+    "name": "usability-test",
+    "title": "Usability evaluation",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Evaluate UX with ISTQB usability methods, heuristics, and ISO/IEC 25010 sub-characteristics \u2014 distinct from accessibility.",
+    "whatItDoes": "Assesses how usable a feature or flow is: scores it against each ISO/IEC 25010 usability sub-characteristic, runs a heuristic evaluation with severity-rated violations, defines usability task scenarios with success criteria, and reviews user-error protection. Advisory only \u2014 does not replace real-user testing. Writes a findings document, modifies no code.",
+    "when": "To assess how usable a feature or flow is (UX, not WCAG accessibility).",
+    "needs": "qa.config.yml for paths.docs_dir, risk_areas, project.* context; a target feature/flow.",
+    "output": "Non-functional usability evaluation report (29119-3 usability Test Execution/analysis result) -> docs_dir/USABILITY-<feature>.md.",
+    "howItWorks": [
+      "Read config; resolve the target flow (default risk_areas.critical when empty)",
+      "Assess against each ISO/IEC 25010 usability sub-characteristic",
+      "Run a heuristic evaluation; rate each violation 0-4 and map to a sub-characteristic",
+      "Define usability task scenarios with explicit success criteria",
+      "Review forms/flows for user-error protection",
+      "Assemble the report and separate heuristic findings from what needs real-user sessions"
+    ],
+    "theory": "Usability evaluation (CT-UT; CTAL-TA quality-characteristic analysis) against ISO/IEC 25010 usability. Directly addresses Principle 7 \u2014 a defect-free product can still fail its users.",
+    "istqb": "CT-UT (Specialist) \u00b7 CTAL-TA \u00b7 ISO/IEC 25010 Usability \u00b7 CTFL v4.0 Principle 7",
+    "example": {
+      "cmd": "/qa:usability-test \"guest checkout\"",
+      "correctWhen": "It applies usability heuristics plus task scenarios and stays distinct from accessibility."
+    },
+    "related": [
+      "a11y-audit",
+      "triage",
+      "exploratory"
+    ],
+    "roles": [
+      "manual"
+    ],
+    "usage": "/qa:usability-test <feature / flow>"
+  },
+  {
+    "name": "nonfunctional",
+    "title": "Non-functional test design",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Design and (where automatable) run reliability/compatibility/portability/maintainability tests against measurable ISO/IEC 25010 criteria.",
+    "whatItDoes": "Covers the non-functional characteristics beyond performance/security/a11y: fixes the targeted ISO/IEC 25010 characteristic and its measurable sub-characteristics, derives test conditions and cases with acceptance criteria, implements the automatable ones, and reports results as numbers vs criteria. Routes perf/security/usability targets to their dedicated commands.",
+    "when": "When testing reliability, compatibility, portability, maintainability, or functional-suitability aspects of quality.",
+    "needs": "qa.config.yml for paths, tooling, browser/device matrix, gates/SLAs, risk_areas; a target 25010 characteristic.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Design + Test Case Specification -> docs_dir/NONFUNCTIONAL-<characteristic>.md, plus Test Procedures under tests_dir and Execution Log when run.",
+    "howItWorks": [
+      "Read config; route perf/security/usability targets to their owning command",
+      "Resolve the characteristic from arguments (default to highest-risk area)",
+      "Fix the 25010 sub-characteristics in scope, each with a measurable criterion from gates",
+      "Derive test conditions and cases, tracing each to a sub-characteristic and criterion",
+      "Implement the automatable cases with configured tooling",
+      "Run against non-prod where feasible and report results vs criteria with pass/fail"
+    ],
+    "theory": "Non-functional test design (CTFL v4.0 \u00a72.2.2; CTAL-TTA) targeting ISO/IEC 25010 product-quality characteristics \u2014 each made measurable so it can be gated.",
+    "istqb": "CTFL v4.0 \u00a72.2.2 \u00b7 CTAL-TTA (Specialist) \u00b7 ISO/IEC 25010",
+    "example": {
+      "cmd": "/qa:nonfunctional reliability",
+      "correctWhen": "It maps to an ISO/IEC 25010 characteristic with measurable criteria."
+    },
+    "related": [
+      "perf-test",
+      "security-scan",
+      "a11y-audit",
+      "contract-sync",
+      "risk-assessment",
+      "status-report"
+    ],
+    "roles": [
+      "performance",
+      "automation"
+    ],
+    "usage": "/qa:nonfunctional <characteristic, e.g. reliability, compatibility, portability, maintainability>"
+  },
+  {
+    "name": "security-scan",
+    "title": "Security baseline scan",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Wire or run the automated security baseline \u2014 SAST, SCA, DAST, secrets \u2014 gated by config toggles, OWASP-aligned.",
+    "whatItDoes": "Runs the configured security scanners plus functional security tests (authorization matrix, input validation, headers, rate limiting) concentrated on critical risk areas, classifies findings by severity, and fails the gate on configured block-severities. An automated OWASP Top 10 / ASVS Level 1 baseline \u2014 not a full pen-test.",
+    "when": "For security testing of the app/API (the automated baseline).",
+    "needs": "qa.config.yml with tooling.security.* toggles, gates.security_block_on, stack.api_spec_path, environments, risk_areas; a non-prod target for DAST.",
+    "output": "Security findings report (ISO/IEC/IEEE 29119-3 Test Execution Log) -> reports_dir/SECURITY-SCAN-<scope>.md, with each above-gate finding raised as an Incident (Defect) Report to /qa:triage.",
+    "howItWorks": [
+      "Read config; gate that tooling.security is present (else route to qa-init)",
+      "Resolve scope from arguments (sast/sca/dast/secrets/all; default all)",
+      "Run each enabled scanner (SAST, SCA, DAST against non-prod, secrets over git history)",
+      "Add functional security tests on critical risk areas (authz, input validation, headers, rate limiting)",
+      "Classify findings by severity and apply the gates.security_block_on gate",
+      "Ticket below-gate findings with owner/SLA; route confirmed above-gate findings to triage"
+    ],
+    "theory": "Non-functional security testing (CT-SEC; OWASP Top 10 / ASVS) mapped to the ISO/IEC 25010 Security characteristic (confidentiality, integrity, non-repudiation, accountability, authenticity). OWASP supplies the concrete threat checklist.",
+    "istqb": "CT-SEC (Specialist) \u00b7 OWASP Top 10 / ASVS \u00b7 ISO/IEC 25010 Security \u00b7 CTFL v4.0 \u00a72.2.2",
+    "example": {
+      "cmd": "/qa:security-scan all",
+      "correctWhen": "It uses the configured tools (Semgrep/npm-audit/OWASP-ZAP/gitleaks) and blocks on high/critical per gates.security_block_on."
+    },
+    "related": [
+      "static-analysis",
+      "risk-assessment",
+      "triage"
+    ],
+    "roles": [
+      "automation",
+      "performance"
+    ],
+    "usage": "/qa:security-scan [sast|sca|dast|secrets|all]"
+  },
+  {
+    "name": "contract-sync",
+    "title": "Consumer-driven contract testing",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Generate/verify consumer and provider Pact contracts and run a can-i-deploy gate across the web/API boundary.",
+    "whatItDoes": "Records the web app's expectations as consumer contracts, verifies them against the API as a provider, and runs a can-i-deploy compatibility-matrix gate so a red matrix blocks deploy. Backstops API mocking by holding virtualized interfaces honest. Logs any contract mismatch as a defect.",
+    "when": "For contract testing across the integration boundary between the web app and the REST API.",
+    "needs": "qa.config.yml with tooling.contract set, tooling.contract_broker_url, stack.api_spec_path, environments, gates, risk_areas.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Execution Log -> docs_dir/CONTRACT-RESULTS-<scope>.md, with raw output under reports_dir and an Incident (Defect) Report per mismatch.",
+    "howItWorks": [
+      "Read config; gate that tooling.contract is enabled",
+      "Resolve mode from arguments (consumer/provider/can-i-deploy; default full flow)",
+      "Consumer: record web expectations from the API spec and publish pacts to the broker",
+      "Provider: replay pacts against the API with provider states; log mismatches as defects",
+      "can-i-deploy: query the broker matrix and emit a deploy/hold decision",
+      "Wire CI triggers and explain how contracts backstop API mocking"
+    ],
+    "theory": "Implementation and execution at the component/system integration level (CTFL \u00a72.2; CT-TAE). Contracts catch integration breakage without a full integrated environment \u2014 the cheap place to find interface defects.",
+    "istqb": "CTFL v4.0 \u00a72.2 (integration testing) \u00b7 CT-TAE (Specialist)",
+    "example": {
+      "cmd": "/qa:contract-sync can-i-deploy",
+      "correctWhen": "It talks to the configured contract_broker_url and gates deploy on verified contracts."
+    },
+    "related": [
+      "integration-test",
+      "api-automate",
+      "triage",
+      "release-report",
+      "fix-ci"
+    ],
+    "roles": [
+      "automation"
+    ],
+    "usage": "/qa:contract-sync [consumer|provider|can-i-deploy]"
+  },
+  {
+    "name": "mobile-test",
+    "title": "Responsive / mobile-web testing",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Test responsive mobile-web behavior using CT-MAT concerns \u2014 viewports, touch, network, device matrix.",
+    "whatItDoes": "Exercises responsive/mobile-web quality for a feature across a config-driven device/viewport matrix: viewport/layout, touch/interaction, network conditions, and interrupts/state preservation. Emits a Test Execution Report with a device-matrix coverage table, tap-target/text-size results, and a state-preservation tally. Hands native apps to /qa:mobile-automate and payload perf to /qa:perf-test.",
+    "when": "To cover mobile/responsive quality for a web app.",
+    "needs": "qa.config.yml with tooling.mobile_device_matrix, ci.browsers, paths, test_data.*, risk_areas; a Playwright-class runner and emulation.",
+    "output": "Test Execution Report (ISO/IEC/IEEE 29119-3 Test Execution Log) under reports_dir, with the device-matrix coverage table; responsive specs as Test Procedures under tests_dir.",
+    "howItWorks": [
+      "Read config; resolve the feature/page (default risk_areas.critical when empty)",
+      "Build the device/viewport matrix from config; allocate per risk tier",
+      "Test viewport & layout (no h-scroll, reflow, tap-target size, text legibility)",
+      "Test touch/interaction and network conditions (slow/flaky/offline)",
+      "Test interrupts & state preservation (orientation, background/foreground, resize)",
+      "Implement and run specs across the matrix; route product defects to triage, flake to flaky-hunt",
+      "Emit the device-matrix coverage table, tap-target results, and state-preservation tally"
+    ],
+    "theory": "CT-MAT concerns applied to responsive web, exercising the 25010 characteristics most affected by small-screen/touch/network use: compatibility/portability, usability, performance efficiency, reliability.",
+    "istqb": "CT-MAT (Specialist) \u00b7 ISO/IEC 25010 compatibility / portability / usability / performance efficiency / reliability",
+    "example": {
+      "cmd": "/qa:mobile-test \"/checkout\"",
+      "correctWhen": "It covers viewports, touch, and network conditions across the device matrix."
+    },
+    "related": [
+      "mobile-automate",
+      "perf-plan",
+      "perf-test",
+      "tool-select",
+      "triage",
+      "flaky-hunt"
+    ],
+    "roles": [
+      "automation",
+      "manual"
+    ],
+    "usage": "/qa:mobile-test [feature / page]"
+  },
+  {
+    "name": "ai-test",
+    "title": "AI/ML system testing",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Test AI/ML components using CT-AI methods \u2014 data quality, model metrics, bias/fairness, robustness, explainability, drift.",
+    "whatItDoes": "Tests AI/ML-based features against ISO/IEC 25010 plus AI-specific quality characteristics: classifies the model and picks a non-exact-match oracle, sets measurable ML metric thresholds, validates the data pipeline (no PII), measures bias/fairness and robustness, checks explainability, and plans drift monitoring, then gates on the thresholds. Flags where human/ethical sign-off is required.",
+    "when": "When the system under test includes AI/ML features.",
+    "needs": "qa.config.yml with paths, risk_areas, gates thresholds, test_data.strategy/sensitive_data_rule; a model/feature to test; synthetic data only (no real PII).",
+    "output": "AI test approach and case specification (ISO/IEC/IEEE 29119-3 Test Design / Test Case Specification) -> docs_dir/AI-TEST-<feature>.md, with automatable checks under tests_dir and failing results routed to /qa:triage.",
+    "howItWorks": [
+      "Read config; resolve the AI/ML feature (stop if no AI/ML component)",
+      "Classify the model and pick a non-exact-match oracle strategy per test",
+      "Set ML functional-performance metrics with numeric acceptance thresholds",
+      "Validate data (split integrity, representativeness, skew) honoring the PII rule",
+      "Measure bias/fairness by group and robustness under perturbation",
+      "Check explainability and define drift-monitoring",
+      "Gate on the thresholds; route failing results to triage, flag human/ethical review"
+    ],
+    "theory": "CT-AI, mapping ISO/IEC 25010 (functional suitability, reliability, performance, security) extended with AI-specific characteristics (correctness under non-determinism, adaptability, autonomy, drift resistance, transparency, freedom from unwanted bias). Non-deterministic systems need metric-based, not exact-match, oracles.",
+    "istqb": "CT-AI (Specialist) \u00b7 ISO/IEC 25010 + AI-specific quality characteristics",
+    "example": {
+      "cmd": "/qa:ai-test \"product recommendations\"",
+      "correctWhen": "It covers data quality, model metrics, bias/fairness, robustness, and drift (CT-AI)."
+    },
+    "related": [
+      "risk-assessment",
+      "test-data",
+      "dynamic-analysis",
+      "genai-assist",
+      "triage"
+    ],
+    "roles": [
+      "automation",
+      "performance"
+    ],
+    "usage": "/qa:ai-test <AI/ML feature or model>"
+  },
+  {
+    "name": "regression",
+    "title": "Regression test selection",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Select, prioritize, and optimize the regression set via impact analysis; keep the suite lean.",
+    "whatItDoes": "Decides what to regression-test for a change: runs impact analysis to map affected areas to risk tiers, picks a regression strategy by rule (retest-all / risk-based selective / prioritized), builds an include/defer/retire selection matrix, and recommends CI placement (PR smoke vs nightly) with counts. Scopes regression only \u2014 confirmation re-testing of the fix is separate. Reads source files only.",
+    "when": "When deciding what to regression-test for a change, or to keep the regression suite lean.",
+    "needs": "qa.config.yml for paths.docs_dir, risk_areas, gates, tooling.* toggles; git history or a named change/area/release.",
+    "output": "Regression Test Selection report (tailored ISO/IEC/IEEE 29119-3 Test Design Specification fragment) -> docs_dir/REGRESSION-SELECTION-<scope>.md.",
+    "howItWorks": [
+      "Read config and recent change signals; resolve the change scope",
+      "Run impact analysis; map each affected area to a risk_areas tier in a table",
+      "Select a regression strategy by explicit rule (retest-all / selective / prioritized)",
+      "Build the selection matrix: include / defer / retire per candidate test",
+      "Recommend CI placement (PR smoke vs nightly) with counts",
+      "State residual risk for what the selected set does not cover"
+    ],
+    "theory": "Change-related regression testing (CTFL v4.0 \u00a72.2.2) \u2014 re-running passing tests to detect new breakage, explicitly distinct from confirmation testing. Risk-based selection (CTAL-TM) keeps it affordable (Principle 2).",
+    "istqb": "CTFL v4.0 \u00a72.2.2 (regression testing) \u00b7 CTAL-TM (risk-based selection) \u00b7 Principle 2",
+    "example": {
+      "cmd": "/qa:regression \"saved-cards change\"",
+      "correctWhen": "It uses impact analysis to include affected areas and trims unrelated tests (pesticide paradox)."
+    },
+    "related": [
+      "maintenance-test",
+      "flaky-hunt",
+      "review-coverage",
+      "implement",
+      "release-report"
+    ],
+    "roles": [
+      "leader",
+      "automation",
+      "manual"
+    ],
+    "usage": "/qa:regression [change / area / release]"
+  },
+  {
+    "name": "ci",
+    "title": "End-to-end red-build triage",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Pull the whole failing build (any CI), bucket every failure, fix the fixable causes, harden to green \u00d73, and escalate real defects.",
+    "whatItDoes": "The build-wide CI orchestrator: pulls the whole latest red build on any platform, triages every failure into a bucket (test defect / product defect / environment / flaky), fixes the test/env/flake causes and confirms each locally, hardens fixed tests to green \u00d73, and escalates real product defects without masking them. The 'x'/'full' mode adds a mandatory-stability + full-suite local gate. Never commits, pushes, or triggers CI unless asked.",
+    "when": "After a red build, to triage and fix the whole build end-to-end in one pass \u2014 not just one log.",
+    "needs": "qa.config.yml with ci.platform (+ jenkins_url/jenkins_job & JENKINS_USER/JENKINS_API_TOKEN, or gh for GitHub Actions) \u2014 or a build URL \u2014 or local JUnit artifacts; the configured runner.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Execution Log / Test Results -> reports_dir/CI-TRIAGE-LOG-<date>.md, with product defects raised as Incident (Defect) Reports via /qa:triage.",
+    "howItWorks": [
+      "Read config; parse mode (plain vs extended) and build reference",
+      "Pull the failing set by precedence (arg URL -> configured CI -> local artifacts); state N",
+      "Triage each failure into one bucket (A test / B product / C env / D flaky)",
+      "Fix the fixable causes (A + fixable C) with the smallest trace-rooted change; confirm locally",
+      "Harden each fixed test to green \u00d73 (hard gate in extended mode)",
+      "Escalate Bucket-B product defects via /qa:triage; never mask",
+      "Report counts; in extended mode verify the full local suite"
+    ],
+    "theory": "Quality in DevOps + confirmation testing + defect management (CTFL \u00a71.4, \u00a72.2, \u00a75.5). Honesty rule = Principle 1: a defect is escalated, never masked; a green build you can't trust is worse than a red one.",
+    "istqb": "CTFL v4.0 \u00a71.4 \u00b7 \u00a72.2 \u00b7 \u00a75.5 \u00b7 \u00a76 \u00b7 Quality in DevOps (Specialist) \u00b7 CT-TAE",
+    "example": {
+      "cmd": "/qa:ci x",
+      "correctWhen": "It pulls the whole build's failures, fixes only test/env/flaky ones, reports stability as n/3 (not prose), escalates product defects instead of masking, and never commits/triggers CI unless asked."
+    },
+    "related": [
+      "fix-ci",
+      "fix-jenkins",
+      "flaky-hunt",
+      "triage"
+    ],
+    "roles": [
+      "automation"
+    ],
+    "usage": "/qa:ci ['x' or 'full' for the extended stability + full-suite gate] [build/run URL | build number | 'last']"
+  },
+  {
+    "name": "fix-ci",
+    "title": "Diagnose & fix a failing pipeline",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Diagnose one failing CI pipeline or test run, classify the root cause, and apply a safe fix without masking product defects.",
+    "whatItDoes": "Takes a single failing pipeline / pasted log, classifies it into one root-cause category (product defect / flaky / env / dependency drift / timeout / pipeline misconfig), finds the root cause not the symptom, applies a safe in-scope fix (or routes out-of-scope changes), and re-runs to confirm. Product defects go to /qa:triage, flakiness to /qa:flaky-hunt \u2014 never patched away.",
+    "when": "When the build/pipeline is red, tests fail in CI but pass locally, or the user pastes a CI log.",
+    "needs": "qa.config.yml for ci.platform, tooling.e2e, paths.reports_dir, ci.agents_docker_image, risk_areas; a log path/pasted error or a discoverable recent run.",
+    "output": "Confirmation Test Execution Log (ISO/IEC/IEEE 29119-3 Test Execution Log / Test Results) -> reports_dir/CI-FIX-LOG-<date>.md.",
+    "howItWorks": [
+      "Read config and discover the CI definition + recent results",
+      "Resolve scope from the passed log/text or the most recent results",
+      "Classify the failure into one of six root-cause categories",
+      "Find the root cause via category-specific decision rules (env diff, dependency drift, pipeline)",
+      "Apply safe in-scope fixes; ask before risky/out-of-scope changes; route product defects to triage",
+      "Run confirmation testing to prove the fix and introduce no new failures"
+    ],
+    "theory": "CI/CD + confirmation testing (CTFL \u00a76; DevOps). Routes product defects to triage rather than patching the test \u2014 Principle 1.",
+    "istqb": "CTFL v4.0 \u00a76 \u00b7 Quality in DevOps \u00b7 confirmation testing (Glossary) \u00b7 CT-TAE \u00b7 CT-ATT",
+    "example": {
+      "cmd": "/qa:fix-ci reports/ci-build-482.log",
+      "correctWhen": "It finds the root cause (env/flaky/dep/pipeline), fixes it, and explains how to verify \u2014 without masking a product defect."
+    },
+    "related": [
+      "triage",
+      "flaky-hunt",
+      "ci",
+      "fix-jenkins"
+    ],
+    "roles": [
+      "automation"
+    ],
+    "usage": "/qa:fix-ci [path to log file or pasted error]"
+  },
+  {
+    "name": "fix-jenkins",
+    "title": "Jenkins pull-and-fix",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Pull the latest Jenkins build's failed cases, fix each by root cause, and re-run only those locally until green.",
+    "whatItDoes": "Pulls every FAILED/REGRESSION case from the latest Jenkins build via the REST API (or a passed URL / local JUnit fallback), diagnoses each by root cause (test defect / flaky / env / product defect), fixes the test/flaky/env causes, and re-runs only the previously-failed set locally as confirmation testing. Real product defects are escalated via /qa:triage, never silenced.",
+    "when": "To triage and fix a red Jenkins build end-to-end.",
+    "needs": "ci.jenkins_url + ci.jenkins_job in config and JENKINS_USER/JENKINS_API_TOKEN in env \u2014 or a build URL \u2014 or local JUnit artifacts; the configured runner.",
+    "output": "Test Execution Log / Test Results (ISO/IEC/IEEE 29119-3) of the local re-run, plus Incident (Defect) Reports for escalated product defects via /qa:triage.",
+    "howItWorks": [
+      "Pull the latest Jenkins testReport by precedence (URL -> config -> local JUnit); state N failed cases",
+      "Extract only FAILED/REGRESSION cases as a numbered list with traces",
+      "Diagnose and classify each (test defect / flaky / env / product defect)",
+      "Fix the test/flaky/env causes with minimal trace-rooted changes",
+      "Re-run only the previously-failed set locally (confirmation testing), cap 3 attempts/case",
+      "Report counts; escalate product defects via triage, route flakiness to flaky-hunt"
+    ],
+    "theory": "Execution + defect management + confirmation testing (CTFL \u00a71.4, \u00a72.2, \u00a75.5). Re-running only the previously-failed set is confirmation testing by definition.",
+    "istqb": "CTFL v4.0 \u00a71.4 \u00b7 \u00a72.2 \u00b7 \u00a75.5 \u00b7 \u00a76 \u00b7 Quality in DevOps \u00b7 CT-TAE",
+    "example": {
+      "cmd": "/qa:fix-jenkins https://jenkins.acme.io/job/shopease/job/main/482/",
+      "correctWhen": "It pulls only FAILED/REGRESSION cases, fixes by root cause, re-runs those locally to green, and escalates real defects via triage."
+    },
+    "related": [
+      "flaky-hunt",
+      "triage",
+      "fix-ci",
+      "ci"
+    ],
+    "roles": [
+      "automation"
+    ],
+    "usage": "/qa:fix-jenkins [jenkins build URL | job path]"
+  },
+  {
+    "name": "flaky-hunt",
+    "title": "Hunt flaky tests",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Find flaky/non-deterministic tests, quarantine against an SLA, fix the root cause (not blind retries), and report.",
+    "whatItDoes": "Targets the suite's reliability: statically scans for flakiness anti-patterns, confirms non-determinism by measuring a flake rate over N runs, quarantines flaky tests against an SLA, fixes the root cause (web-first waits, stable locators, isolated data, mocked time/network), and verifies at 0% flake over N. Product-defect intermittency goes to /qa:triage; deep cases route on. Never masks with retries.",
+    "when": "When tests intermittently fail or the user mentions flakiness.",
+    "needs": "qa.config.yml for tooling.e2e/unit, tooling.language, paths.tests_dir/reports_dir, gates/process.* SLA, risk_areas; a test path or run count N.",
+    "output": "Flaky-Hunt report (test-maintenance work product feeding the 29119-3 Test Execution Log) -> reports_dir/FLAKY-HUNT-<date>.md, with quarantine changes reflected in the affected Test Procedures.",
+    "howItWorks": [
+      "Read config; resolve scope (default risk_areas.critical suites when empty)",
+      "Static scan for flakiness anti-patterns (hard sleeps, brittle selectors, order/shared state, unmocked time/network)",
+      "Confirm non-determinism: measure flake rate over N runs; classify deterministic/flaky/consistently-failing",
+      "Triage each flaky test as test/env vs product defect",
+      "Quarantine, fix the root cause, and verify at 0% flake over N",
+      "Apply the quarantine SLA (thresholds, owner, fix SLA) and write the report"
+    ],
+    "theory": "Test-automation maintenance & reliability (CT-TAE) targeting the suite's ISO 25010 reliability, countering the pesticide paradox (Principle 5). A false alarm destroys the signal that a failure means a defect.",
+    "istqb": "CT-TAE (Specialist) \u00b7 CTFL v4.0 \u00a76 \u00b7 ISO/IEC 25010 reliability \u00b7 Principle 5",
+    "example": {
+      "cmd": "/qa:flaky-hunt \"tests/e2e/checkout.spec.ts\"",
+      "correctWhen": "It stabilizes the root cause (waits/data/order) rather than adding blind retries."
+    },
+    "related": [
+      "self-heal",
+      "test-data",
+      "fix-ci",
+      "triage"
+    ],
+    "roles": [
+      "automation"
+    ],
+    "usage": "/qa:flaky-hunt [test path or N runs]"
+  },
+  {
+    "name": "self-heal",
+    "title": "Self-heal & maintain the suite",
+    "group": "Test execution \u2014 functional & non-functional",
+    "tagline": "Repair broken locators after UI changes, prune/refactor obsolete tests, and re-run to confirm \u2014 heals how we locate, never what we verify.",
+    "whatItDoes": "Maintains the automated test suite: detects broken locators after UI/DOM changes, classifies each failure (locator drift / product defect / flaky / intentional removal), heals drift with the most stable available locator strategy (centralized in Page Objects), prunes/refactors obsolete tests, updates approved baselines, and re-runs to confirm. Never loosens an assertion to force green; product defects go to /qa:triage.",
+    "when": "When tests break due to UI/DOM changes, or for routine suite maintenance.",
+    "needs": "qa.config.yml for tooling.e2e, tooling.visual, paths.tests_dir/reports_dir, stack.base_url_web, risk_areas; a test path/failing area or recent UI-change signals.",
+    "output": "Updated 29119-3 Test Procedure Specifications / scripts in place under tests_dir, a maintenance change log, and a Test Execution Log under reports_dir.",
+    "howItWorks": [
+      "Read config and suite signals; resolve scope (failing/UI-impacted tests, or asked target)",
+      "Run in-scope tests to surface locator failures",
+      "Classify each failure (locator drift / product defect / flaky / intentional removal)",
+      "Heal drift via the highest stable locator tier; confirm a single-element match in the Page Object",
+      "Maintain: prune/refactor obsolete tests, update approved baselines, review quarantine",
+      "Re-run healed/affected tests locally; report counts; escalate defects to triage, flake to flaky-hunt"
+    ],
+    "theory": "Test-automation maintenance (CT-TAE); maintainability is an ISO 25010 property of the testware. Counters the pesticide paradox without weakening assertions.",
+    "istqb": "CT-TAE (Specialist) \u00b7 CTFL v4.0 \u00a71.3 Principle 5 \u00b7 ISO/IEC 25010 maintainability",
+    "example": {
+      "cmd": "/qa:self-heal \"tests/pages/CheckoutPage.ts\"",
+      "correctWhen": "It heals how we locate (stable locator tiers in the Page Object), not what we verify, and escalates real product defects instead of silencing them."
+    },
+    "related": [
+      "triage",
+      "flaky-hunt",
+      "test-cases",
+      "test-design",
+      "maintenance-test"
+    ],
+    "roles": [
+      "automation"
+    ],
+    "usage": "/qa:self-heal [test path / failing area]"
+  },
+  {
+    "name": "status-report",
+    "title": "Test status (progress) report",
+    "group": "Monitoring, control & completion",
+    "tagline": "Mid-release monitoring metrics plus control actions vs the plan.",
+    "usage": "/qa:status-report <release-id>",
+    "whatItDoes": "Produces an ISTQB Test Status (Progress) Report for an in-flight release: gathers progress metrics, assigns an overall RED/YELLOW/GREEN status, and ends with corrective control recommendations. Distinct from the end-of-test Completion Report.",
+    "when": "During a sprint or release, to report testing progress and trigger corrective action (weekly or per milestone).",
+    "needs": "qa.config.yml (paths, gates, risk_areas); ideally a TEST-PLAN-<release>.md baseline plus available results.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Status Report -> docs/qa/STATUS-REPORT-<release>-<date>.md.",
+    "howItWorks": [
+      "Resolve the release and pull the Test Plan baseline",
+      "Monitor: gather test-case progress, pass rate, defect and coverage metrics",
+      "Control: recommend a corrective action with owner and date per deviation",
+      "Escalate: assign overall RED/YELLOW/GREEN by top-down thresholds",
+      "Output the Status Report with metrics tables and control recommendations"
+    ],
+    "theory": "Test monitoring (gathering data), control (corrective action) and reporting; monitoring without control is just a dashboard, the report's value is the action it mandates.",
+    "istqb": "CTFL v4.0 \u00a75.3",
+    "example": {
+      "cmd": "/qa:status-report R2.4",
+      "correctWhen": "Compares progress to the plan with metrics plus control actions (mid-release)."
+    },
+    "related": [
+      "coverage-measure",
+      "triage",
+      "release-report",
+      "go-no-go"
+    ],
+    "roles": [
+      "leader"
+    ]
+  },
+  {
+    "name": "coverage-measure",
+    "title": "Measure test coverage",
+    "group": "Monitoring, control & completion",
+    "tagline": "Measure structural, requirements and risk coverage, then name the holes.",
+    "usage": "/qa:coverage-measure [scope or path]",
+    "whatItDoes": "Quantifies how much is actually covered and where the gaps are: structural (statement/branch), test-basis/requirements, risk, and coverage-item coverage, each compared against configured gates with a PASS/FAIL verdict. Read-only.",
+    "when": "When you need to know what is under-tested, at release endgame or in a quarterly health check.",
+    "needs": "qa.config.yml (paths, tooling.unit/component, stack.api_spec_path, gates, risk_areas); a structural coverage artifact for the white-box dimension.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Status Report (coverage metric) returned as a report; no file written.",
+    "howItWorks": [
+      "Resolve scope (default to risk_areas.critical if none given)",
+      "Measure structural statement/branch coverage per module",
+      "Map requirements and API endpoints to test cases via traceability",
+      "Report risk coverage per tier and coverage-item coverage",
+      "Apply gate thresholds as PASS/FAIL and prioritize gaps by risk"
+    ],
+    "theory": "Monitoring via coverage measurement; coverage is a metric, not a target to game (absence-of-errors fallacy) and never proof of correctness.",
+    "istqb": "CTFL v4.0 \u00a75.3 \u00b7 \u00a74.3",
+    "example": {
+      "cmd": "/qa:coverage-measure checkout",
+      "correctWhen": "Reports structural plus requirements plus risk coverage and names the holes."
+    },
+    "related": [
+      "status-report",
+      "review-coverage",
+      "test-design",
+      "implement"
+    ],
+    "roles": [
+      "automation",
+      "leader"
+    ]
+  },
+  {
+    "name": "triage",
+    "title": "Defect report (severity vs priority)",
+    "group": "Monitoring, control & completion",
+    "tagline": "Classify a failure, separate severity from priority, write a proper defect report.",
+    "usage": "/qa:triage <failure, error, or bug description>",
+    "whatItDoes": "Investigates a failing test or reported bug, classifies its root location (test/env/product), assigns severity and priority independently, flags release blockers, and writes a 29119-3 Incident (Defect) Report with a unique ID. Read-only on product code.",
+    "when": "When a test fails for a real reason, or a bug is reported and needs to be filed properly.",
+    "needs": "qa.config.yml (paths.reports_dir, gates.block_on_severity, risk_areas); the failure, trace, or bug description.",
+    "output": "ISO/IEC/IEEE 29119-3 Incident (Defect) Report -> reports/defects/DEF-<item>-<nnn>.md.",
+    "howItWorks": [
+      "Investigate the failure and classify root location (test/env/product)",
+      "Assign severity from impact thresholds (S1-S4)",
+      "Assign priority independently from the affected risk tier and timing",
+      "Flag a release blocker if severity is in gates.block_on_severity",
+      "Assign a unique defect ID and write the Incident Report",
+      "Recommend the follow-up (regression test, add-test, flaky-hunt)"
+    ],
+    "theory": "Defect management following the incident lifecycle; the non-negotiable separation of severity (technical impact) from priority (business urgency) is the heart of the technique.",
+    "istqb": "CTFL v4.0 \u00a75.5",
+    "example": {
+      "cmd": "/qa:triage \"checkout returns HTTP 500 when applying an expired coupon\"",
+      "correctWhen": "Separates severity from priority and gives clear repro/expected/actual."
+    },
+    "related": [
+      "add-test",
+      "implement",
+      "regression",
+      "flaky-hunt"
+    ],
+    "roles": [
+      "manual",
+      "automation"
+    ]
+  },
+  {
+    "name": "release-report",
+    "title": "Test completion report",
+    "group": "Monitoring, control & completion",
+    "tagline": "Evaluate every gate, state residual risk, give a deterministic Ship/Hold call.",
+    "usage": "/qa:release-report <release-id>",
+    "whatItDoes": "Produces the end-of-release Test Completion Report: gathers results by level, evaluates every exit criterion against gates to PASS/FAIL, states residual risk, confirms traceability, and applies a deterministic Ship/Hold decision rule.",
+    "when": "At the end of a release, to make the final ship/hold call (after go-no-go).",
+    "needs": "qa.config.yml (paths, tooling toggles, gates, risk_areas, team); execution results in reports_dir; ideally the matching TEST-PLAN-<release>.md for exit criteria.",
+    "output": "ISO/IEC/IEEE 29119-3 Test Completion Report -> docs/qa/RELEASE-REPORT-<release>.md.",
+    "howItWorks": [
+      "Resolve the release and pull the Test Plan's Definition of Done",
+      "Gather results by enabled level, marking missing measures not run",
+      "Evaluate each exit criterion against gates as PASS/FAIL",
+      "Produce the report with residual-risk and traceability statements",
+      "Apply the deterministic Ship/Hold rule and name each failing gate",
+      "Write the report referencing raw evidence"
+    ],
+    "theory": "Test completion, the seventh process activity; residual risk is mandatory (Principle 1), you report what is not covered, never claim no defects remain.",
+    "istqb": "CTFL v4.0 \u00a71.4 \u00b7 CTAL-TM \u00b7 ISO 29119-3",
+    "example": {
+      "cmd": "/qa:release-report R2.4",
+      "correctWhen": "Evaluates exit criteria vs gates, states residual risk, and gives a ship/hold recommendation."
+    },
+    "related": [
+      "go-no-go",
+      "status-report",
+      "triage",
+      "shift-right"
+    ],
+    "roles": [
+      "leader",
+      "performance"
+    ]
+  },
+  {
+    "name": "review-pr",
+    "title": "QA review of a pull request",
+    "group": "Version control & PR quality",
+    "tagline": "Review a PR from a testing view \u2014 coverage of the diff, regression risk, testware quality, defects \u2014 then a gate-based merge call.",
+    "usage": "/qa:review-pr [PR number | PR URL | branch] (optional \u2014 defaults to the current branch's PR / diff)",
+    "whatItDoes": "Assesses whether a change is safe and well-tested: maps the diff to risk areas, checks coverage of the changed code, scopes regression, reviews added tests, and files real defects \u2014 without editing the PR's product code.",
+    "when": "Before merging a PR, when you want the testing view (not a code-style review).",
+    "needs": "qa.config.yml (tooling, paths, gates, risk_areas); the gh CLI or a local git diff vs the base branch.",
+    "output": "ISO/IEC/IEEE 29119-3 Review Report -> reports/PR-REVIEW-<id>-<date>.md, plus a merge recommendation.",
+    "howItWorks": [
+      "Resolve the change set (gh PR or local diff vs base)",
+      "Map changed areas to risk_areas tiers",
+      "Assess coverage of changed files; count uncovered",
+      "Scope regression and hand to /qa:regression",
+      "Review added testware for anti-patterns",
+      "File real defects via /qa:triage (no code edits)",
+      "Evaluate gates -> Approve / Conditions / Request changes / Block"
+    ],
+    "theory": "A test-focused static review of a change set (CTFL \u00a73) plus impact analysis (\u00a72.3) and risk-based depth (\u00a75.2). Reviews remove defects before execution, the cheapest point (Principle 3); real defects escalate via triage, never hidden (Principle 1).",
+    "istqb": "CTFL v4.0 \u00a73 \u00b7 \u00a72.3 \u00b7 \u00a75.2 \u00b7 CTAL-TA",
+    "example": {
+      "cmd": "/qa:review-pr 482",
+      "correctWhen": "It maps the diff to risk_areas, reports coverage as counts, scopes regression, files real defects via triage, and the merge call names the gates item that drives it."
+    },
+    "related": [
+      "triage",
+      "regression",
+      "review-coverage",
+      "merge-gate"
+    ],
+    "roles": [
+      "automation",
+      "leader"
+    ]
+  },
+  {
+    "name": "commit",
+    "title": "QA-gated commit",
+    "group": "Version control & PR quality",
+    "tagline": "Verify the staged change first (affected tests, lint, static review as confirmation testing), then commit with a Conventional Commits message that traces to the requirement or defect.",
+    "usage": "/qa:commit [message hint or scope] (optional)",
+    "whatItDoes": "Commits a staged change only after fast checks confirm it: runs the affected tests/lint/static review, writes a Conventional Commits message linking the change to its test basis, refuses to commit an unverified or failing change, and never pushes.",
+    "when": "When committing test or feature work and you want it verified and traceable before it lands.",
+    "needs": "qa.config.yml (tooling for the verification runner, stack); a staged change in the working tree.",
+    "output": "A verified Git commit (hash + Conventional Commits message); nothing is pushed.",
+    "howItWorks": [
+      "Read the staged diff; classify the Conventional Commits type and scope",
+      "Run affected tests / lint / static-review (resolved from tooling) as a gate",
+      "Commit only if the checks pass",
+      "Route a real product defect to /qa:triage instead of committing",
+      "Write a message tracing to the requirement/defect (Refs:/Fixes:)",
+      "Commit; never push, amend published history, or force"
+    ],
+    "theory": "Confirmation testing before integrating a change plus traceability (CTFL \u00a71.4; \u00a71.4.4; Glossary). Verifying before committing enacts Principle 1 \u2014 never integrate an unverified or defect-masking change; the traceable message keeps the basis-to-change chain intact.",
+    "istqb": "CTFL v4.0 \u00a71.4 \u00b7 \u00a71.4.4 \u00b7 Glossary (confirmation testing)",
+    "example": {
+      "cmd": "/qa:commit \"fix: expired-coupon 500\"",
+      "correctWhen": "It runs the affected tests/lint first, commits only if green, writes a Conventional Commits message tracing to the requirement/defect (Fixes: DEF-\u2026), and never pushes \u2014 a failing change routes to triage instead of being committed."
+    },
+    "related": [
+      "triage",
+      "static-review",
+      "open-pr",
+      "merge-gate"
+    ],
+    "roles": [
+      "automation",
+      "manual"
+    ]
+  },
+  {
+    "name": "open-pr",
+    "title": "Open a PR with a QA summary",
+    "group": "Version control & PR quality",
+    "tagline": "Raise a PR whose body is real QA evidence \u2014 what changed, what was tested, coverage delta, the regression set run, residual risk, and linked defects.",
+    "usage": "/qa:open-pr [base branch | PR title] (optional)",
+    "whatItDoes": "Builds a change-level test summary from the branch diff \u2014 what changed mapped to risk areas, what was tested with counts, the regression scope, residual risk, and linked defects \u2014 then opens the PR via the gh CLI on confirmation.",
+    "when": "When raising a PR and you want the QA evidence attached for reviewers to trust.",
+    "needs": "qa.config.yml (tooling, paths, risk_areas, gates); a pushed branch; the gh CLI to open the PR (else outputs the body for manual creation).",
+    "output": "Change-level ISO/IEC/IEEE 29119-3 Test Completion-style summary -> reports/PR-<head>-<date>.md, used as the PR body; the PR URL.",
+    "howItWorks": [
+      "Resolve base + head; confirm the branch is pushed (only on confirmation)",
+      "Summarize what changed and why, areas mapped to risk_areas",
+      "State what was tested \u2014 levels/suites, coverage delta, regression set",
+      "State residual risk and link defects/tickets",
+      "Assemble the PR body from the completion-report template",
+      "Open the PR via gh on confirmation (never force-push)"
+    ],
+    "theory": "Test reporting at change scope \u2014 a completion-style summary (CTFL \u00a71.4 completion; \u00a75.3 reporting; ISO/IEC/IEEE 29119-3). It carries the evidence a reviewer needs and states residual risk (Principle 1) \u2014 a change-scoped echo of the Test Completion Report.",
+    "istqb": "CTFL v4.0 \u00a71.4 \u00b7 \u00a75.3 \u00b7 ISO/IEC/IEEE 29119-3",
+    "example": {
+      "cmd": "/qa:open-pr main",
+      "correctWhen": "The PR body states what changed, what was tested (coverage delta, regression set) as counts, residual risk, and linked defects \u2014 and the PR is opened only on confirmation, never force-pushed."
+    },
+    "related": [
+      "commit",
+      "regression",
+      "triage",
+      "merge-gate"
+    ],
+    "roles": [
+      "automation",
+      "leader"
+    ]
+  },
+  {
+    "name": "merge-gate",
+    "title": "Merge gate \u2014 evaluate a PR against the quality gates",
+    "group": "Version control & PR quality",
+    "tagline": "Evaluate a PR against the project's gates \u2014 CI status, pass rate, coverage, severity blockers, security/a11y/perf \u2014 into a documented merge / hold decision. A change-scoped go/no-go that never auto-merges.",
+    "usage": "/qa:merge-gate [PR number | PR URL | branch] (optional \u2014 defaults to the current branch's PR)",
+    "whatItDoes": "Gathers PR signals (CI checks, pass rate, coverage and delta, open defects by severity, security/a11y/perf results), evaluates each configured gate PASS/FAIL/N-A with evidence, and records a MERGE / MERGE-WITH-CONDITIONS / HOLD decision with conditions and residual risk \u2014 it never merges.",
+    "when": "When deciding whether a PR is safe to merge against the quality gates.",
+    "needs": "qa.config.yml (gates thresholds, risk_areas for severity mapping, paths, tooling); the gh CLI for PR/CI signals, or supplied CI status/coverage; local reports under reports_dir.",
+    "output": "A merge gate decision record -> reports/MERGE-GATE-<id>-<date>.md with a gate table and residual risk.",
+    "howItWorks": [
+      "Resolve the PR (number/URL or current branch via gh)",
+      "Gather signals \u2014 CI status, pass rate, coverage, defects by severity, security/a11y/perf",
+      "Evaluate each gates item PASS/FAIL/N-A with evidence",
+      "Decide MERGE / MERGE WITH CONDITIONS / HOLD, naming the driver",
+      "Route severity blockers to /qa:triage, coverage holes to /qa:review-coverage, flakiness to /qa:flaky-hunt",
+      "Record the decision with conditions, residual risk, and sign-off \u2014 never auto-merge"
+    ],
+    "theory": "Exit-criteria evaluation against the configured gates plus a residual-risk statement (CTFL \u00a75.3 monitoring, control & exit criteria; CTAL-TM release-decision practice). It is go/no-go at change scope \u2014 the same discipline as /qa:go-no-go applied per PR; severity (not priority) drives blockers (Principle 1).",
+    "istqb": "CTFL v4.0 \u00a75.3 \u00b7 CTAL-TM",
+    "example": {
+      "cmd": "/qa:merge-gate 482",
+      "correctWhen": "Every gates item is marked PASS/FAIL/N-A with evidence, severity (not priority) drives the blocker check, the verdict names the failing gate, and it records a recommendation rather than auto-merging."
+    },
+    "related": [
+      "review-pr",
+      "go-no-go",
+      "triage",
+      "review-coverage"
+    ],
+    "roles": [
+      "leader",
+      "manager",
+      "automation"
+    ]
+  },
+  {
+    "name": "genai-assist",
+    "title": "GenAI-assisted testing",
+    "group": "AI-assisted & reference",
+    "tagline": "Use generative AI to accelerate test work under CT-GenAI safeguards: human oversight and privacy.",
+    "usage": "/qa:genai-assist <task, e.g. 'generate test ideas for checkout'>",
+    "whatItDoes": "Uses GenAI to speed up testing tasks (test ideas, synthetic test data, case drafting, summaries, failure explanations, doc drafts), producing an AI-DRAFT artifact that a tester must verify before trusting. Applies the two non-negotiable CT-GenAI safeguards: mandatory human review of every output and privacy protection (never send real PII, production data, or secrets to an external model).",
+    "when": "When you want to accelerate a test task with AI while keeping human oversight and protecting sensitive data.",
+    "needs": "qa.config.yml (paths.docs_dir/tests_dir, risk_areas, stack.api_spec_path, gates, test_data.strategy/sensitive_data_rule). Run /qa:qa-init first if missing.",
+    "output": "GenAI-assisted testing draft -> <paths.docs_dir>/GENAI-ASSIST-<category>.md. A supporting input to an ISO/IEC/IEEE 29119-3 work product, never a finalized one (it is an unverified AI draft pending human review).",
+    "howItWorks": [
+      "Config guard: stop if qa.config.yml is none",
+      "Resolve task and classify into one category (test-ideas/test-data/test-cases/summarize/explain-failure/doc-draft); default empty input to test-ideas on critical risk areas",
+      "Apply the privacy safeguard before generating: honor sensitive_data_rule, synthetic only, escalate if real data seems required",
+      "Ground generation in the project test basis (OpenAPI, requirements, existing tests), concentrating on critical then high risk",
+      "Generate the artifact with every item marked AI-DRAFT and tied to a test basis reference/technique",
+      "Quality-control for CT-GenAI failure modes: hallucination, missing context/over-reliance, bias/gaps, runnability",
+      "Human-in-the-loop handoff: compile a Human-must-verify checklist with counts; route defects to /qa:triage, cases to /qa:test-design or /qa:implement"
+    ],
+    "theory": "CT-GenAI (Testing with Generative AI, Specialist) \u2014 every GenAI output is an unverified draft (Principle 1 applied to the AI itself); mandatory human oversight and privacy protection are the syllabus non-negotiables.",
+    "istqb": "CT-GenAI (Specialist) \u00b7 ISTQB Principle 1 \u00b7 Principle 4",
+    "example": {
+      "cmd": "/qa:genai-assist \"generate test ideas for guest checkout\"",
+      "correctWhen": "It applies CT-GenAI safeguards: a human-review prompt, no real PII, and output labeled for verification."
+    },
+    "related": [
+      "ai-test",
+      "test-design",
+      "test-cases",
+      "test-data",
+      "exploratory",
+      "triage"
+    ],
+    "roles": [
+      "manual",
+      "automation"
+    ]
+  },
+  {
+    "name": "istqb-coach",
+    "title": "On-demand ISTQB reference and coach",
+    "group": "AI-assisted & reference",
+    "tagline": "Explain or apply any ISTQB concept, technique, term, or process, then route you to the command that does it.",
+    "usage": "/qa:istqb-coach <ISTQB concept, technique, term, or question>",
+    "whatItDoes": "Acts as a built-in, interactive ISTQB reference: explains a concept accurately using Glossary terminology, applies it to this project's config (stack, OpenAPI endpoints, risk_areas, tooling), and routes you to the sibling /qa:* command that operationalizes it. Advisory only \u2014 it teaches and routes; the other commands do the work. Optionally writes a concept note when asked.",
+    "when": "When you want to learn a technique, check a definition, or figure out how to test something the ISTQB way.",
+    "needs": "qa.config.yml for project-specific worked examples (degrades to a representative example if none). Optional WebSearch to confirm against official sources.",
+    "output": "An explanation plus command routing inline; optional concept note -> <paths.docs_dir>/ISTQB-COACH-<concept>.md only when explicitly asked to save it.",
+    "howItWorks": [
+      "Resolve the input: if arguments are empty, print a topic menu and wait rather than guess",
+      "Explain the concept/technique/term accurately using ISTQB Glossary terminology, citing a section only when traceable in the toolkit docs",
+      "Apply it to this project's config with a concrete worked example (real endpoint, parameter, or risk area)",
+      "Route to the sibling /qa:* command that operationalizes the concept (concept-to-command matrix, ISTQB-COMPLIANCE \u00a713)",
+      "Confirm against official sources via WebSearch when the topic is newer, ambiguous, or not traceable",
+      "Optionally write a concept note only if the request asks to save it"
+    ],
+    "theory": "The ISTQB Glossary plus the syllabus body of knowledge (CTFL v4.0 + Advanced/Specialist) made interactive \u2014 the in-toolkit teacher that makes the other commands learnable; reference guidance only, with the actual testing evidenced in the routed command (Principle 1).",
+    "istqb": "ISTQB Glossary + syllabus body of knowledge (CTFL v4.0/v4.0.1 + Advanced/Specialist)",
+    "example": {
+      "cmd": "/qa:istqb-coach \"boundary value analysis\"",
+      "correctWhen": "It explains BVA (2-value/3-value) with an example and points you to /qa:test-design to apply it."
+    },
+    "related": [
+      "test-design",
+      "test-cases",
+      "combinatorial",
+      "risk-assessment",
+      "static-review",
+      "exploratory",
+      "triage"
+    ],
+    "roles": [
+      "manual",
+      "automation",
+      "performance",
+      "leader",
+      "manager"
+    ]
+  }
+]

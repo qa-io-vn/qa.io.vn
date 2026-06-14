@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:scan-ui — Discover a running UI into page objects and test cases · QA Toolkit</title>
+<meta name="description" content="Deep-dive a web UI to extract stable locators and actions into page objects, then generate cases covering every element and flow.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#38bdf8">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#test-automation-by-surface">Test automation by surface</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>scan-ui</h1>
+<p class="ctitle reveal">Discover a running UI into page objects and test cases</p>
+<p class="standfirst reveal">Deep-dive a web UI to extract stable locators and actions into page objects, then generate cases covering every element and flow.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:scan-ui &lt;url or page/flow&gt; [auth role]</code></div>
+<div class="meta-row reveal"><span>Test automation by surface</span><span>CTFL v4.0 §1.4 · §4 · CT-TAE (POM) · ISO/IEC/IEEE 29119-3</span><span>Automation</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Crawls a running UI (bounded to base_url_web origin, capped at 10 pages), extracts every interactive element with its role/name/test-id and state, derives the most stable locator and action per element, writes/extends Page Object classes (assertions kept in specs), and generates test cases covering presence/state, actions, input validation (EP/BVA), navigation, and negative paths. Marks expected results not derivable from the UI as TODO and reports element coverage as counts.</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>To bootstrap or expand UI automation from a running app — discovering elements into page objects and covering cases.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml; running app + stack.base_url_web; E2E framework present (tooling.e2e via scaffold); test-case-template.md; optional saved storageState per role.</p></div>
+<div class="ov-card"><h3>Output</h3><p>Test Procedure Specification (page objects under paths.tests_dir/pages/ + specs under e2e/) and a Test Case Specification doc at docs/UI-SCAN-&lt;target&gt;.md + a counts coverage summary; temp _scan/ probe removed.</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Guard config and resolve the target (URL / page-flow / auth role)</li><li>Run a temporary exploration script to discover every interactive element</li><li>Choose the most stable locator and infer the action(s) per element</li><li>Generate or extend Page Object files, reusing existing POMs</li><li>Derive conditions and generate covering test cases with EP/BVA</li><li>Mark non-derivable expected results TODO: confirm with requirements</li><li>Output page objects, the cases doc, and a coverage summary</li><li>Run smoke specs, remove the _scan/ probe, then hand off</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>Test analysis and design using the running UI as the test basis, implemented with the Page Object Model; POM is the maintainability pattern (ISO 25010) that keeps UI tests from rotting; oracle caveat — the scanner knows what exists, not always the correct business outcome.</p><p class="istqb-tag">CTFL v4.0 §1.4 · §4 · CT-TAE (POM) · ISO/IEC/IEEE 29119-3</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>scan-ui</span></div><pre><span class="p">&gt; /qa:scan-ui http://localhost:3000/checkout</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> Every interactive element gets a stable locator and at least one covering case, and the temp probe is removed.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="web-automate.html">/qa:web-automate</a><a class="chip" href="self-heal.html">/qa:self-heal</a><a class="chip" href="test-cases.html">/qa:test-cases</a><a class="chip" href="scaffold.html">/qa:scaffold</a><a class="chip" href="tool-select.html">/qa:tool-select</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-automation" href="../automation-tester.html">Automation</a></div></div></div><nav class="prevnext"><a class="pn prev" href="api-automate.html"><span>&larr; Prev</span><b>/qa:api-automate</b></a><a class="pn allc" href="index.html">All commands</a><a class="pn next" href="web-automate.html"><span>Next &rarr;</span><b>/qa:web-automate</b></a></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

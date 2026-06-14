@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:perf-test — K6 performance test · QA Toolkit</title>
+<meta name="description" content="Script (and optionally run) a K6 load/stress/spike/soak test with pass/fail thresholds from config gates.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#f0b03c">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#test-execution-functional-non-functional">Test execution — functional &amp; non-functional</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>perf-test</h1>
+<p class="ctitle reveal">K6 performance test</p>
+<p class="standfirst reveal">Script (and optionally run) a K6 load/stress/spike/soak test with pass/fail thresholds from config gates.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:perf-test &lt;endpoint or journey&gt; [load|stress|spike|soak]</code></div>
+<div class="meta-row reveal"><span>Test execution — functional &amp; non-functional</span><span>CT-PT (Specialist) · ISO/IEC 25010 performance efficiency / reliability · CTFL v4.0 §2.2.2</span><span>Performance</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Builds an executable K6 performance script for an endpoint or journey, encodes the response-time/error-rate/throughput SLAs from qa.config.yml as run-failing thresholds, and optionally smoke-runs it against a non-prod target. Tests ISO/IEC 25010 performance efficiency (and reliability for soak).</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>After /qa:perf-plan defines the workload model and SLAs, to execute load, stress, spike, or soak testing.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml with tooling.performance: k6 and gates.performance SLAs; a non-prod target if running; ideally a PERF-PLAN-*.md for the workload model.</p></div>
+<div class="ov-card"><h3>Output</h3><p>ISO/IEC/IEEE 29119-3 Test Execution Log (K6 JSON summary) under paths.reports_dir, plus the K6 Test Procedure under paths.tests_dir/performance/.</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Read config; gate that tooling.performance is k6</li><li>Resolve target/type from arguments (default load; default target to risk_areas.critical)</li><li>Derive workload model from PERF-PLAN-*.md or gates.performance</li><li>Build the K6 script with per-type stages (load/stress/spike/soak)</li><li>Encode gates.performance SLAs as options.thresholds so a breach fails the run</li><li>Wire the runner and JSON summary export</li><li>Optionally smoke-run against non-prod and report p95/p99/error-rate vs thresholds</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>Performance testing execution (CT-PT Specialist). Thresholds-as-gates make performance efficiency (and soak reliability) objectively pass/fail, not subjective.</p><p class="istqb-tag">CT-PT (Specialist) · ISO/IEC 25010 performance efficiency / reliability · CTFL v4.0 §2.2.2</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>perf-test</span></div><pre><span class="p">&gt; /qa:perf-test "/checkout" load</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> Thresholds equal the gates (p95 &lt;= 500ms, p99 &lt;= 1000ms, error &lt;= 1%, 100 rps) and the build fails if breached.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="perf-plan.html">/qa:perf-plan</a><a class="chip" href="dynamic-analysis.html">/qa:dynamic-analysis</a><a class="chip" href="nonfunctional.html">/qa:nonfunctional</a><a class="chip" href="status-report.html">/qa:status-report</a><a class="chip" href="release-report.html">/qa:release-report</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-performance" href="../performance-tester.html">Performance</a></div></div></div><nav class="prevnext"><span></span><a class="pn allc" href="index.html">All commands</a><a class="pn next" href="a11y-audit.html"><span>Next &rarr;</span><b>/qa:a11y-audit</b></a></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

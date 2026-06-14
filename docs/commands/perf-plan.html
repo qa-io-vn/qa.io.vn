@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:perf-plan — Performance test planning (objectives, SLAs, workload model) · QA Toolkit</title>
+<meta name="description" content="Plan performance testing before scripting: objectives, SLAs, operational profile, workload model, test types, entry/exit — risk-driven.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#38bdf8">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#test-automation-by-surface">Test automation by surface</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>perf-plan</h1>
+<p class="ctitle reveal">Performance test planning (objectives, SLAs, workload model)</p>
+<p class="standfirst reveal">Plan performance testing before scripting: objectives, SLAs, operational profile, workload model, test types, entry/exit — risk-driven.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:perf-plan [release / system area]</code></div>
+<div class="meta-row reveal"><span>Test automation by surface</span><span>CT-PT · ISO/IEC/IEEE 29119-3 (Test Plan) · CTFL v4.0 §5.2 · ISO/IEC 25010</span><span>Performance</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Produces a performance test plan (29119-3 Test Plan, performance scope) with objectives tied to risks/SLAs, acceptance criteria carrying gates.performance values verbatim as pass/fail rules, an operational profile and workload model (transaction mix, volumes, concurrency, think-times, arrival pattern), the test types to run (load/stress/spike/soak/capacity), a non-prod system and data choice, a risk-to-workload traceability register, measurable entry/exit criteria, schedule, and metrics. Precedes scripting in perf-test.</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>Before scripting load tests — to set objectives and SLAs and model the operational profile so perf-test enforces a tested requirement, not just a number.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml (paths, gates.performance, risk_areas, environments, test_data, tooling.performance); plan-template.md for document structure.</p></div>
+<div class="ov-card"><h3>Output</h3><p>ISO/IEC/IEEE 29119-3 Test Plan (performance scope) -&gt; docs/PERF-PLAN-&lt;scope&gt;.md (paths.docs_dir).</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Guard config and resolve scope (default risk_areas.critical)</li><li>State objectives, one per question, tied to a risk or SLA</li><li>Carry gates.performance SLAs verbatim as pass/fail rules</li><li>Model the operational profile and workload (mix, concurrency, arrival)</li><li>Select the performance test types and justify each by risk/objective</li><li>Pick a non-prod environment and production-scale data; require APM</li><li>Build the bidirectional risk-to-workload traceability register</li><li>Set measurable entry/exit criteria, schedule, and metrics</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>CT-PT planning in the 29119-3 Test Plan shape, risk-driven (risk-based testing), targeting performance efficiency (ISO/IEC 25010); planning first turns 'a number' into a tested requirement.</p><p class="istqb-tag">CT-PT · ISO/IEC/IEEE 29119-3 (Test Plan) · CTFL v4.0 §5.2 · ISO/IEC 25010</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>perf-plan</span></div><pre><span class="p">&gt; /qa:perf-plan "checkout"</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> It sets objectives/SLAs from gates.performance and a workload model (operational profile), feeding perf-test.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="perf-test.html">/qa:perf-test</a><a class="chip" href="mobile-automate.html">/qa:mobile-automate</a><a class="chip" href="automation-strategy.html">/qa:automation-strategy</a><a class="chip" href="risk-assessment.html">/qa:risk-assessment</a><a class="chip" href="nonfunctional.html">/qa:nonfunctional</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-performance" href="../performance-tester.html">Performance</a></div></div></div><nav class="prevnext"><a class="pn prev" href="mobile-automate.html"><span>&larr; Prev</span><b>/qa:mobile-automate</b></a><a class="pn allc" href="index.html">All commands</a><span></span></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

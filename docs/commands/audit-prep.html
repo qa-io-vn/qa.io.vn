@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:audit-prep — Audit &amp; compliance readiness · QA Toolkit</title>
+<meta name="description" content="Assemble an audit-readiness evidence pack — documentation completeness, traceability sample-checks, standards conformance, and a severity-ordered gap list.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#5da9f2">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#test-planning-management">Test planning &amp; management</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>audit-prep</h1>
+<p class="ctitle reveal">Audit &amp; compliance readiness</p>
+<p class="standfirst reveal">Assemble an audit-readiness evidence pack — documentation completeness, traceability sample-checks, standards conformance, and a severity-ordered gap list.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:audit-prep [standard / release / scope]</code></div>
+<div class="meta-row reveal"><span>Test planning &amp; management</span><span>CTFL v4.0 §1.4.4 · ISO/IEC/IEEE 29119-3</span><span>Test Manager</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Confirms the expected 29119-3 work products exist and are current, sample-checks the bidirectional traceability chain (at least one per critical risk area), assesses ISTQB/ISO 29119 process conformance, verifies retained execution evidence and sign-offs, and lists every gap with a severity, remediation, and owner. It alters no existing record — only the readiness report.</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>Before an internal or external audit or compliance review.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml — paths, tooling toggles, gates, risk_areas (assumes conservative defaults if missing). Reads existing QA docs and standards references (ISTQB-COMPLIANCE.md / ISTQB-AUDIT.md).</p></div>
+<div class="ov-card"><h3>Output</h3><p>Audit-readiness evidence pack over the 29119-3 work product set (no dedicated 29119-3 template) -&gt; &lt;paths.docs_dir&gt;/AUDIT-READINESS-&lt;scope&gt;.md.</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Config guard; resolve scope from args or default to ISTQB/ISO 29119-3 conformance on risk_areas.critical</li><li>Check documentation completeness: each work product present / present-but-outdated / missing</li><li>Sample-check the bidirectional traceability chain (≥1 per critical area, min 3); mark intact or break</li><li>Assess ISTQB / ISO 29119 process conformance per activity (conformant/partial/non-conformant)</li><li>Confirm retained execution evidence, sign-offs, env/config management, defect lifecycle</li><li>List severity-ordered gaps with remediation and owners; write the evidence pack</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>Test documentation, traceability &amp; conformance evidence (CTFL §1.4.4; ISO/IEC/IEEE 29119-3). Auditability rests on bidirectional traceability being intact and work products being named to the standard; the pass names what it does NOT cover (unsampled chains) rather than implying audit-ready certainty (Principle 1).</p><p class="istqb-tag">CTFL v4.0 §1.4.4 · ISO/IEC/IEEE 29119-3</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>audit-prep</span></div><pre><span class="p">&gt; /qa:audit-prep "ISO-29119"</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> It assembles a traceability + evidence pack and flags conformance gaps by severity.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="review-coverage.html">/qa:review-coverage</a><a class="chip" href="release-report.html">/qa:release-report</a><a class="chip" href="go-no-go.html">/qa:go-no-go</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-manager" href="../test-manager.html">Test Manager</a></div></div></div><nav class="prevnext"><a class="pn prev" href="cost-of-quality.html"><span>&larr; Prev</span><b>/qa:cost-of-quality</b></a><a class="pn allc" href="index.html">All commands</a><span></span></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

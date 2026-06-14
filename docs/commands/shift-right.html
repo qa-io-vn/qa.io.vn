@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:shift-right — Testing in production (shift-right) · QA Toolkit</title>
+<meta name="description" content="Verify quality in the live environment safely — synthetic monitoring, SLO checks, canary/A-B and feature-flag validation, post-deploy smoke.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#4fd1c5">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#test-levels-change-related-testing">Test levels &amp; change-related testing</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>shift-right</h1>
+<p class="ctitle reveal">Testing in production (shift-right)</p>
+<p class="standfirst reveal">Verify quality in the live environment safely — synthetic monitoring, SLO checks, canary/A-B and feature-flag validation, post-deploy smoke.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:shift-right [feature / journey]</code></div>
+<div class="meta-row reveal"><span>Test levels &amp; change-related testing</span><span>Quality in DevOps (Specialist) · ISO/IEC/IEEE 29119-3 Production Verification Report</span><span>Performance · Automation · Test Leader</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Designs production-safe synthetic checks, SLIs/SLOs, and progressive-delivery validation (canary/A-B/flags), evaluates production health, and records a promote/hold/roll-back verdict.</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>When verifying quality in the live environment that pre-release testing cannot fully reach; post-deploy.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml; live environment access; paths.*; tooling.* (e2e/api); gates (SLO thresholds); risk_areas; environments; team (approvers).</p></div>
+<div class="ov-card"><h3>Output</h3><p>ISO/IEC/IEEE 29119-3 Production Verification Report -&gt; paths.reports_dir/production-verification-&lt;scope&gt;.md, plus synthetic-check scripts under paths.tests_dir.</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Resolve scope to the risk_areas.critical journeys (or the named feature/journey)</li><li>Define synthetic checks / post-deploy smoke per journey against production-safe endpoints</li><li>Define SLIs and SLOs, deriving thresholds from gates and verifying telemetry exposes each signal</li><li>Validate progressive delivery: canary promotion/rollback criteria, A/B guardrails, feature-flag kill-switch</li><li>Evaluate production health (healthy/degraded/roll back) and record a promote/hold/roll-back decision</li><li>Preserve the risk-area -&gt; check -&gt; SLI/SLO -&gt; result traceability and state production residual risk</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>Testing in production / continuous testing (Quality in DevOps). Extends coverage to real conditions but explicitly complements, never replaces, shift-left testing (Principle 3). Done safely: read-only, synthetic data, no load/destructive tests against production.</p><p class="istqb-tag">Quality in DevOps (Specialist) · ISO/IEC/IEEE 29119-3 Production Verification Report</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>shift-right</span></div><pre><span class="p">&gt; /qa:shift-right "checkout"</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> It defines synthetic monitors, observability checks, and canary/feature-flag validation for production.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="dynamic-analysis.html">/qa:dynamic-analysis</a><a class="chip" href="release-report.html">/qa:release-report</a><a class="chip" href="triage.html">/qa:triage</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-performance" href="../performance-tester.html">Performance</a><a class="chip role-automation" href="../automation-tester.html">Automation</a><a class="chip role-leader" href="../test-leader.html">Test Leader</a></div></div></div><nav class="prevnext"><a class="pn prev" href="dynamic-analysis.html"><span>&larr; Prev</span><b>/qa:dynamic-analysis</b></a><a class="pn allc" href="index.html">All commands</a><span></span></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

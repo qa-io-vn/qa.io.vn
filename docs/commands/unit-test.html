@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:unit-test — Component (unit) testing · QA Toolkit</title>
+<meta name="description" content="Design or strengthen tests at the lowest level — isolation, test doubles, and statement/branch coverage targets driven by risk.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#4fd1c5">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#test-levels-change-related-testing">Test levels &amp; change-related testing</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>unit-test</h1>
+<p class="ctitle reveal">Component (unit) testing</p>
+<p class="standfirst reveal">Design or strengthen tests at the lowest level — isolation, test doubles, and statement/branch coverage targets driven by risk.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:unit-test &lt;module / component / file&gt;</code></div>
+<div class="meta-row reveal"><span>Test levels &amp; change-related testing</span><span>CTFL v4.0 §2.2 · §4.2 · §4.3</span><span>Automation · Manual</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Designs, reviews, and strengthens developer-owned component tests in isolation, derives cases with black-box plus white-box techniques, and measures statement/branch coverage.</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>When you need unit/component test guidance and structural coverage at the component level; before or during development of a unit.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml; a unit runner from tooling.unit (or inferred from package.json and confirmed); paths.tests_dir; risk_areas to set the coverage target.</p></div>
+<div class="ov-card"><h3>Output</h3><p>Component test procedures / automated test scripts (ISO/IEC/IEEE 29119-3 Test Procedure Specification) plus a statement/branch coverage report, under paths.tests_dir.</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Read config and resolve the unit runner from tooling.unit</li><li>Resolve the target component from arguments (or default to risk_areas.critical)</li><li>Test the unit in isolation using test doubles (stubs/mocks/fakes)</li><li>Derive cases with black-box (EP, BVA, decision table) and white-box statement/branch coverage</li><li>Set the coverage target from risk_areas (branch for critical, statement floor otherwise)</li><li>Implement/extend tests, run with coverage enabled, report counts and remaining gaps</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>The component test level (CTFL §2.2). Cases from black-box techniques (§4.2) plus white-box statement/branch coverage (§4.3) — the level where white-box coverage is meaningful. Coverage is a guardrail, not a vanity metric (Principle 7).</p><p class="istqb-tag">CTFL v4.0 §2.2 · §4.2 · §4.3</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>unit-test</span></div><pre><span class="p">&gt; /qa:unit-test "src/pricing/discount.ts"</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> It targets statement/branch coverage with test doubles and isolates the unit.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="coverage-measure.html">/qa:coverage-measure</a><a class="chip" href="integration-test.html">/qa:integration-test</a><a class="chip" href="implement.html">/qa:implement</a><a class="chip" href="add-test.html">/qa:add-test</a><a class="chip" href="static-review.html">/qa:static-review</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-automation" href="../automation-tester.html">Automation</a><a class="chip role-manual" href="../manual-tester.html">Manual</a></div></div></div><nav class="prevnext"><span></span><a class="pn allc" href="index.html">All commands</a><a class="pn next" href="integration-test.html"><span>Next &rarr;</span><b>/qa:integration-test</b></a></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

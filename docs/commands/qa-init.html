@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:qa-init — Generate the project QA config · QA Toolkit</title>
+<meta name="description" content="Interview you and generate the per-project qa.config.yml — the single file every other /qa command reads.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#5da9f2">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#test-planning-management">Test planning &amp; management</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>qa-init</h1>
+<p class="ctitle reveal">Generate the project QA config</p>
+<p class="standfirst reveal">Interview you and generate the per-project qa.config.yml — the single file every other /qa command reads.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:qa-init</code></div>
+<div class="meta-row reveal"><span>Test planning &amp; management</span><span>CTFL v4.0 §1.4 · §5.1</span><span>Test Leader · Test Manager · Automation · Manual</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Detects project signals (package manifest, API spec, CI files, test dirs), asks you for what it cannot infer, validates against the template schema, then writes qa.config.yml at the repo root. It seeds the context — stack, tooling toggles, CI, gates, risk areas — that every later planning artifact consumes.</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>First thing in any new project; re-run to refresh the config. Most other commands degrade to 'create qa.config.yml first' without it.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>Nothing — it creates the config. Reads detected signals (package.json, openapi/swagger, CI files, test dirs).</p></div>
+<div class="ov-card"><h3>Output</h3><p>Project test-context configuration (29119-3 context input that feeds the Organizational Test Strategy and Test Plan) -&gt; ./qa.config.yml.</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Detect project signals from manifests, API spec, CI files, test dirs</li><li>Pre-fill stack/CI/spec path/test dir from those signals</li><li>Interview the user (grouped questions) for anything not inferable</li><li>Run pre-write validation: schema match, valid YAML, no invented values, mandatory minimum</li><li>Emit a readiness checklist (populated vs TBD per section)</li><li>Write ./qa.config.yml and a structured summary with counts and next steps</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>Realizes the first step of the ISTQB test-planning activity — establishing project context (CTFL v4.0 §1.4). The config is the ISO/IEC/IEEE 29119-3 context input every downstream work product reads, which turns Principle 6 (testing is context-dependent) into an engineering mechanism: identical commands behave per-project because only the config differs.</p><p class="istqb-tag">CTFL v4.0 §1.4 · §5.1</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>qa-init</span></div><pre><span class="p">&gt; /qa:qa-init</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> qa.config.yml exists at repo root with your real project, stack, tooling, gates, and risk_areas filled in (not generic defaults).</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="create-strategy.html">/qa:create-strategy</a><a class="chip" href="scaffold.html">/qa:scaffold</a><a class="chip" href="test-policy.html">/qa:test-policy</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-leader" href="../test-leader.html">Test Leader</a><a class="chip role-manager" href="../test-manager.html">Test Manager</a><a class="chip role-automation" href="../automation-tester.html">Automation</a><a class="chip role-manual" href="../manual-tester.html">Manual</a></div></div></div><nav class="prevnext"><span></span><a class="pn allc" href="index.html">All commands</a><a class="pn next" href="test-policy.html"><span>Next &rarr;</span><b>/qa:test-policy</b></a></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

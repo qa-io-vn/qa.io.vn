@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:cost-of-quality — Cost of Quality &amp; QA ROI · QA Toolkit</title>
+<meta name="description" content="Analyze Cost of Quality and automation ROI — prevention/appraisal/failure costs, cost of poor quality, and payback — to justify the QA budget.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#5da9f2">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#test-planning-management">Test planning &amp; management</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>cost-of-quality</h1>
+<p class="ctitle reveal">Cost of Quality &amp; QA ROI</p>
+<p class="standfirst reveal">Analyze Cost of Quality and automation ROI — prevention/appraisal/failure costs, cost of poor quality, and payback — to justify the QA budget.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:cost-of-quality [scope / period]</code></div>
+<div class="meta-row reveal"><span>Test planning &amp; management</span><span>CTAL-TM · CTFL v4.0 §1 (cost of defects)</span><span>Test Manager</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Builds a Cost of Quality model splitting prevention / appraisal / internal-failure / external-failure costs, estimates the cost of poor quality from defect/incident data, computes automation one-time vs recurring cost vs saving with a payback period and break-even, and makes a prioritized investment business case. Uses real figures only, labeling missing inputs as placeholders.</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>For QA economics and business cases — justifying or sizing the QA budget. Advisory; flag for human/finance review before budget decisions.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml recommended (risk tiers, tooling, environments, process.release_cadence, gates); proceeds with stated assumptions if missing. Reads defect/incident/automation baseline signals.</p></div>
+<div class="ov-card"><h3>Output</h3><p>Test-economics / value-of-testing input to the 29119-3 Organizational Test Strategy / Policy / Test Plan (not itself a 29119-3 document) -&gt; &lt;paths.docs_dir&gt;/COST-OF-QUALITY-&lt;scope&gt;.md.</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>List assumptions and data completeness first; label each input actual/estimated/(placeholder)</li><li>Build the CoQ model: prevention/appraisal/internal-failure/external-failure as ranges</li><li>Estimate cost of poor quality from defect/incident data over the period</li><li>Compute automation ROI: one-time vs recurring cost vs saving</li><li>Derive payback period and break-even with the cycle assumption stated</li><li>Make a prioritized business case tied to CoQ categories and expected reductions</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>Value of testing &amp; test economics (CTAL-TM), grounded in the cost-of-defects/shift-left rationale (Principle 3): defects get exponentially more expensive the later they are caught, which funds prevention. Costs are ranges with stated confidence (Principle 1 — a cost model is a forecast, not an audited statement).</p><p class="istqb-tag">CTAL-TM · CTFL v4.0 §1 (cost of defects)</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>cost-of-quality</span></div><pre><span class="p">&gt; /qa:cost-of-quality "2026 automation programme"</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> It splits prevention/appraisal/failure costs and shows automation ROI/payback with the cycle assumption stated.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="process-improvement.html">/qa:process-improvement</a><a class="chip" href="quality-report.html">/qa:quality-report</a><a class="chip" href="risk-assessment.html">/qa:risk-assessment</a><a class="chip" href="automation-strategy.html">/qa:automation-strategy</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-manager" href="../test-manager.html">Test Manager</a></div></div></div><nav class="prevnext"><a class="pn prev" href="go-no-go.html"><span>&larr; Prev</span><b>/qa:go-no-go</b></a><a class="pn allc" href="index.html">All commands</a><a class="pn next" href="audit-prep.html"><span>Next &rarr;</span><b>/qa:audit-prep</b></a></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

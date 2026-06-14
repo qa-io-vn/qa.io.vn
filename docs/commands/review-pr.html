@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:review-pr — QA review of a pull request · QA Toolkit</title>
+<meta name="description" content="Review a PR from a testing view — coverage of the diff, regression risk, testware quality, defects — then a gate-based merge call.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#f4654f">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#version-control-pr-quality">Version control &amp; PR quality</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>review-pr</h1>
+<p class="ctitle reveal">QA review of a pull request</p>
+<p class="standfirst reveal">Review a PR from a testing view — coverage of the diff, regression risk, testware quality, defects — then a gate-based merge call.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:review-pr [PR number | PR URL | branch] (optional — defaults to the current branch's PR / diff)</code></div>
+<div class="meta-row reveal"><span>Version control &amp; PR quality</span><span>CTFL v4.0 §3 · §2.3 · §5.2 · CTAL-TA</span><span>Automation · Test Leader</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Assesses whether a change is safe and well-tested: maps the diff to risk areas, checks coverage of the changed code, scopes regression, reviews added tests, and files real defects — without editing the PR's product code.</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>Before merging a PR, when you want the testing view (not a code-style review).</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml (tooling, paths, gates, risk_areas); the gh CLI or a local git diff vs the base branch.</p></div>
+<div class="ov-card"><h3>Output</h3><p>ISO/IEC/IEEE 29119-3 Review Report -&gt; reports/PR-REVIEW-&lt;id&gt;-&lt;date&gt;.md, plus a merge recommendation.</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Resolve the change set (gh PR or local diff vs base)</li><li>Map changed areas to risk_areas tiers</li><li>Assess coverage of changed files; count uncovered</li><li>Scope regression and hand to /qa:regression</li><li>Review added testware for anti-patterns</li><li>File real defects via /qa:triage (no code edits)</li><li>Evaluate gates -&gt; Approve / Conditions / Request changes / Block</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>A test-focused static review of a change set (CTFL §3) plus impact analysis (§2.3) and risk-based depth (§5.2). Reviews remove defects before execution, the cheapest point (Principle 3); real defects escalate via triage, never hidden (Principle 1).</p><p class="istqb-tag">CTFL v4.0 §3 · §2.3 · §5.2 · CTAL-TA</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>review-pr</span></div><pre><span class="p">&gt; /qa:review-pr 482</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> It maps the diff to risk_areas, reports coverage as counts, scopes regression, files real defects via triage, and the merge call names the gates item that drives it.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="triage.html">/qa:triage</a><a class="chip" href="regression.html">/qa:regression</a><a class="chip" href="review-coverage.html">/qa:review-coverage</a><a class="chip" href="merge-gate.html">/qa:merge-gate</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-automation" href="../automation-tester.html">Automation</a><a class="chip role-leader" href="../test-leader.html">Test Leader</a></div></div></div><nav class="prevnext"><span></span><a class="pn allc" href="index.html">All commands</a><a class="pn next" href="commit.html"><span>Next &rarr;</span><b>/qa:commit</b></a></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

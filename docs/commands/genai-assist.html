@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:genai-assist — GenAI-assisted testing · QA Toolkit</title>
+<meta name="description" content="Use generative AI to accelerate test work under CT-GenAI safeguards: human oversight and privacy.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#e879c7">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#ai-assisted-reference">AI-assisted &amp; reference</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>genai-assist</h1>
+<p class="ctitle reveal">GenAI-assisted testing</p>
+<p class="standfirst reveal">Use generative AI to accelerate test work under CT-GenAI safeguards: human oversight and privacy.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:genai-assist &lt;task, e.g. 'generate test ideas for checkout'&gt;</code></div>
+<div class="meta-row reveal"><span>AI-assisted &amp; reference</span><span>CT-GenAI (Specialist) · ISTQB Principle 1 · Principle 4</span><span>Manual · Automation</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Uses GenAI to speed up testing tasks (test ideas, synthetic test data, case drafting, summaries, failure explanations, doc drafts), producing an AI-DRAFT artifact that a tester must verify before trusting. Applies the two non-negotiable CT-GenAI safeguards: mandatory human review of every output and privacy protection (never send real PII, production data, or secrets to an external model).</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>When you want to accelerate a test task with AI while keeping human oversight and protecting sensitive data.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml (paths.docs_dir/tests_dir, risk_areas, stack.api_spec_path, gates, test_data.strategy/sensitive_data_rule). Run /qa:qa-init first if missing.</p></div>
+<div class="ov-card"><h3>Output</h3><p>GenAI-assisted testing draft -&gt; &lt;paths.docs_dir&gt;/GENAI-ASSIST-&lt;category&gt;.md. A supporting input to an ISO/IEC/IEEE 29119-3 work product, never a finalized one (it is an unverified AI draft pending human review).</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Config guard: stop if qa.config.yml is none</li><li>Resolve task and classify into one category (test-ideas/test-data/test-cases/summarize/explain-failure/doc-draft); default empty input to test-ideas on critical risk areas</li><li>Apply the privacy safeguard before generating: honor sensitive_data_rule, synthetic only, escalate if real data seems required</li><li>Ground generation in the project test basis (OpenAPI, requirements, existing tests), concentrating on critical then high risk</li><li>Generate the artifact with every item marked AI-DRAFT and tied to a test basis reference/technique</li><li>Quality-control for CT-GenAI failure modes: hallucination, missing context/over-reliance, bias/gaps, runnability</li><li>Human-in-the-loop handoff: compile a Human-must-verify checklist with counts; route defects to /qa:triage, cases to /qa:test-design or /qa:implement</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>CT-GenAI (Testing with Generative AI, Specialist) — every GenAI output is an unverified draft (Principle 1 applied to the AI itself); mandatory human oversight and privacy protection are the syllabus non-negotiables.</p><p class="istqb-tag">CT-GenAI (Specialist) · ISTQB Principle 1 · Principle 4</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>genai-assist</span></div><pre><span class="p">&gt; /qa:genai-assist "generate test ideas for guest checkout"</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> It applies CT-GenAI safeguards: a human-review prompt, no real PII, and output labeled for verification.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="ai-test.html">/qa:ai-test</a><a class="chip" href="test-design.html">/qa:test-design</a><a class="chip" href="test-cases.html">/qa:test-cases</a><a class="chip" href="test-data.html">/qa:test-data</a><a class="chip" href="exploratory.html">/qa:exploratory</a><a class="chip" href="triage.html">/qa:triage</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-manual" href="../manual-tester.html">Manual</a><a class="chip role-automation" href="../automation-tester.html">Automation</a></div></div></div><nav class="prevnext"><span></span><a class="pn allc" href="index.html">All commands</a><a class="pn next" href="istqb-coach.html"><span>Next &rarr;</span><b>/qa:istqb-coach</b></a></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

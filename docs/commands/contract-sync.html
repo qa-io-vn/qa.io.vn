@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:contract-sync — Consumer-driven contract testing · QA Toolkit</title>
+<meta name="description" content="Generate/verify consumer and provider Pact contracts and run a can-i-deploy gate across the web/API boundary.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#f0b03c">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#test-execution-functional-non-functional">Test execution — functional &amp; non-functional</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>contract-sync</h1>
+<p class="ctitle reveal">Consumer-driven contract testing</p>
+<p class="standfirst reveal">Generate/verify consumer and provider Pact contracts and run a can-i-deploy gate across the web/API boundary.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:contract-sync [consumer|provider|can-i-deploy]</code></div>
+<div class="meta-row reveal"><span>Test execution — functional &amp; non-functional</span><span>CTFL v4.0 §2.2 (integration testing) · CT-TAE (Specialist)</span><span>Automation</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Records the web app's expectations as consumer contracts, verifies them against the API as a provider, and runs a can-i-deploy compatibility-matrix gate so a red matrix blocks deploy. Backstops API mocking by holding virtualized interfaces honest. Logs any contract mismatch as a defect.</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>For contract testing across the integration boundary between the web app and the REST API.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml with tooling.contract set, tooling.contract_broker_url, stack.api_spec_path, environments, gates, risk_areas.</p></div>
+<div class="ov-card"><h3>Output</h3><p>ISO/IEC/IEEE 29119-3 Test Execution Log -&gt; docs_dir/CONTRACT-RESULTS-&lt;scope&gt;.md, with raw output under reports_dir and an Incident (Defect) Report per mismatch.</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Read config; gate that tooling.contract is enabled</li><li>Resolve mode from arguments (consumer/provider/can-i-deploy; default full flow)</li><li>Consumer: record web expectations from the API spec and publish pacts to the broker</li><li>Provider: replay pacts against the API with provider states; log mismatches as defects</li><li>can-i-deploy: query the broker matrix and emit a deploy/hold decision</li><li>Wire CI triggers and explain how contracts backstop API mocking</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>Implementation and execution at the component/system integration level (CTFL §2.2; CT-TAE). Contracts catch integration breakage without a full integrated environment — the cheap place to find interface defects.</p><p class="istqb-tag">CTFL v4.0 §2.2 (integration testing) · CT-TAE (Specialist)</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>contract-sync</span></div><pre><span class="p">&gt; /qa:contract-sync can-i-deploy</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> It talks to the configured contract_broker_url and gates deploy on verified contracts.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="integration-test.html">/qa:integration-test</a><a class="chip" href="api-automate.html">/qa:api-automate</a><a class="chip" href="triage.html">/qa:triage</a><a class="chip" href="release-report.html">/qa:release-report</a><a class="chip" href="fix-ci.html">/qa:fix-ci</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-automation" href="../automation-tester.html">Automation</a></div></div></div><nav class="prevnext"><a class="pn prev" href="security-scan.html"><span>&larr; Prev</span><b>/qa:security-scan</b></a><a class="pn allc" href="index.html">All commands</a><a class="pn next" href="mobile-test.html"><span>Next &rarr;</span><b>/qa:mobile-test</b></a></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

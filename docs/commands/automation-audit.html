@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:automation-audit — Automation project audit · QA Toolkit</title>
+<meta name="description" content="Score an inherited automation suite end-to-end — gTAA architecture, SOLID &amp; clean code, test-design quality, anti-patterns, pyramid, CI — into a maturity scorecard with prioritized, routed fixes. Read-only.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#ab8df8">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#static-testing-analysis-design">Static testing, analysis &amp; design</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>automation-audit</h1>
+<p class="ctitle reveal">Automation project audit</p>
+<p class="standfirst reveal">Score an inherited automation suite end-to-end — gTAA architecture, SOLID &amp; clean code, test-design quality, anti-patterns, pyramid, CI — into a maturity scorecard with prioritized, routed fixes. Read-only.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:automation-audit [path / module to focus on]</code></div>
+<div class="meta-row reveal"><span>Static testing, analysis &amp; design</span><span>CTFL v4.0 §3.1 · CT-TAE · ISO/IEC 25010 (maintainability)</span><span>Automation</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Treats the automation codebase as the test object: maps it to the gTAA, evaluates SOLID/clean-code, test-case/design quality (ISTQB + FIRST), anti-patterns/flakiness, pyramid distribution and CI health, then writes a scored health report with a prioritized remediation roadmap routed to the commands that do the work. Modifies nothing in the audited suite.</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>Onboarding or inheriting a suite, or a periodic (quarterly) health check.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml (paths.* for report location, tooling.*, gates, risk_areas) — stack/risk inferred from the repo if absent; a path/module to focus on, or the whole project.</p></div>
+<div class="ov-card"><h3>Output</h3><p>Automation Project Assessment Report (static-testing review of testware; scores ISO/IEC 25010 maintainability) -&gt; docs/AUTOMATION-AUDIT.md.</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Scope from $ARGUMENTS; read representative files across each layer (not grep counts alone)</li><li>Architecture &amp; gTAA layering: separation of concerns, structure, config, data, reporting</li><li>SOLID &amp; design principles applied to test code, with file:line evidence</li><li>Test-case &amp; design quality (ISTQB techniques + FIRST), assertion quality, traceability</li><li>Anti-patterns &amp; flakiness (hard waits, fragile selectors, hardcoded secrets, skips)</li><li>Pyramid/level distribution and CI/CD health; write a maturity scorecard + routed roadmap</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>Static testing of testware + CT-TAE architecture assessment, scored against ISO/IEC 25010 maintainability (modularity, reusability, analysability, modifiability, testability). The audit is sampled, not exhaustive (Principle 2); it reports residual risk, never 'the suite is defect-free' (Principle 1); analysis must never mutate the thing it judges.</p><p class="istqb-tag">CTFL v4.0 §3.1 · CT-TAE · ISO/IEC 25010 (maintainability)</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>automation-audit</span></div><pre><span class="p">&gt; /qa:automation-audit tests</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> It scores Architecture/SOLID/Design-quality/Anti-patterns/Pyramid/CI (1–5), cites file:line evidence, and changes no code.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="static-analysis.html">/qa:static-analysis</a><a class="chip" href="review-coverage.html">/qa:review-coverage</a><a class="chip" href="automation-strategy.html">/qa:automation-strategy</a><a class="chip" href="self-heal.html">/qa:self-heal</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-automation" href="../automation-tester.html">Automation</a></div></div></div><nav class="prevnext"><a class="pn prev" href="static-analysis.html"><span>&larr; Prev</span><b>/qa:static-analysis</b></a><a class="pn allc" href="index.html">All commands</a><a class="pn next" href="review-coverage.html"><span>Next &rarr;</span><b>/qa:review-coverage</b></a></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>/qa:create-plan — Release/sprint Test Plan · QA Toolkit</title>
+<meta name="description" content="Build a release- or sprint-scoped Test Plan from the config plus a release name and feature list — scope, approach, entry/exit criteria, schedule, risks.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d0f13'/%3E%3Cpath d='M9 11l6 5-6 5' stroke='%235ee2a0' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M17 21h7' stroke='%23e9e4d8' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="command.css">
+</head>
+<body style="--rc:#5da9f2">
+<nav class="topnav" aria-label="Navigation">
+  <div class="wrap">
+    <a class="wordmark" href="../index.html">QA Toolkit<span class="v">v3.10.0</span></a>
+    <ul class="navlinks">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="index.html">All commands</a></li>
+      <li><a href="../COMMAND-GUIDE.md">Guide</a></li>
+      <li><a href="../COMMAND-THEORY.md">Theory</a></li>
+      <li><a href="../command-reference.html">Reference</a></li>
+    </ul>
+  </div>
+</nav>
+<header class="chero" id="top"><div class="wrap">
+<p class="kicker reveal"><a href="index.html#test-planning-management">Test planning &amp; management</a></p>
+<h1 class="reveal"><span class="slash">/qa:</span>create-plan</h1>
+<p class="ctitle reveal">Release/sprint Test Plan</p>
+<p class="standfirst reveal">Build a release- or sprint-scoped Test Plan from the config plus a release name and feature list — scope, approach, entry/exit criteria, schedule, risks.</p>
+<div class="usage reveal"><span class="ul">USAGE</span><code>/qa:create-plan &lt;release-id&gt; [comma-separated features]</code></div>
+<div class="meta-row reveal"><span>Test planning &amp; management</span><span>CTFL v4.0 §5.1 · ISO/IEC/IEEE 29119-3</span><span>Test Leader</span></div>
+</div></header>
+<main>
+<section class="reveal"><div class="wrap"><div class="ov-grid">
+<div class="ov-card"><h3>What it does</h3><p>Combines qa.config.yml with a release ID and feature list into a complete Test Plan: features in/out tagged by risk tier, in-scope test types limited to enabled tooling, entry/exit criteria using the exact gates thresholds, sample Given/When/Then cases per feature, a risk register, RACI, and a residual-risk section. It links to the Strategy rather than repeating it.</p></div>
+<div class="ov-card"><h3>When to use it</h3><p>When planning a specific release or sprint. Derives from the Organizational Test Strategy.</p></div>
+<div class="ov-card"><h3>Prerequisites</h3><p>qa.config.yml (run /qa:qa-init first) — paths, tooling, gates, risk_areas, team, test_data, process.sprint_length_weeks. Plus the release ID and features as args.</p></div>
+<div class="ov-card"><h3>Output</h3><p>ISO/IEC/IEEE 29119-3 Test Plan -&gt; &lt;paths.docs_dir&gt;/TEST-PLAN-&lt;release-id&gt;.md.</p></div>
+</div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Mechanics</p><h2 class="sec-title">How it works</h2><ol class="steps"><li>Parse release ID (first token) and feature list from $ARGUMENTS; ask if empty</li><li>Config guard: stop and route to /qa:qa-init if missing</li><li>Load the plan template</li><li>Build scope with features tagged by risk tier and only enabled test types</li><li>Set entry/exit criteria from the exact gates thresholds</li><li>Add sample cases (happy/negative/authz/non-functional) per feature</li><li>Add risk register, RACI from team, residual-risk section; write TEST-PLAN-&lt;id&gt;.md</li></ol></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Why it works</p><h2 class="sec-title">The theory behind it</h2><div class="theory"><p>The Test Plan work product (CTFL §5.1; ISO/IEC/IEEE 29119-3). A plan is risk- and context-driven, so it consumes the risk register and config rather than a fixed template; every feature traces basis -&gt; condition -&gt; case and gates carry verbatim into exit criteria, keeping the chain auditable.</p><p class="istqb-tag">CTFL v4.0 §5.1 · ISO/IEC/IEEE 29119-3</p></div></div></section>
+<section class="reveal"><div class="wrap"><p class="kicker">Example</p><h2 class="sec-title">See it in use</h2><div class="term"><div class="term-bar"><i></i><i></i><i></i><span>create-plan</span></div><pre><span class="p">&gt; /qa:create-plan R2.4 "guest checkout, saved cards"</span></pre></div><p class="correct"><span class="ok">&#10003; Correct when</span> Scope = the two features, exit criteria = the gates (e.g. ≥98% pass, block on S1/S2), and it cites the release's risk areas.</p></div></section>
+<section class="reveal"><div class="wrap"><div class="rel-grid"><div><p class="kicker">Related commands</p><div class="chips"><a class="chip" href="risk-assessment.html">/qa:risk-assessment</a><a class="chip" href="create-strategy.html">/qa:create-strategy</a><a class="chip" href="test-cases.html">/qa:test-cases</a><a class="chip" href="implement.html">/qa:implement</a><a class="chip" href="status-report.html">/qa:status-report</a></div></div><div><p class="kicker">Used by</p><div class="chips"><a class="chip role-leader" href="../test-leader.html">Test Leader</a></div></div></div><nav class="prevnext"><a class="pn prev" href="create-strategy.html"><span>&larr; Prev</span><b>/qa:create-strategy</b></a><a class="pn allc" href="index.html">All commands</a><a class="pn next" href="risk-assessment.html"><span>Next &rarr;</span><b>/qa:risk-assessment</b></a></nav></div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-line">
+      <span>QA Toolkit <strong>v3.10.0</strong></span><span>64 commands</span>
+      <span>MIT license</span><span><a href="../index.html">Home</a></span>
+    </div>
+    <p class="foot-legal">ISTQB&reg; is a registered trademark of the International Software Testing
+    Qualifications Board. ISTQB syllabi and the Glossary are copyrighted by ISTQB — this toolkit
+    implements their concepts and terminology; it does not reproduce the syllabi.</p>
+  </div>
+</footer>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:0.05});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+})();
+</script>
+</body>
+</html>
