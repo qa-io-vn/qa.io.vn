@@ -1,6 +1,6 @@
 # QA Toolkit — Full Command Guideline
 
-The complete operating manual for all **60 `/qa:*` commands**. For each command you get: what it does, **when** to use it, what it **needs** (prerequisites), what it **outputs**, and what to run **next**. It also gives ready-made **workflow recipes** and a **"which command do I use?"** index.
+The complete operating manual for all **64 `/qa:*` commands**. For each command you get: what it does, **when** to use it, what it **needs** (prerequisites), what it **outputs**, and what to run **next**. It also gives ready-made **workflow recipes** and a **"which command do I use?"** index.
 
 - New here? Read [§1 How the toolkit works](#1-how-the-toolkit-works) → [§2 Quick-start recipes](#2-quick-start-workflow-recipes), then dip into the [§4 command reference](#4-command-reference) as needed.
 - Want a copy-paste **sample invocation for every command** (with a "Correct when" check)? See [COMMAND-EXAMPLES.md](./COMMAND-EXAMPLES.md).
@@ -103,7 +103,7 @@ Copy-paste sequences for the common situations. Each step links to the detailed 
 
 ---
 
-## 3. The command map (all 60 at a glance)
+## 3. The command map (all 64 at a glance)
 
 | Phase | Commands |
 |---|---|
@@ -115,6 +115,7 @@ Copy-paste sequences for the common situations. Each step links to the detailed 
 | **Automation by surface** | `automation-strategy` · `api-automate` · `scan-ui` · `web-automate` · `mobile-automate` · `perf-plan` |
 | **Execution (non-functional)** | `perf-test` · `a11y-audit` · `usability-test` · `nonfunctional` · `security-scan` · `contract-sync` · `mobile-test` · `ai-test` |
 | **Maintenance, CI & flakiness** | `ci` · `fix-ci` · `fix-jenkins` · `flaky-hunt` · `self-heal` |
+| **Version control & PR quality** | `review-pr` · `commit` · `open-pr` · `merge-gate` |
 | **Monitoring, control & completion** | `status-report` · `coverage-measure` · `triage` · `release-report` |
 | **AI-assisted & reference** | `genai-assist` · `istqb-coach` |
 
@@ -367,7 +368,24 @@ Copy-paste sequences for the common situations. Each step links to the detailed 
 - **Needs:** running app (for DOM probe) for high-confidence heals.
 - **Output:** `→ healed code + report`.
 
-### 4.9 Monitoring, control & completion
+### 4.9 Version control & PR quality
+
+QA *on the change* — not generic Git. Reads the PR via the `gh` CLI or a local diff vs the base branch.
+
+**`/qa:review-pr [PR#|URL|branch]`** — **QA review of a pull request**: change impact & risk vs `risk_areas`, test coverage of the diff, regression scope, testware quality, and real defects → **Review Report** + a gate-based merge recommendation. Review-only; defects go to `triage`.
+- **When:** before merging a PR; you want the testing view, not a style review.
+- **Output:** `→ reports/PR-REVIEW-<id>-<date>.md` + merge verdict.
+
+**`/qa:commit [hint]`** — **QA-gated commit**: verify the staged change first (affected tests / lint / static-review as confirmation testing), then write a **Conventional Commits** message tracing to the requirement/defect. Refuses to commit an unverified change; **never pushes**.
+- **Output:** `→ a verified commit (hash + message)`.
+
+**`/qa:open-pr [base|title]`** — **Open a PR with a QA summary**: what changed, what was tested (coverage delta, regression set), residual risk, linked defects — a change-level completion summary. Opens via `gh` on confirmation.
+- **Output:** `→ PR + reports/PR-<branch>-<date>.md`.
+
+**`/qa:merge-gate [PR#|branch]`** — **Evaluate a PR against the `gates`** (pass rate, coverage, severity blockers, security/a11y/perf) → a documented **merge / hold** decision. Go/no-go at PR scope; never auto-merges.
+- **Output:** `→ reports/MERGE-GATE-<id>-<date>.md`.
+
+### 4.10 Monitoring, control & completion
 
 **`/qa:status-report <release-id>`** — ISTQB **Test Status (Progress) Report** — monitoring metrics + control actions mid-release.
 - **Output:** `→ docs/STATUS-REPORT-<release>-<date>.md`.
@@ -383,7 +401,7 @@ Copy-paste sequences for the common situations. Each step links to the detailed 
 - **When:** end of a release.
 - **Output:** `→ docs/RELEASE-REPORT-<release>.md`.
 
-### 4.10 AI-assisted & reference
+### 4.11 AI-assisted & reference
 
 **`/qa:genai-assist <task>`** — Use **GenAI** to accelerate testing (ideas, data, case drafting) with CT-GenAI safeguards (human oversight, privacy).
 - **Output:** varies by task.
@@ -421,6 +439,10 @@ Copy-paste sequences for the common situations. Each step links to the detailed 
 | Fix any red pipeline / pasted log | `fix-ci` |
 | Deal with intermittent failures | `flaky-hunt` |
 | Repair tests after a UI change | `self-heal` |
+| QA-review a pull request before merge | `review-pr` |
+| Commit only after verifying the change | `commit` |
+| Open a PR with the QA evidence attached | `open-pr` |
+| Decide if a PR clears the quality gates | `merge-gate` |
 | File a bug properly | `triage` |
 | Pick the regression set for a change | `regression` |
 | Report progress mid-release | `status-report` |
@@ -451,4 +473,4 @@ Copy-paste sequences for the common situations. Each step links to the detailed 
 
 ---
 
-*Generated for QA Toolkit v3.9.0 — 60 commands. Full syllabus traceability: [ISTQB-COMPLIANCE.md](./ISTQB-COMPLIANCE.md) · terminology: [GLOSSARY.md](./GLOSSARY.md).*
+*Generated for QA Toolkit v3.10.0 — 64 commands. Full syllabus traceability: [ISTQB-COMPLIANCE.md](./ISTQB-COMPLIANCE.md) · terminology: [GLOSSARY.md](./GLOSSARY.md).*

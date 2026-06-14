@@ -211,6 +211,10 @@ Test basis (requirement / user story / OpenAPI)
 | `ci` | Build-wide CI triage + confirmation testing + defect management | CTFL §1.4, §5.5, §6; DevOps |
 | `fix-ci` | Test execution / test environment mgmt | CTFL §6; DevOps |
 | `flaky-hunt` | Test automation maintenance & reliability | CT-TAE; CTFL §6 |
+| `review-pr` | Static review of a change + impact analysis + risk-based selection | CTFL §3, §2.3, §5.2 |
+| `commit` | Confirmation testing + traceability of a change | CTFL §1.4, §1.4.4; Glossary (confirmation testing) |
+| `open-pr` | Change-level test reporting (completion-style summary) | CTFL §1.4, §5.3; ISO 29119-3 |
+| `merge-gate` | Exit-criteria evaluation at change scope (go/no-go) | CTFL §5.3; CTAL-TM |
 | `automation-audit` | Static testing of testware + automation architecture assessment | CTFL §3.1; CT-TAE; ISO/IEC 25010 |
 | `review-coverage` | Test monitoring (coverage) + analysis | CTFL §5.3 |
 | `status-report` | Test monitoring & control | CTFL §5.3 |
@@ -245,14 +249,14 @@ This matrix shows that **every applicable ISTQB syllabus has at least one comman
 | Testing with Generative AI (CT-GenAI) | Specialist | `genai-assist` |
 | Model-Based Testing (CT-MBT) | Specialist | `mbt` |
 | Mobile Application Testing (CT-MAT) | Specialist | `mobile-automate` (native/cross-platform via Appium/device farm), `mobile-test` (responsive web) |
-| Quality in DevOps | Specialist | `scaffold` (CI), `ci`, `fix-ci`, `fix-jenkins`, `coverage-measure`, `shift-right` |
+| Quality in DevOps | Specialist | `scaffold` (CI), `ci`, `fix-ci`, `fix-jenkins`, `review-pr`, `commit`, `open-pr`, `merge-gate`, `coverage-measure`, `shift-right` |
 | Accessibility | Specialist | `a11y-audit` |
 | Automotive / Finance / Gambling / Game | Specialist (domain) | *Extensible — add a command + config domain if the product is in this domain.* |
 | Glossary / learning | — | `istqb-coach` (on-demand reference for any concept) |
 
 > **Completeness:** for a topic-by-topic walk of every CTFL chapter and Advanced/Specialist syllabus against commands (the gap analysis), see [`ISTQB-COVERAGE.md`](./ISTQB-COVERAGE.md).
 
-### Complete command catalog (60) by ISTQB activity
+### Complete command catalog (64) by ISTQB activity
 
 - **Test planning & management:** `qa-init`, `test-policy`, `create-strategy`, `create-plan`, `risk-assessment`, `estimate`, `tool-select`, `process-improvement`
 - **QA management & governance:** `quality-report`, `team-plan`, `go-no-go`, `cost-of-quality`, `audit-prep`
@@ -264,6 +268,7 @@ This matrix shows that **every applicable ISTQB syllabus has at least one comman
 - **Test automation maintenance:** `self-heal`, `flaky-hunt`, `fix-jenkins`
 - **Performance:** `perf-plan`, `perf-test`
 - **Test execution (functional & non-functional):** `perf-test`, `a11y-audit`, `usability-test`, `nonfunctional`, `security-scan`, `contract-sync`, `mobile-test`, `ai-test`, `regression`, `ci`, `fix-ci`, `fix-jenkins`, `flaky-hunt`
+- **Version control & PR quality:** `review-pr`, `commit`, `open-pr`, `merge-gate`
 - **Monitoring, control & completion:** `status-report`, `coverage-measure`, `triage`, `release-report`
 - **AI-assisted & reference:** `genai-assist`, `istqb-coach`
 

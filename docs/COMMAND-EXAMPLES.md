@@ -1,4 +1,4 @@
-# QA Toolkit — Worked Examples (all 60 commands)
+# QA Toolkit — Worked Examples (all 64 commands)
 
 A concrete, copy-pasteable **sample invocation for every command**, plus a **"Correct when"** check that proves it ran right. Every example is anchored to **one consistent sample project** so they chain into a real QA story — if you run them in order against that project, the artifacts reference each other.
 
@@ -374,7 +374,33 @@ Produces: quarantine + deterministic fixes. ✓ **Correct when** it stabilizes t
 ```
 Produces: healed locators + a report. ✓ **Correct when** it repairs *how we locate* (stable selector) in the page object, never loosens an assertion, and re-runs to confirm.
 
-## 9. Monitoring, control & completion
+## 9. Version control & PR quality
+
+**`/qa:review-pr`**
+```text
+/qa:review-pr 482
+```
+Produces: `reports/PR-REVIEW-482-<date>.md` + a merge verdict. ✓ **Correct when** it maps the diff to `risk_areas`, reports coverage of the change as counts (covered/uncovered files), scopes regression, flags testware issues, files real defects via `triage`, and the merge call names the `gates` item that drives it — without editing the PR's product code.
+
+**`/qa:commit`**
+```text
+/qa:commit "fix: expired-coupon 500"
+```
+Produces: a verified commit. ✓ **Correct when** it runs the affected tests/lint *first*, commits only if green, writes a Conventional Commits message tracing to the requirement/defect (`Fixes: DEF-…`), and never pushes — a failing change routes to `triage` instead of being committed.
+
+**`/qa:open-pr`**
+```text
+/qa:open-pr main
+```
+Produces: a PR + `reports/PR-<branch>-<date>.md`. ✓ **Correct when** the PR body states what changed, what was tested (coverage delta, regression set) as counts, residual risk, and linked defects — and the PR is opened only on confirmation, never force-pushed.
+
+**`/qa:merge-gate`**
+```text
+/qa:merge-gate 482
+```
+Produces: `reports/MERGE-GATE-482-<date>.md`. ✓ **Correct when** every `gates` item is marked PASS/FAIL/N-A with evidence, severity (not priority) drives the blocker check, the verdict names the failing gate, and it records a recommendation rather than auto-merging.
+
+## 10. Monitoring, control & completion
 
 **`/qa:status-report`**
 ```text
@@ -400,7 +426,7 @@ Produces: an ISTQB defect report. ✓ **Correct when** it separates **severity**
 ```
 Produces: `docs/qa/RELEASE-REPORT-R2.4.md`. ✓ **Correct when** it evaluates exit criteria vs `gates`, states residual risk, and gives a ship/hold recommendation.
 
-## 10. AI-assisted & reference
+## 11. AI-assisted & reference
 
 **`/qa:genai-assist`**
 ```text
@@ -438,4 +464,4 @@ Each step's output names the prior artifacts and the same `gates`/`risk_areas` v
 
 ---
 
-*QA Toolkit v3.9.0 — 60 commands. Examples use the shipped [`qa.config.example.yml`](../templates/qa.config.example.yml).*
+*QA Toolkit v3.10.0 — 64 commands. Examples use the shipped [`qa.config.example.yml`](../templates/qa.config.example.yml).*

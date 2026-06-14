@@ -17,7 +17,7 @@ The toolkit follows the **ISTQB®** framework strictly — **Certified Tester Fo
 ```
   qa-toolkit (this repo, on GitHub)        Your project A          Your project B
   ┌──────────────────────────────┐                ┌───────────────┐       ┌───────────────┐
-  │ commands/  (60 /qa:* commands)│   install once │ qa.config.yml │       │ qa.config.yml │
+  │ commands/  (64 /qa:* commands)│   install once │ qa.config.yml │       │ qa.config.yml │
   │ skills/    (auto context)     │ ─────────────► │  (the only    │  ...  │  (different   │
   │ templates/ (strategy & plan)  │   via /plugin  │   per-project │       │   values)     │
   └──────────────────────────────┘                │   file)       │       │               │
@@ -63,14 +63,14 @@ Everything reads `qa.config.yml`, so you never re-specify your stack or threshol
 
 ---
 
-## Commands (60)
+## Commands (64)
 
 A command for every ISTQB activity, so a tester can run the **entire** workflow through the agent. Grouped by the ISTQB test-process activity each implements. All commands read `qa.config.yml`, respect its `tooling` toggles, and use ISTQB Glossary terminology.
 
 > 🏠 **Start here — the visual guide:** [`docs/index.html`](docs/index.html) — a blog-style home page with the role playbooks, lifecycle map, and full catalog (enable GitHub Pages from `/docs` to host it).
 > 🧑‍💼 **Role playbooks:** [`docs/WORKFLOWS.md`](docs/WORKFLOWS.md) — how to work as a **Manual Tester, Automation Tester, Performance Tester, Test Leader, or Test Manager**: each role's mission, command loops, and cadence, plus the release-lifecycle map that ties them together.
 > 📖 **Full how-to:** [`docs/COMMAND-GUIDE.md`](docs/COMMAND-GUIDE.md) — every command's purpose, prerequisites, output, and next step, plus copy-paste **workflow recipes** and a "which command do I use?" index.
-> 🧠 **How it works + the theory:** [`docs/COMMAND-THEORY.md`](docs/COMMAND-THEORY.md) — for **each** command, the mechanics (what it reads, the steps it runs) plus the ISTQB technique/principle and ISO standard that **back it up** — and the shared theoretical spine all 60 sit on.
+> 🧠 **How it works + the theory:** [`docs/COMMAND-THEORY.md`](docs/COMMAND-THEORY.md) — for **each** command, the mechanics (what it reads, the steps it runs) plus the ISTQB technique/principle and ISO standard that **back it up** — and the shared theoretical spine all 64 sit on.
 > 🧪 **Worked examples:** [`docs/COMMAND-EXAMPLES.md`](docs/COMMAND-EXAMPLES.md) — a sample invocation for **every** command with a "Correct when" check, all anchored to one consistent sample project.
 > 📑 **Command reference + proof:** [`docs/command-reference.html`](docs/command-reference.html) — all 59 commands with a **worked sample output** for each (the actual ISTQB artifact it generates for the ShopEase sample project), a live filter box, and the verify-it-worked checklist. The "show me it works" page.
 > Full syllabus→command mapping: [`docs/ISTQB-COMPLIANCE.md`](docs/ISTQB-COMPLIANCE.md).
@@ -159,6 +159,15 @@ A command for every ISTQB activity, so a tester can run the **entire** workflow 
 | `/qa:flaky-hunt [path\|N runs]` | Find & fix flaky tests — deterministic fixes, no blind retries (testware maintenance). |
 | `/qa:self-heal [area]` | **Maintain & auto-heal** the suite — repair broken locators after UI changes, prune/refactor, re-run to confirm. |
 
+**Version control & PR quality** (CTFL §3 review · §2.3 impact analysis · §5.3 exit criteria) — QA on the change, not generic Git.
+
+| Command | What it does |
+|---|---|
+| `/qa:review-pr [PR\|branch]` | **QA review of a pull request** — change impact & risk, coverage of the diff, regression scope, testware quality, defects → **Review Report** + gate-based merge call. |
+| `/qa:commit [hint]` | **QA-gated commit** — verify the staged change (confirmation testing), then write a **Conventional Commits** message that traces to the requirement/defect. Never pushes. |
+| `/qa:open-pr [base\|title]` | **Open a PR with a QA summary** — what changed, what was tested, coverage delta, regression set, residual risk, linked defects (a change-level completion summary). |
+| `/qa:merge-gate [PR\|branch]` | **Evaluate a PR against the quality gates** (pass rate, coverage, severity blockers, security/a11y/perf) → a documented merge / hold decision. Go/no-go at PR scope. |
+
 **Monitoring, control & completion** (CTFL §5.3–5.5 · ISO 29119-3)
 
 | Command | What it does |
@@ -190,7 +199,7 @@ qa-toolkit/
 ├── .claude-plugin/
 │   ├── plugin.json            # plugin manifest (name: qa)
 │   └── marketplace.json       # marketplace manifest (clone & install target)
-├── commands/                  # the 60 /qa:* slash commands (one .md each)
+├── commands/                  # the 64 /qa:* slash commands (one .md each)
 ├── skills/
 │   └── qa-context/SKILL.md    # auto-loads qa.config.yml + ISTQB standing rules
 ├── templates/
@@ -200,7 +209,7 @@ qa-toolkit/
 ├── docs/
 │   ├── index.html             # blog-style visual guide (GitHub Pages-ready)
 │   ├── WORKFLOWS.md           # role playbooks: manual/automation/perf tester, lead, manager
-│   ├── COMMAND-GUIDE.md       # full how-to for all 60 commands + workflow recipes
+│   ├── COMMAND-GUIDE.md       # full how-to for all 64 commands + workflow recipes
 │   ├── COMMAND-THEORY.md      # how each command works + the ISTQB/ISO theory behind it
 │   ├── COMMAND-EXAMPLES.md    # a worked sample invocation for every command
 │   ├── ISTQB-COMPLIANCE.md    # command → ISTQB syllabus traceability map

@@ -378,7 +378,32 @@ Each command runs a final **Self-check / residual-risk** gate (config reflected 
 
 ---
 
-## H · AI-assisted & reference
+## H · Version control & PR quality
+*QA applied to the change itself — static review, confirmation testing, change-level reporting, and exit-criteria evaluation at PR scope. Not generic Git helpers.*
+
+### `/qa:review-pr [PR|branch]` — QA review of a pull request
+- **Produces:** an ISO/IEC/IEEE 29119-3 **Review Report** (review findings) + a gate-based merge recommendation.
+- **How it works:** resolves the change set (gh PR or local diff vs base), maps it to `risk_areas`, assesses test coverage of the diff (counts uncovered changed files), scopes regression, reviews any added/edited testware, files real defects via `triage`, and evaluates `gates` into a merge verdict. Read-only on product code.
+- **Theory & basis:** **static testing / review** of a change set (CTFL §3) — a review is a defect-detection technique applied *before* execution (Principle 3) — combined with **impact analysis** (§2.3) and **risk-based** depth (§5.2). It is a test-focused review, distinct from a code-style review.
+
+### `/qa:commit [hint]` — QA-gated commit
+- **Produces:** a verified Git commit (hash + Conventional Commits message). Pushes nothing.
+- **How it works:** reads the staged diff, runs the affected tests / lint / static-review (resolved from `<tooling.*>`) as a gate, and commits **only if they pass**; the message traces to the requirement/defect. A failing check that reveals a real defect routes to `triage` instead of committing.
+- **Theory & basis:** **confirmation testing** before integrating a change + **traceability** (CTFL §1.4; §1.4.4; Glossary). Verifying before committing enacts Principle 1 (never integrate an unverified or defect-masking change); the traceable message keeps the basis→change chain intact.
+
+### `/qa:open-pr [base|title]` — open a PR with a QA summary
+- **Produces:** a change-level **Test Completion-style summary** (29119-3 field guide) used as the PR body and saved under `<paths.reports_dir>`.
+- **How it works:** gathers the branch diff, summarizes what changed (→ `risk_areas`), what was tested (coverage delta, regression set run), residual risk, and linked defects; opens the PR via `gh` on confirmation (never force-pushes).
+- **Theory & basis:** test reporting at change scope (CTFL §1.4 completion; §5.3 reporting). It carries the *evidence* a reviewer needs and states residual risk (Principle 1) — a change-scoped echo of the Test Completion Report.
+
+### `/qa:merge-gate [PR|branch]` — exit-criteria gate at PR scope
+- **Produces:** a **merge gate decision record** (MERGE / MERGE-WITH-CONDITIONS / HOLD) with a gate table and residual risk.
+- **How it works:** gathers PR signals (CI checks, pass rate, coverage, open defects by severity, security/a11y/perf), evaluates each configured `gates` item PASS/FAIL/N-A with evidence, and records a decision — never auto-merges.
+- **Theory & basis:** **exit-criteria evaluation** against gates + residual risk (CTFL §5.3; CTAL-TM release-decision practice). It is **go/no-go at change scope** — the same discipline as `/qa:go-no-go`, applied per PR rather than per release; severity (not priority) drives blockers.
+
+---
+
+## I · AI-assisted & reference
 
 ### `/qa:genai-assist <task>` — GenAI with ISTQB safeguards
 - **Produces:** accelerated draft test artifacts (ideas, data, case drafts).
@@ -392,4 +417,4 @@ Each command runs a final **Self-check / residual-risk** gate (config reflected 
 
 ---
 
-*Generated for QA Toolkit v3.9.0 — 60 commands. Concepts implement the ISTQB® body of knowledge (CTFL v4.0 + Advanced/Specialist) and ISO/IEC/IEEE 29119-3 / ISO/IEC 25010; section numbers are indicative — verify against the current syllabus before quoting externally. Full traceability: [ISTQB-COMPLIANCE.md](./ISTQB-COMPLIANCE.md).*
+*Generated for QA Toolkit v3.10.0 — 64 commands. Concepts implement the ISTQB® body of knowledge (CTFL v4.0 + Advanced/Specialist) and ISO/IEC/IEEE 29119-3 / ISO/IEC 25010; section numbers are indicative — verify against the current syllabus before quoting externally. Full traceability: [ISTQB-COMPLIANCE.md](./ISTQB-COMPLIANCE.md).*
